@@ -85,6 +85,17 @@ operação).
   `danzeroum/prompte`); a config acima é detectada. Deploy automático a cada
   push na `main`. Alternativas: Vercel ou Supabase Storage.
 
+## Dashboard administrativo (#5) ✅
+- Função SQL `get_metrics()` (`security definer`, só `service_role`): total de
+  eventos, por tipo, total LLM, cache hits, rate limited, erros e eventos/dia (14d).
+- Edge Function `metrics` (`verify_jwt=true`): exige usuário autenticado cujo
+  e-mail esteja no secret **`ADMIN_EMAILS`** (lista por vírgula); senão `403`.
+- Frontend: `admin.html` + `admin.js` (renderiza cards/tabelas) + `metricsClient.js`.
+  Link "Admin / Métricas" na navegação das páginas.
+- **Passo manual:** definir o secret `ADMIN_EMAILS` (ex.: `supabase secrets set
+  ADMIN_EMAILS=voce@exemplo.com --project-ref tqohthmeneaweuozuref`) e entrar com
+  esse e-mail (magic link). Sem o secret, ninguém é admin (403 — seguro).
+
 ## Itens incrementais de frontend
 - Completar a marcação `data-i18n` no conteúdo das três páginas (hoje a "chrome" está
   traduzida; o conteúdo extenso é incremental).

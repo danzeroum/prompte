@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Métricas | Prompt Engineering Pro</title>
+<meta name="description" content="Dashboard administrativo de telemetria.">
+<meta name="theme-color" content="#0d1117">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co">
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="/assets/css/theme.css">
+<script type="module" src="/assets/js/app.js"></script>
+<script type="module" src="/assets/js/admin.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex}
+  .sidebar{width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);height:100vh;position:fixed;top:0;left:0;overflow-y:auto;z-index:100;transition:transform .3s}
+  .sidebar-hdr{padding:20px;border-bottom:1px solid var(--border);text-align:center}
+  .sidebar-hdr h1{font-size:16px;font-weight:700;color:var(--accent)}
+  .sidebar-hdr span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+  .sb-sec{padding:10px 0}
+  .sb-sec-title{padding:5px 20px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
+  .sb-item{display:flex;align-items:center;gap:10px;padding:8px 20px;cursor:pointer;font-size:12.5px;color:var(--text2);border-left:3px solid transparent}
+  .sb-item:hover{background:var(--bg3);color:var(--text)}
+  .sb-item.active{background:var(--bg3);color:var(--accent);border-left-color:var(--accent)}
+  .sb-item .icon{width:20px;text-align:center}
+  .main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column}
+  .topbar{display:flex;align-items:center;gap:12px;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:50}
+  .topbar h2{font-size:17px;font-weight:600}
+  .menu-toggle{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer}
+  .content{flex:1;padding:28px;max-width:980px;width:100%;margin:0 auto}
+  .pe-metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px}
+  .pe-metric{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center}
+  .pe-metric-value{font-size:26px;font-weight:700;color:var(--accent)}
+  .pe-metric-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .pe-metrics-tables{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .pe-metrics-tables h3{font-size:13px;margin-bottom:8px}
+  .pe-metric-table{width:100%;border-collapse:collapse;font-size:12px}
+  .pe-metric-table td{padding:6px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
+  .pe-metric-foot{font-size:11px;color:var(--muted);margin-top:16px}
+  #pe-metrics p{color:var(--text2);font-size:13px}
+  @media(max-width:768px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.menu-toggle{display:block}.content{padding:16px}.pe-metrics-tables{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="sidebar" id="sb">
+  <div class="sidebar-hdr">
+    <h1>Admin</h1>
+    <span>Métricas de Telemetria</span>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Navegacao</div>
+    <a class="sb-item" href="/index.html"><span class="icon">&#x1f4ca;</span> Analise &amp; Gerador</a>
+    <a class="sb-item" href="/generator.html"><span class="icon">&#x1f680;</span> Gerador de Prompts</a>
+    <a class="sb-item" href="/manual.html"><span class="icon">&#x1f4d6;</span> Manual</a>
+    <a class="sb-item active" href="/admin.html"><span class="icon">&#x1f4c8;</span> Admin / Métricas</a>
+  </div>
+</nav>
+<main class="main">
+  <div class="topbar">
+    <button class="menu-toggle" aria-label="Menu">&#9776;</button>
+    <h2>Métricas</h2>
+  </div>
+  <div class="content">
+    <div id="pe-metrics"><p>Carregando…</p></div>
+  </div>
+</main>
+</body>
+</html>

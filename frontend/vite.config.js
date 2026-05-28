@@ -12,6 +12,7 @@ export default defineConfig({
         index: resolve(__dirname, 'index.html'),
         generator: resolve(__dirname, 'generator.html'),
         manual: resolve(__dirname, 'manual.html'),
+        admin: resolve(__dirname, 'admin.html'),
       },
     },
   },
