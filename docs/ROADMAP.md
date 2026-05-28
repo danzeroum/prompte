@@ -85,24 +85,16 @@ operação).
   `danzeroum/prompte`); a config acima é detectada. Deploy automático a cada
   push na `main`. Alternativas: Vercel ou Supabase Storage.
 
-## Melhorias pós-roadmap (lote 1)
-- **#1 Cache HTTP:** respostas de sucesso da Edge Function trazem
-  `Cache-Control: public, max-age=3600, stale-while-revalidate=60` (efeito
-  limitado em POST; *surrogate keys* de CDN ficam para depois).
-- **#4 Integridade do payload:** constraint `events_payload_is_object`
-  (`jsonb_typeof(payload) = 'object'`).
-- **#6 Rate limiting sliding window:** tabela `rate_limit_hits` + nova
-  `consume_rate_limit` (advisory lock por id) — substitui a janela fixa.
-- **#7 Fallback de provedor LLM:** Edge Function tenta DeepSeek e, se falhar,
-  OpenAI (`gpt-4o-mini`) — basta definir `OPENAI_API_KEY`. Resposta inclui
-  `provider`.
-- **#10 Logs estruturados:** logs JSON com nível e `requestId` (gerado no
-  cliente em `x-request-id`, ecoado na resposta) — visíveis em
-  Edge Functions → Logs.
-- **Não feitas (com motivo):** #9 tema claro/escuro **já existia** (Fundação);
-  #2 Brotli já é automático no Netlify (forçar `Content-Encoding` quebraria);
-  #8 prefetch redundante (o chunk do `supabase-js` já baixa no boot via
-  `initAuth`/`flush`).
+## Dashboard administrativo (#5) ✅
+- Função SQL `get_metrics()` (`security definer`, só `service_role`): total de
+  eventos, por tipo, total LLM, cache hits, rate limited, erros e eventos/dia (14d).
+- Edge Function `metrics` (`verify_jwt=true`): exige usuário autenticado cujo
+  e-mail esteja no secret **`ADMIN_EMAILS`** (lista por vírgula); senão `403`.
+- Frontend: `admin.html` + `admin.js` (renderiza cards/tabelas) + `metricsClient.js`.
+  Link "Admin / Métricas" na navegação das páginas.
+- **Passo manual:** definir o secret `ADMIN_EMAILS` (ex.: `supabase secrets set
+  ADMIN_EMAILS=voce@exemplo.com --project-ref tqohthmeneaweuozuref`) e entrar com
+  esse e-mail (magic link). Sem o secret, ninguém é admin (403 — seguro).
 
 ## Itens incrementais de frontend
 - Completar a marcação `data-i18n` no conteúdo das três páginas (hoje a "chrome" está

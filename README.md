@@ -118,6 +118,18 @@ Passo manual: conectar `danzeroum/prompte` no Netlify (Add new site → Import) 
 a config é detectada e o deploy roda a cada push na `main`. O `dist/_headers`
 cuida do cache. Alternativas: Vercel ou Supabase Storage.
 
+## Dashboard administrativo (#5 ✅)
+
+`admin.html` mostra métricas de telemetria (eventos, chamadas LLM, cache hit rate,
+rate limited, erros, por tipo/dia). Acesso restrito: a Edge Function `metrics`
+exige usuário autenticado cujo e-mail esteja no secret `ADMIN_EMAILS`.
+
+```bash
+supabase secrets set ADMIN_EMAILS=voce@exemplo.com --project-ref tqohthmeneaweuozuref
+```
+Depois, entre com esse e-mail (magic link) e abra `/admin.html`. Sem o secret,
+ninguém é admin (403).
+
 ## Login via magic link (Fase D.2 ✅)
 
 Usuários podem entrar com e-mail (magic link) pelo menu de preferências (seção
