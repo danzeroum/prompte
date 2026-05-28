@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Engineering Pro — Análise & Gerador Avançado</title>
+<meta name="description" content="Análise de domínios e gerador avançado de prompts de engenharia de software.">
+<meta name="theme-color" content="#0d1117">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co">
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="/assets/css/theme.css">
+<script type="module" src="/assets/js/app.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;min-height:100vh;display:flex}
+  a{color:var(--accent);text-decoration:none}
+  code{font-family:'SF Mono','Cascadia Code','Fira Code','Consolas',monospace;font-size:0.9em;background:rgba(88,166,255,0.1);padding:1px 6px;border-radius:4px;color:var(--accent)}
+  pre code{background:none;padding:0}
+
+  /* SIDEBAR */
+  .sidebar{width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);height:100vh;position:fixed;top:0;left:0;overflow-y:auto;z-index:100;transition:transform .3s}
+  .sidebar::-webkit-scrollbar{width:4px}.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  .sidebar-hdr{padding:20px;border-bottom:1px solid var(--border);text-align:center}
+  .sidebar-hdr h1{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:-.3px}
+  .sidebar-hdr span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+  .sb-sec{padding:10px 0}
+  .sb-sec-title{padding:5px 20px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
+  .sb-item{display:flex;align-items:center;gap:10px;padding:8px 20px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:.15s;border-left:3px solid transparent}
+  .sb-item:hover{background:var(--bg3);color:var(--text)}
+  .sb-item.active{background:var(--bg3);color:var(--accent);border-left-color:var(--accent)}
+  .sb-item .icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+
+  /* MAIN */
+  .main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:50}
+  .topbar h2{font-size:17px;font-weight:600;display:flex;align-items:center;gap:10px}
+  .badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:12px;text-transform:uppercase;letter-spacing:.5px}
+  .b-analysis{background:rgba(45,212,191,.12);color:var(--teal)}
+  .b-enhanced{background:rgba(188,140,255,.12);color:var(--purple)}
+  .b-gen{background:rgba(63,185,80,.12);color:var(--green)}
+  .menu-toggle{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px 8px}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90}
+
+  .content{flex:1;padding:28px;max-width:980px;width:100%;margin:0 auto}
+
+  /* PANELS */
+  .panel{display:none}.panel.active{display:block;animation:fadeIn .25s}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+  /* CARDS */
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px}
+  .card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .card h3 .emoji{font-size:18px}
+  .card p,.card li{font-size:13px;color:var(--text2);line-height:1.7}
+  .card ul{padding-left:18px;margin-top:8px}
+  .card li{margin-bottom:4px}
+
+  /* INSIGHT CHIPS */
+  .chip{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin:2px;cursor:default}
+  .chip-devops{background:rgba(88,166,255,.12);color:var(--accent)}
+  .chip-ux{background:rgba(226,179,64,.12);color:#e2b34a}
+  .chip-arch{background:rgba(188,140,255,.12);color:var(--purple)}
+  .chip-api{background:rgba(63,185,80,.12);color:var(--green)}
+  .chip-qual{background:rgba(248,81,73,.12);color:var(--red)}
+  .chip-ds{background:rgba(210,153,34,.12);color:var(--orange)}
+  .chip-proc{background:rgba(45,212,191,.12);color:var(--teal)}
+  .chip-priv{background:rgba(248,81,73,.12);color:var(--red)}
+  .chip-algo{background:rgba(188,140,255,.12);color:var(--purple)}
+
+  /* FORM */
+  .fg{margin-bottom:18px}
+  .fg label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px}
+  .fg label .req{color:var(--red);margin-left:2px}
+  .fg input,.fg textarea,.fg select{width:100%;padding:9px 12px;background:var(--bg-input);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;font-family:inherit;transition:border .2s;outline:none}
+  .fg input:focus,.fg textarea:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(88,166,255,.15)}
+  .fg textarea{min-height:100px;resize:vertical;font-family:'SF Mono','Cascadia Code','Fira Code','Consolas',monospace;font-size:12px;line-height:1.6}
+  .fg textarea.code-area{min-height:160px}
+  .fg select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+  .fg .hint{font-size:10.;color:var(--muted);margin-top:3px}
+  .fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .cb-group{display:flex;flex-wrap:wrap;gap:10px}
+  .cb-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);cursor:pointer}
+  .cb-item input{accent-color:var(--accent);width:14px;height:14px}
+
+  /* BTN */
+  .btn-gen{display:inline-flex;align-items:center;gap:8px;padding:11px 26px;background:var(--green);color:#0d1117;font-weight:700;font-size:13px;border:none;border-radius:6px;cursor:pointer;transition:.2s;margin-top:6px}
+  .btn-gen:hover{background:var(--green-h);transform:translateY(-1px)}
+  .btn-copy{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:transparent;color:var(--accent);font-weight:600;font-size:12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:.2s}
+  .btn-copy:hover{background:var(--bg3);border-color:var(--accent)}
+  .btn-copy.copied{color:var(--green);border-color:var(--green)}
+  .btn-clr{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:transparent;color:var(--muted);font-weight:600;font-size:12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:.2s}
+  .btn-clr:hover{color:var(--red);border-color:var(--red)}
+  .btn-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+
+  /* OUTPUT */
+  .out{margin-top:28px;display:none}.out.vis{display:block;animation:fadeIn .3s}
+  .out-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .out-hdr h3{font-size:13px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:8px}
+  .out-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px}
+  .out-text{font-family:'SF Mono','Cascadia Code','Fira Code','Consolas',monospace;font-size:12px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-word;max-height:600px;overflow-y:auto}
+  .out-text::-webkit-scrollbar{width:5px}.out-text::-webkit-scrollbar-track{background:transparent}.out-text::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+  /* ANALYSIS GRID */
+  .analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+  @media(max-width:768px){.analysis-grid{grid-template-columns:1fr}.fr{grid-template-columns:1fr}}
+  .ebook-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;transition:.2s;cursor:pointer;border-left:3px solid transparent}
+  .ebook-card:hover{border-left-color:var(--accent);transform:translateY(-2px)}
+  .ebook-card.selected{border-left-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+  .ebook-card h4{font-size:13px;font-weight:700;margin-bottom:4px}
+  .ebook-card .author{font-size:11px;color:var(--muted);margin-bottom:10px}
+  .ebook-card .topics{display:flex;flex-wrap:wrap;gap:3px}
+  .ebook-card p{font-size:12px;color:var(--text2);line-height:1.6;margin-top:8px}
+
+  /* ENHANCED SECTION */
+  .enh-section{background:linear-gradient(135deg,rgba(63,185,80,.05),rgba(88,166,255,.05));border:1px solid rgba(63,185,80,.2);border-radius:10px;padding:20px;margin-bottom:20px}
+  .enh-section h3{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--green);display:flex;align-items:center;gap:8px}
+  .enh-section p{font-size:12.5px;color:var(--text2);line-height:1.7;margin-bottom:8px}
+
+  .matrix-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:11.5px}
+  .matrix-table th{background:var(--bg3);color:var(--accent);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+  .matrix-table td{padding:6px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+  .matrix-table tr:hover td{background:var(--bg3)}
+  .matrix-table .check{color:var(--green)}
+  .matrix-table .cross{color:var(--red)}
+
+  .principle{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:12px}
+  .principle h4{font-size:13px;font-weight:700;color:var(--purple);margin-bottom:4px}
+  .principle p{font-size:12px;color:var(--text2);line-height:1.7}
+  .principle code{font-size:11px}
+
+  @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.overlay.open{display:block}.main{margin-left:0}.menu-toggle{display:block}.content{padding:16px}.topbar{padding:12px 16px}}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="toggleSB()"></div>
+
+<nav class="sidebar" id="sb">
+  <div class="sidebar-hdr">
+    <h1>Prompt Engineering Pro</h1>
+    <span>Analise de Dominios & Gerador Avancado</span>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Navegacao</div>
+    <a class="sb-item active" href="/index.html"><span class="icon">&#x1f4ca;</span> Analise &amp; Gerador</a>
+    <a class="sb-item" href="/generator.html"><span class="icon">&#x1f680;</span> Gerador de Prompts</a>
+    <a class="sb-item" href="/manual.html"><span class="icon">&#x1f4d6;</span> Manual</a>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Analise</div>
+    <div class="sb-item active" data-t="overview" onclick="show(this)"><span class="icon">&#x1f4ca;</span> Visao Geral</div>
+    <div class="sb-item" data-t="mapping" onclick="show(this)"><span class="icon">&#x1f517;</span> Mapa de Dominios</div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Ebooks Analisados</div>
+    <div class="sb-item" data-t="e-devops" onclick="show(this)"><span class="icon">&#x1f680;</span> DevOps / CI-CD</div>
+    <div class="sb-item" data-t="e-td" onclick="show(this)"><span class="icon">&#x1f4b0;</span> Transformacao Digital</div>
+    <div class="sb-item" data-t="e-ux" onclick="show(this)"><span class="icon">&#x1f3a8;</span> UX / Software</div>
+    <div class="sb-item" data-t="e-api" onclick="show(this)"><span class="icon">&#x1f310;</span> APIs / Plugins</div>
+    <div class="sb-item" data-t="e-arch" onclick="show(this)"><span class="icon">&#x1f3d7;</span> Arquitetura SW</div>
+    <div class="sb-item" data-t="e-analytics" onclick="show(this)"><span class="icon">&#x1f4c8;</span> Analytics / Dados</div>
+    <div class="sb-item" data-t="e-priv" onclick="show(this)"><span class="icon">&#x1f512;</span> Privacidade / LGPD</div>
+    <div class="sb-item" data-t="e-qual" onclick="show(this)"><span class="icon">&#x2705;</span> Qualidade SW</div>
+    <div class="sb-item" data-t="e-algo" onclick="show(this)"><span class="icon">&#x1f9e0;</span> Algoritmos / Padrões</div>
+    <div class="sb-item" data-t="e-proc" onclick="show(this)"><span class="icon">&#x2699;</span> Processos / BPM</div>
+    <div class="sb-item" data-t="e-cloud" onclick="show(this)"><span class="icon">&#x2601;</span> Cloud Computing</div>
+    <div class="sb-item" data-t="e-requisitos" onclick="show(this)"><span class="icon">&#x1f4dd;</span> Eng. Requisitos</div>
+    <div class="sb-item" data-t="e-agile" onclick="show(this)"><span class="icon">&#x1f3c3;</span> Metodos Ageis</div>
+    <div class="sb-item" data-t="e-squads" onclick="show(this)"><span class="icon">&#x1f465;</span> Tech Squads</div>
+    <div class="sb-item" data-t="e-lideranca" onclick="show(this)"><span class="icon">&#x1f31f;</span> Lideranca / Gestao</div>
+    <div class="sb-item" data-t="e-ia" onclick="show(this)"><span class="icon">&#x1f9e0;</span> Engenharia de IA</div>
+    <div class="sb-item" data-t="e-dados" onclick="show(this)"><span class="icon">&#x1f4ca;</span> Dados Intensivos</div>
+    <div class="sb-item" data-t="e-arq2" onclick="show(this)"><span class="icon">&#x1f3d7;</span> Arq. Software II</div>
+    <div class="sb-item" data-t="e-metricas" onclick="show(this)"><span class="icon">&#x1f4c8;</span> Metricas / OKR</div>
+    <div class="sb-item" data-t="e-gestao" onclick="show(this)"><span class="icon">&#x1f4c5;</span> Gestao de Projetos</div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Gerador Avancado</div>
+    <div class="sb-item" data-t="gen-review" onclick="show(this)"><span class="icon">&#x1f504;</span> Revisao + Qualidade</div>
+    <div class="sb-item" data-t="gen-api" onclick="show(this)"><span class="icon">&#x1f310;</span> Design de API</div>
+    <div class="sb-item" data-t="gen-arch" onclick="show(this)"><span class="icon">&#x1f3d7;</span> Refatoracao Arquitetural</div>
+    <div class="sb-item" data-t="gen-security" onclick="show(this)"><span class="icon">&#x1f6e1;</span> Seguranca + LGPD</div>
+    <div class="sb-item" data-t="gen-ux" onclick="show(this)"><span class="icon">&#x1f3a8;</span> UX + Usabilidade</div>
+    <div class="sb-item" data-t="gen-canivete" onclick="show(this)"><span class="icon">&#x1f91d;</span> Canivete Suico Pro</div>
+    <div class="sb-item" data-t="gen-cloud" onclick="show(this)"><span class="icon">&#x2601;</span> Cloud / Infra</div>
+    <div class="sb-item" data-t="gen-ia" onclick="show(this)"><span class="icon">&#x1f9e0;</span> IA / Machine Learning</div>
+    <div class="sb-item" data-t="gen-dados" onclick="show(this)"><span class="icon">&#x1f4ca;</span> Dados / Analytics</div>
+    <div class="sb-item" data-t="gen-gestao" onclick="show(this)"><span class="icon">&#x1f4c5;</span> Gestao / Metricas</div>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="menu-toggle" onclick="toggleSB()">&#9776;</button>
+      <h2 id="topTitle">Visao Geral <span class="badge b-analysis">Analise</span></h2>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="panel active" id="p-overview">
+      <div class="card" style="border-left-color:var(--teal)">
+        <h3><span class="emoji">&#x1f4ca;</span> Objetivo da Analise</h3>
+        <p>Esta ferramenta analisa <strong>10 ebooks de disciplinas de pos-graduacao</strong> para identificar como o conhecimento de cada dominio pode ser incorporado nos prompts de engenharia de software, tornando-os mais especificos, rigorosos e alinhados com melhores praticas de mercado. Cada ebook contribui com camadas de conhecimento que transformam prompts genericos em prompts especializados com contexto de dominio.</p>
+        <p>O gerador avancado combina os <strong>templates originais</strong> com <strong>diretrizes de dominio</strong> selecionadas, gerando prompts significativamente mais ricos e coerentes.</p>
+      </div>
+
+      <div class="analysis-grid">
+        <div class="card">
+          <h3>Dominios Identificados</h3>
+          <div class="topics">
+            <span class="chip chip-devops">DevOps</span>
+            <span class="chip chip-arch">Arquitetura</span>
+            <span class="chip chip-api">APIs</span>
+            <span class="chip chip-ux">UX</span>
+            <span class="chip chip-qual">Qualidade</span>
+            <span class="chip chip-ds">Transformacao Digital</span>
+            <span class="chip chip-analytics">Analytics</span>
+            <span class="chip chip-priv">Privacidade</span>
+            <span class="chip chip-algo">Padroes</span>
+            <span class="chip chip-proc">Processos</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Melhoria no Prompt</h3>
+          <p>Ao adicionar contexto de dominio, os prompts ganham:</p>
+          <ul>
+            <li><strong>Especificidade tecnica</strong> — Terminologia precisa, frameworks e ferramentas corretas</li>
+            <li><strong>Rigor metodologico</strong> — Checklists baseadas em padroes reconhecidos (SOLID, ISO, OWASP, BPMN)</li>
+            <li><strong>Perspectiva multidimensional</strong> — Nao apenas codigo, mas arquitetura, UX, seguranca, performance e compliance</li>
+            <li><strong>Critica profissional</strong> — Anti-padroes, code smells, vulnerabilidades e atributos de qualidade</li>
+            <li><strong>Alinhamento regulatório</strong> — LGPD, GDPR, PCI-DSS, ISO 25010 como parte do requisito</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="border-left-color:var(--accent)">
+        <h3><span class="emoji">&#x1f4cb;</span> Matriz de Impacto por Template</h3>
+        <p>Esta matriz mostra quais ebooks mais influenciam cada tipo de prompt, com intensidade baixa/media/alta.</p>
+        <div style="overflow-x:auto;margin-top:12px">
+          <table class="matrix-table">
+            <thead><tr>
+              <th>Template</th>
+              <th>DevOps</th>
+              <th>APIs</th>
+              <th>Arq.</th>
+              <th>Qual.</th>
+              <th>Padr.</th>
+              <th>UX</th>
+              <th>Priv.</th>
+              <th>Proc.</th>
+              <th>Anl.</th>
+              <th>Cloud</th>
+              <th>Req.</th>
+              <th>Ag.</th>
+              <th>Sq.</th>
+              <th>Lid.</th>
+              <th>IA</th>
+              <th>D.I.</th>
+              <th>Arq.II</th>
+              <th>Met.</th>
+              <th>Ges.</th>
+            </tr></thead>
+            <tbody>
+              <tr><td><strong>Revisao de Codigo</strong></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td></tr>
+              <tr><td><strong>Design de API</strong></td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Media</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td></tr>
+              <tr><td><strong>Refatoracao Arq.</strong></td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Media</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td></tr>
+              <tr><td><strong>Seguranca + LGPD</strong></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Media</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td></tr>
+              <tr><td><strong>UX + Usabilidade</strong></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td></tr>
+              <tr><td><strong>Canivete Suico</strong></td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td><span class="check">Alta</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td><td><span class="check">Media</span></td></tr>
+              <tr><td><strong>Cloud / Infra</strong></td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td><span class="check">Media</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Media</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td></tr>
+              <tr><td><strong>IA / ML</strong></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Media</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td></tr>
+              <tr><td><strong>Dados / Analytics</strong></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td><span class="check">Media</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Media</span></td><td class="check">Baixa</td></tr>
+              <tr><td><strong>Gestao / Metricas</strong></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td class="check">Baixa</td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td><td><span class="check">Alta</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- EBOOK CARDS -->
+    <div class="panel" id="p-mapping">
+      <p style="color:var(--text2);margin-bottom:20px;font-size:13px;">Clique em um ebook para ver os insights detalhados e os prompts que ele inspira. O card fica selecionado quando voce o clica.</p>
+      <div class="analysis-grid" id="ebookGrid"></div>
+    </div>
+
+    <!-- GENERIC EBOOK PANEL -->
+    <div class="panel" id="p-e-devops"></div>
+    <div class="panel" id="p-e-td"></div>
+    <div class="panel" id="p-e-ux"></div>
+    <div class="panel" id="p-e-api"></div>
+    <div class="panel" id="p-e-arch"></div>
+    <div class="panel" id="p-e-analytics"></div>
+    <div class="panel" id="p-e-priv"></div>
+    <div class="panel" id="p-e-qual"></div>
+    <div class="panel" id="p-e-algo"></div>
+    <div class="panel" id="p-e-proc"></div>
+    <div class="panel" id="p-e-cloud"></div>
+    <div class="panel" id="p-e-requisitos"></div>
+    <div class="panel" id="p-e-agile"></div>
+    <div class="panel" id="p-e-squads"></div>
+    <div class="panel" id="p-e-lideranca"></div>
+    <div class="panel" id="p-e-ia"></div>
+    <div class="panel" id="p-e-dados"></div>
+    <div class="panel" id="p-e-arq2"></div>
+    <div class="panel" id="p-e-metricas"></div>
+    <div class="panel" id="p-e-gestao"></div>
+
+    <!-- ENHANCED GENERATORS -->
+    <div class="panel" id="p-gen-review"></div>
+    <div class="panel" id="p-gen-api"></div>
+    <div class="panel" id="p-gen-arch"></div>
+    <div class="panel" id="p-gen-security"></div>
+    <div class="panel" id="p-gen-ux"></div>
+    <div class="panel" id="p-gen-canivete"></div>
+    <div class="panel" id="p-gen-cloud"></div>
+    <div class="panel" id="p-gen-ia"></div>
+    <div class="panel" id="p-gen-dados"></div>
+    <div class="panel" id="p-gen-gestao"></div>
+
+  </div>
+</main>
+
+<script>
+// ─── DATA ───
+const meta = {
+  overview:{title:'Visao Geral',badge:'Analise',badgeClass:'b-analysis'},
+  mapping:{title:'Mapa de Dominios',badge:'Analise',badgeClass:'b-analysis'},
+  'e-devops':{title:'DevOps / CI/CD',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-td':{title:'Transformacao Digital',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-ux':{title:'UX no Desenvolvimento',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-api':{title:'Projeto e Arq. de APIs',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-arch':{title:'Arquitetura de Software',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-analytics':{title:'Analytics / Dados',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-priv':{title:'Privacy by Design / LGPD',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-qual':{title:'Qualidade de Software',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-algo':{title:'Algoritmos e Padroes',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-proc':{title:'Sistemas Orientados a Processos',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-cloud':{title:'Cloud Computing',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-requisitos':{title:'Engenharia de Requisitos',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-agile':{title:'Metodos Ageis',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-squads':{title:'Tech Squads',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-lideranca':{title:'Lideranca / Gestao',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-ia':{title:'Engenharia de IA',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-dados':{title:'Dados Intensivos',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-arq2':{title:'Arq. Software II',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-metricas':{title:'Metricas / OKR',badge:'Ebook',badgeClass:'b-analysis'},
+  'e-gestao':{title:'Gestao de Projetos',badge:'Ebook',badgeClass:'b-analysis'},
+  'gen-review':{title:'Revisao + Qualidade',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-api':{title:'Design de API',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-arch':{title:'Refatoracao Arquitetural',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-security':{title:'Seguranca + LGPD',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-ux':{title:'UX + Usabilidade',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-canivete':{title:'Canivete Suico Pro',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-cloud':{title:'Cloud / Infra',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-ia':{title:'IA / Machine Learning',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-dados':{title:'Dados / Analytics',badge:'Gerador',badgeClass:'b-gen'},
+  'gen-gestao':{title:'Gestao / Metricas',badge:'Gerador',badgeClass:'b-gen'}
+};
+
+const ebooks = [
+  {id:'e-devops',title:'DevOps e Integracao Continua',author:'Andre Borges',topics:['DevSecOps','CI/CD','Containers','Kubernetes','Observabilidade','Microservicos'],color:'var(--accent)',
+    insights:[
+      {domain:'Observabilidade',text:'Solicite logs estruturados, metricas e tracing para cada problema reportado. Exija que a LLM identifique gargalos usando os tres pilares da observabilidade e sugira instrumentacao apropriada.'},
+      {domain:'CI/CD Pipeline',text:'Quando revisar codigo de deploy, referencie as etapas do pipeline (build, test, stage, deploy). Peça validacao em cada estagio e rollback automatizado.'},
+      {domain:'Seguranca no Codigo',text:'Exija que o codigo siga o SAMM (OpenSAMM) nas 5 dimensoes: Governanca, Design, Implementacao, Verificacao e Operacao.'},
+      {domain:'Microservicos',text:'Para arquiteturas de microservicos, exija mapeamento de dependencias, interface contracts e strategy patterns para desacoplamento.'}
+    ],
+    prompts:['Revisao e Correcao','Melhoria / Refatoracao','Revisao + Qualidade']},
+  {id:'e-td',title:'Transformacao Digital dos Negocios',author:'Italo Flammia',topics:['Inovacao','Customer-Centric','Data-Driven','Culture','Ecossistema'],color:'var(--orange)',
+    insights:[
+      {domain:'Customer-Centric',text:'Sempre que o prompt envolver interacao com usuario final, solicite que a LLM avalie o impacto na experiencia do cliente e proponha melhorias baseadas em journey maps.'},
+      {domain:'Data-Driven',text:'Exija que a LLM justifique decisoes com dados, metricas ou evidencias. Solicite KPIs, dashboards e hipoteses mensuraveis.'},
+      {domain:'Cultura de Inovacao',text:'Para requests de novos projetos, peça a LLM considerar elementos de cultura organizacional, modelos de maturidade digital e learning plans ao inves de business plans.'},
+      {domain:'Ecossistema',text:'Para analises de repositorio, inclua perspectivas de ecossistema: como o codigo interage com parceiros, fornecedores e outros servicos.'}
+    ],
+    prompts:['Analise Geral','Analise Especifica','Revisao + Qualidade']},
+  {id:'e-ux',title:'UX no Desenvolvimento de Software',author:'Paula Azevedo Macedo',topics:['Usabilidade','Design Centrado','Prototipacao','Info Architecture','Empatia'],color:'#e2b34a',
+    insights:[
+      {domain:'Usabilidade Heuristica',text:'Para qualquer revisao de interface, peça analise heuristica (Nielsen) cobrindo: facilidade de aprender, eficiencia, retencao, erros e satisfacao.'},
+      {domain:'Design Centrado no Usuario',text:'Solicite que a LLM considere o processo completo de design: empatizar, definir, idear, prototipar e testar — nao apenas o codigo.'},
+      {domain:'Prototipacao Rapida',text:'Sempre inclua no prompt a solicitacao de prototipos como ferramenta de co-criacao, nao apenas validacao. Peça Crazy 8s ou prototipos de baixa fidelidade.'},
+      {domain:'Arquitetura de Informacao',text:'Para revisar interfaces, solicite avaliacao da arquitetura de informacao: organizacao, navegacao, rotulacao e hierarquia dos conteudos.'}
+    ],
+    prompts:['Revisao + Qualidade','UX + Usabilidade']},
+  {id:'e-api',title:'Projeto e Arquitetura de APIs',author:'Rafael Lachi / Weber Ress',topics:['REST Design','Anti-Patterns','Observabilidade','Seguranca','Open Banking'],color:'var(--green)',
+    insights:[
+      {domain:'API Design Principles',text:'Exija que a LLM avalie: substantivos autoexplicativos, metodos HTTP corretos (GET/POST/PUT/PATCH/DELETE), feedback informativo e exemplos de resposta.'},
+      {domain:'Anti-Patterns de API',text:'Sempre inclua verificacao de anti-patterns: falta de versionamento, documentacao ausente, sem rate limiting, logs nao registrados e endpoints nao documentados.'},
+      {domain:'Observabilidade (Logs/Metricas/Traces)',text:'Solicite que o prompt inclua requisitos de observabilidade: logs estruturados com contexto, metricas de desempenho e tracing de requisicoes.'},
+      {domain:'Plugin Architecture',text:'Para sistemas extensíveis, solicite avaliacao de: ponto de entrada, interfaces de comunicacao (hooks/APIs), gerenciamento de ciclo de vida e compatibilidade.'}
+    ],
+    prompts:['Design de API','Canivete Suico']},
+  {id:'e-arch',title:'Arquitetura de Software',author:'Adriano Carezzato',topics:['4 Pilares','Atributos de Qualidade','Refatoracao','C4/4+1','DevOps','Cloud'],color:'var(--purple)',
+    insights:[
+      {domain:'Atributos de Qualidade (-ilities)',text:'Solicite que a LLM identifique e documente os atributos de qualidade relevantes: escalabilidade, performance, seguranca, disponibilidade, manutenibilidade, testabilidade.'},
+      {domain:'Leis da Arquitetura',text:'Sempre inclua: "Toda decisao tem seu preco" e "Uma decisao so pode ser avaliada em relacao ao seu contexto". Peça trade-offs explicitos.'},
+      {domain:'Documentacao C4/4+1',text:'Para qualquer analise, solicite documentacao nos niveis C4: Contexto, Container, Componente e Codigo. Para revisoes, inclua diagramas de sequencia (Cenarios).'},
+      {domain:'Refatoracao',text:'Solicite analise de oportunidades de refatoracao com: reducao de acoplamento, automacao de testes, identificacao de padroes emergentes e planejamento escalavel.'}
+    ],
+    prompts:['Refatoracao Arquitetural','Revisao + Qualidade','Design de API']},
+  {id:'e-analytics',title:'Analytics em Negocios e Tomada de Decisao',author:'Marcelo H. de Araujo',topics:['Estatistica Descritiva','Inferencia','Regressao','Dashboards','Sampling'],color:'var(--accent)',
+    insights:[
+      {domain:'Analise Descritiva',text:'Antes de qualquer analise preditiva, solicite que a LLM faca analise descritiva: medidas de posicao (media, mediana, moda), dispersao (desvio padrao) e identificacao de outliers.'},
+      {domain:'Inferencia e Teste de Hipotese',text:'Para recomendacoes, solicite que a LLM formule hipoteses testaveis com nivel de significancia definido (alpha), considerando erros tipo I e II.'},
+      {domain:'Regressao Linear',text:'Para analises correlacionais, solicite modelos de regressao com metricas de qualidade (R2 ajustado), teste F para significancia geral e teste t para parametros individuais.'},
+      {domain:'Amostragem',text:'Solicite definicao de plano de amostragem: objetivo, populacao-alvo, metodo (aleatoria simples, estratificada, sistematica) e tamanho adequado.'}
+    ],
+    prompts:['Analise Geral','Analise Especifica','Revisao + Qualidade']},
+  {id:'e-priv',title:'Privacy by Design / LGPD',author:'Samara Schuch',topics:['LGPD','GDPR','7 Principios PbD','Bases Legais','Dados Pessoais'],color:'var(--red)',
+    insights:[
+      {domain:'7 Principios PbD',text:'Exija que o codigo siga: (1) Proativo e Preventivo, (2) Privacy by Default, (3) Privacidade no Design, (4) Soma Positiva, (5) Transparencia, (6) Seguranca Ponta-a-Ponta, (7) Centrado no Usuario.'},
+      {domain:'Bases Legais LGPD',text:'Sempre que envolver dados, solicite que a LLM identifique a base legal aplicavel (consentimento, obrigacao legal, interesse legitimo, etc.) e documente a justificativa.'},
+      {domain:'Dados Pessoais vs Sensiveis',text:'Solicite classificacao adequada: dados pessoais vs. dados sensiveis. Para sensíveis, exija protecao adicional e justificativa de processamento.'},
+      {domain:'Incidentes de Seguranca',text:'Para qualquer alteracao, solicite analise de cenarios de incidente, plano de resposta e cadeia de evidencias para auditoria.'}
+    ],
+    prompts:['Seguranca + LGPD','Canivete Suico']},
+  {id:'e-qual',title:'Garantia e Controle de Qualidade',author:'Jeniffer Deus',topics:['V&V','Testes','Automação','TDD/BDD','Code Review','DevOps'],color:'var(--red)',
+    insights:[
+      {domain:'Verificacao e Validacao',text:'Sempre solicite que a LLM separe V&V: verificacao (esta correto?) e validacao (e o que deveria fazer?). Ambos devem ser aplicados em cada nivel.'},
+      {domain:'Niveis de Teste',text:'Exija cobertura em todos os niveis: unidade, integracao, sistema e aceitacao. Para cada nivel, peça foco em limites, riscos e areas de maior complexidade.'},
+      {domain:'TDD/BDD',text:'Para codigo novo, solicite que a LLM gere ou valide usando TDD (Test-Driven Development) ou BDD (Behavior-Driven Development) com Given/When/Then.'},
+      {domain:'Analise Estatica e SAST',text:'Solicite analise estatica automatizada para detectar: codigo morto, duplicado, complexidade ciclomatica alta, vulnerabilidades OWASP e violacoes de padroes de codificacao.'}
+    ],
+    prompts:['Revisao + Qualidade','Melhoria / Refatoracao','Revisao + Qualidade']},
+  {id:'e-algo',title:'Algoritmos e Padroes de Projetos',author:'Renan de Oliveira',topics:['SOLID','Design Patterns','Estruturas','Complexidade','Clean Code','12-Factor'],color:'var(--purple)',
+    insights:[
+      {domain:'SOLID',text:'Exija verificacao de todos os 5 principios: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation e Dependency Inversion.'},
+      {domain:'Design Patterns',text:'Identifique padroes aplicaveis: criacionais (Factory, Singleton, Builder), estruturais (Adapter, Decorator, Facade) e comportamentais (Strategy, Observer, Template Method).'},
+      {domain:'Complexidade Big-O',text:'Sempre que envolver performance, solicite analise de complexidade temporal (Big-O) e compare estruturas de dados para o caso de uso especifico.'},
+      {domain:'Clean Code + 12-Factor',text:'Solicite aderencia a clean code (nomes descritivos, funcoes curtas, sem duplicacao) e aos 12 fatores app (base de codigo rastreavel, configuracoes no ambiente, logs como eventos).'}
+    ],
+    prompts:['Revisao + Qualidade','Melhoria / Refatoracao','Refatoracao Arquitetural','Canivete Suico']},
+  {id:'e-proc',title:'Sistemas Orientados a Processos',author:'Erica Siqueira',topics:['BPM','BPMN','DMN','BPMS','Low-Code','Automação'],color:'var(--teal)',
+    insights:[
+      {domain:'Modelagem BPMN',text:'Para workflows, solicite modelagem BPMN com: eventos claros, gateways corretos (XOR/OR/AND), swimlanes para atores diferentes e subprocessos bem definidos.'},
+      {domain:'DMN (Decision Tables)',text:'Para logica de negocio, solicite que decisoes complexas sejam modeladas em DMN (Decision Model and Notation) separando regras de negocio do codigo.'},
+      {domain:'Process Mining',text:'Solicite que a LLM sugira uso de process mining nos logs existentes para descobrir o "processo real" vs o "processo documentado" antes de propor mudancas.'},
+      {domain:'Orquestracao BPMS',text:'Para automacao, solicite design de orquestracao com: chamadas sincronas e assincronas (digital workers), acoplamento fraco via REST API e tolerancia a falhas.'}
+    ],
+    prompts:['Analise Geral','Revisao + Qualidade','Revisao + Qualidade']}
+  ,
+  {id:'e-cloud',title:'Computacao em Nuvem',author:'Marcelo Zillo',topics:['Cloud Computing','Seguranca na Nuvem','SaaS/PaaS/IaaS','Migracao','Responsabilidade Compartilhada','Compliance'],color:'var(--accent)',
+    insights:[
+      {domain:'Seguranca na Nuvem',text:'Solicite que a LLM avalie se o codigo segue o modelo de responsabilidade compartilhada da nuvem, verificando configuracoes de seguranca (IAM, flags de protecao, criptografia) e se estao devidamente implementadas.'},
+      {domain:'Modelos de Servico',text:'Quando revisar codigo hospedado em nuvem, exija que a LLM identifique qual modelo de servico (SaaS, PaaS, IaaS ou FaaS) esta sendo utilizado e se os recursos estao provisionados de forma otimizada (Pay as you Go).'},
+      {domain:'Migracao e Adocao',text:'Inclua verificacao dos 6 pilares de preparacao para migracao em nuvem (negocios, pessoas, governanca, plataforma, seguranca, operacoes) e solicite a LLM que avalie se o codigo esta pronto para ambientes cloud-native.'},
+      {domain:'Compliance e Regulacao',text:'Exija que a LLM verifique se o codigo atende aos requisitos de conformidade aplicaveis (LGPD, resolucao BACEN 4.658, NIST CSF) e se implementa praticas de seguranca by design, como criptografia em escala e resiliencia global.'}
+    ],
+    prompts:['Revisao e Correcao','Refatoracao Arquitetural','Canivete Suico']},
+  {id:'e-requisitos',title:'Engenharia de Requisitos em Sistemas de Informacoes',author:'Enock Godoy de Souza',topics:['Requisitos Funcionais e Nao Funcionais','Historias de Usuario','PMBOK e Scrum','Prototipos','Product Ownership','Backlog'],color:'var(--orange)',
+    insights:[
+      {domain:'Historias de Usuario',text:'Solicite que a LLM avalie se as historias de usuario no codigo seguem as caracteristicas INVEST (Independente, Negociavel, Valiosa, Estimavel, Pequena, Testavel) e se possuem criterios de aceitacao bem definidos.'},
+      {domain:'Requisitos Nao Funcionais',text:'Quando revisar codigo, inclua verificacao explicita de requisitos nao funcionais (performance, seguranca, usabilidade, escalabilidade) e solicite a LLM que identifique gaps entre o implementado e os SLAs definidos.'},
+      {domain:'Gestao do Backlog',text:'Exija que a LLM analise se a estrutura do projeto reflete um backlog de produto bem refinado, com itens ordenados por prioridade (metodo MoSCoW) e com nivel de detalhamento adequado para a sprint atual.'},
+      {domain:'Prototipagem e Validacao',text:'Ao revisar funcionalidades novas, solicite que a LLM verifique se existem prototipos ou especificacoes claras que validem os requisitos antes da implementacao, e se o codigo corresponde fielmente as especificacoes documentadas.'}
+    ],
+    prompts:['Analise Geral','Revisao + Qualidade','Canivete Suico']},
+  {id:'e-agile',title:'Metodos Ageis em Projetos de Softwares',author:'Alexandre Ferraz',topics:['Scrum','Kanban','Lean Inception','BDD','SAFe','Value Stream'],color:'#e2b34a',
+    insights:[
+      {domain:'BDD e Testes',text:'Solicite que a LLM avalie se o codigo possui testes automatizados alinhados aos cenarios Given-When-Then do BDD, garantindo especificacao viva e feedback rapido sobre a qualidade do software.'},
+      {domain:'Artefatos Ageis',text:'Quando revisar, exija que a LLM verifique a existencia e qualidade dos artefatos ageis: Scrum Board atualizado, Grafico Burndown, Product Backlog priorizado com criterios de aceite claros e Definition of Done bem estabelecida.'},
+      {domain:'Metricas de Fluxo',text:'Inclua em seus prompts uma avaliacao do fluxo de entrega: Lead Time, tempo de ciclo e throughput. Solicite a LLM que identifique gargalos no processo de desenvolvimento baseado nos padroes de commit e entrega.'},
+      {domain:'Valor e Priorizacao',text:'Exija que a LLM analise se as funcionalidades implementadas seguem a priorizacao por valor (WSJF - Weighted Shortest Job First) e se o Cost of Delay foi considerado nas decisoes de roadmap e sequenciamento de sprints.'}
+    ],
+    prompts:['Revisao e Correcao','Revisao + Qualidade','Canivete Suico']},
+  {id:'e-squads',title:'Formacao e Gestao de Tech Squads',author:'Gilberto Guimaraes',topics:['Squads Multifuncionais','Lideranca Situacional','Modelo de Tuckman','OKR','Autogestao','Lideranca Positiva'],color:'var(--green)',
+    insights:[
+      {domain:'OKR e Resultados',text:'Solicite que a LLM verifique se o codigo e as entregas do time estao alinhados aos OKRs definidos, distinguindo entre esforco (output) e resultado (outcome), e se os Key Results sao mensuraveis e rastreaveis.'},
+      {domain:'Estrutura de Equipe',text:'Quando revisar codigo em contexto de squads, exija que a LLM avalie se a estrutura do codigo reflete uma equipe multifuncional (5-10 membros) com autonomia e se as responsabilidades estao bem distribuidas sem dependencias externas criticas.'},
+      {domain:'Competencias e Perfil',text:'Inclua verificacao sobre se o codigo demanda competencias presentes no perfil do squad, solicitando a LLM que identifique skills faltantes (competencias tecnicas, comunicacao, tomada de decisao) que possam impactar a entrega.'},
+      {domain:'Dinamica de Equipe',text:'Exija que a LLM analise padroes de colaboracao no codigo (comunicacoes, code reviews, pair programming) e indique se o time esta em fase de Forming, Storming, Norming ou Performing (modelo de Tuckman), sugerindo acoes de melhoria.'}
+    ],
+    prompts:['Analise Geral','Refatoracao Arquitetural','Canivete Suico']},
+  {id:'e-lideranca',title:'Lideranca e Gestao de Pessoas',author:'Gilberto Guimaraes',topics:['Lideranca Positiva','Gestao de Mudancas','Cultura Organizacional','Mobilizacao','Kotter 8 Etapas','Alto Desempenho'],color:'var(--purple)',
+    insights:[
+      {domain:'Gestao de Mudancas',text:'Solicite que a LLM avalie mudancas no codigo sob a perspectiva das 8 etapas de Kotter, verificando se ha senso de urgencia, coalizao de apoio, comunicacao da visao, empoderamento, vitorias de curto prazo e consolidacao na cultura.'},
+      {domain:'Cultura Organizacional',text:'Quando revisar processos e padroes de codigo, exija que a LLM identifique se os elementos visiveis da cultura (politicas, procedimentos, estrutura) e os invisiveis (valores, crencas, pressupostos) estao alinhados com as praticas de desenvolvimento.'},
+      {domain:'Mobilizacao e Engajamento',text:'Inclua avaliacao dos 5 fatores de mobilizacao: conceito de comunidade, comunicacao, sentimento de importancia, escolha criteriosa dos participantes e reconhecimento. Solicite que a LLM indique se o ambiente promove alto desempenho.'},
+      {domain:'Lideranca Positiva',text:'Exija que a LLM analise se as decisoes tecnicas e de arquitetura refletem lideranca positiva (foco em forcas ao inves de fraquezas, otimismo, apoio ao inves de critica) e se promovem um ambiente de eliminacao do medo e busca do virtuosismo.'}
+    ],
+    prompts:['Analise Geral','Refatoracao Arquitetural','Canivete Suico']},
+  {id:'e-ia',title:'Engenharia de Inteligencia Artificial',author:'Adriano Carezzato',topics:['Machine Learning','Deep Learning','Redes Neurais','Etica e Vies em IA','IA Responsavel','Aplicacoes de IA'],color:'var(--red)',
+    insights:[
+      {domain:'Vies e Etica',text:'Solicite que a LLM avalie modelos de IA quanto a vies nos dados de treinamento, verificando se os datasets sao diversos e representativos, e se existem mecanismos de auditoria que previnam a replicacao de desigualdades sociais e discriminacao.'},
+      {domain:'Qualidade dos Dados',text:'Quando revisar codigo de IA/ML, exija que a LLM verifique a qualidade dos dados (completude, consistencia, veracidade), aplicando o principio "garbage in, trash out", e se a LGPD/GDPR esta sendo respeitada no tratamento de dados sensiveis.'},
+      {domain:'Overfitting e Generalizacao',text:'Inclua verificacao de overfitting e underfitting nos modelos: solicite que a LLM analise se ha separacao adequada entre treino e teste, se a metrica de avaliacao e condizente com o problema de negocio e se o modelo generaliza para dados reais.'},
+      {domain:'Seguranca de IA',text:'Exija que a LLM avalie a robustez do modelo contra ataques adversarios (pequenas alteracoes nos dados de entrada), se ha integracao de supervisao humana em aplicacoes criticas, e se os principios de IA responsavel (transparencia, justica, privacidade, responsabilidade) sao seguidos.'}
+    ],
+    prompts:['Revisao e Correcao','Revisao + Qualidade','Canivete Suico']},
+  {id:'e-dados',title:'Projeto e Arq. de Sistemas de Uso Intensivo de Dados',author:'Etienne Cartolano',topics:['Big Data','Business Intelligence','Data Science','Microsservicos','ETL e Analytics','ML Aplicado'],color:'var(--teal)',
+    insights:[
+      {domain:'Big Data',text:'Solicite que a LLM avalie se a arquitetura do sistema considera os 5 Vs do Big Data (volume, velocidade, variedade, veracidade, valor) e se as decisoes de design de dados estao alinhadas ao problema de negocio definido.'},
+      {domain:'Qualidade dos Dados',text:'Quando revisar pipelines de dados, exija que a LLM verifique o processo de ETL completo: tratamento de dados faltantes, remocao de anomalias/outliers, normalizacao, e se a integracao de multiplas fontes mantem a consistencia e a rastreabilidade.'},
+      {domain:'Arquitetura de Microsservicos',text:'Inclua avaliacao dos principios de design de microsservicos: dominio bem definido, baixo acoplamento entre servicos, independencia de deploy, e se a arquitetura suporta escalabilidade horizontal e resiliencia.'},
+      {domain:'Analise e Decisao',text:'Exija que a LLM verifique se o processo analitico segue o ciclo completo (definicao do problema, coleta, preparacao, modelagem, comunicacao de resultados, feedback) e se as metricas estao definidas segundo o modelo SMART.'}
+    ],
+    prompts:['Analise Geral','Design de API','Refatoracao Arquitetural']},
+  {id:'e-arq2',title:'Arquitetura de Softwares',author:'Adriano Carezzato',topics:['Atributos de Qualidade','Microsservicos','DevOps e CI/CD','Observabilidade','Documentacao de Arq.','Seguranca por Design'],color:'var(--yellow)',
+    insights:[
+      {domain:'Atributos de Qualidade',text:'Solicite que a LLM avalie se o codigo atende aos atributos de qualidade arquiteturais (escalabilidade, performance, seguranca, manutenibilidade) e se as decisoes arquiteturais minimizam o custo cumulativo ao longo da vida util do sistema.'},
+      {domain:'DevOps e Automacao',text:'Quando revisar infraestrutura e deploy, exija que a LLM verifique a presenca de praticas CI/CD, automacao de testes, containers e se a cultura de iteracao continua esta refletida na pipeline de entrega do software.'},
+      {domain:'Observabilidade',text:'Inclua verificacao de observabilidade: solicite que a LLM analise se existem mecanismos de logging, tracing e monitoramento que permitam compreender o comportamento interno do sistema e identificar gargalos de performance.'},
+      {domain:'Seguranca por Design',text:'Exija que a LLM avalie se a seguranca esta integrada desde as fases iniciais do projeto (Security by Design), verificando criptografia de dados sensiveis, controles de acesso baseados em privilegios minimos e conformidade com LGPD e GDPR.'}
+    ],
+    prompts:['Refatoracao Arquitetural','Revisao + Qualidade','Design de API']},
+  {id:'e-metricas',title:'Metricas na Gestao de Projetos de Software',author:'Raphael Donaire Albino',topics:['OKR','Estrategia de Negocios','Lead Time e Throughput','Lei de Little','Work in Progress','Monte Carlo'],color:'var(--pink)',
+    insights:[
+      {domain:'OKR e Alinhamento Estrategico',text:'Solicite que a LLM avalie se o codigo e as entregas estao conectados aos OKRs da organizacao, verificando se os Key Results sao quantitativos, mensuraveis e orientados a resultado (nao apenas a entrega/tarefas).'},
+      {domain:'Fluxo e Entrega',text:'Quando revisar projetos, exija que a LLM analise metricas de fluxo como Lead Time (tempo desde a solicitacao ate a entrega), Throughput (itens entregues por periodo) e Work in Progress, identificando gargalos e sugerindo limites de WIP.'},
+      {domain:'Efficiency vs Effectiveness',text:'Inclua avaliacao da diferenca entre eficiencia (fazer as coisas certo) e eficacia (fazer as coisas certas): solicite que a LLM verifique se as metricas do projeto medem impacto real no negocio, nao apenas produtividade ou volume de entregas.'},
+      {domain:'Previsibilidade',text:'Exija que a LLM analise a previsibilidade do projeto usando dados historicos de ciclo de entrega e simulacoes de Monte Carlo, verificando se as estimativas de prazo sao realistas e se ha margem de erro adequada.'}
+    ],
+    prompts:['Analise Geral','Revisao + Qualidade','Canivete Suico']},
+  {id:'e-gestao',title:'Praticas de Gestao de Projetos de Software',author:'Adriano Neves',topics:['PMBOK','Gerenciamento de Escopo','Gerenciamento de Riscos','Metodos Hibridos','PMO','Ciclo de Vida do Projeto'],color:'var(--sky)',
+    insights:[
+      {domain:'Escopo e EAP',text:'Solicite que a LLM verifique se o escopo do projeto esta claramente definido (declaracao de escopo) e se a EAP (Work Breakdown Structure) esta alinhada com as entregas reais do codigo, evitando scope creep e entregas nao planejadas.'},
+      {domain:'Gerenciamento de Riscos',text:'Quando revisar projetos, exija que a LLM identifique riscos tecnicos e de negocio (com probabilidade e impacto), e se as respostas aos riscos (evitar, transferir, mitigar, aceitar) estao documentadas e sendo monitoradas ativamente.'},
+      {domain:'Modelo de Gestao',text:'Inclua avaliacao de qual modelo de gestao e mais adequado (tradicional, agil ou hibrido): solicite que a LLM analise a complexidade do projeto, o nivel de mudanca nos requisitos e a maturidade da organizacao para recomendar o modelo ideal.'},
+      {domain:'Stakeholders e Comunicacao',text:'Exija que a LLM verifique se o plano de comunicacao do projeto contempla todos os stakeholders mapeados (poder/interesse), se o Termo de Abertura (Project Charter) esta atualizado e se a gestao de aquisicoes segue criterios formais de avaliacao.'}
+    ],
+    prompts:['Analise Geral','Revisao + Qualidade','Canivete Suico']}
+];
+
+// ─── NAVIGATION ───
+function show(el){
+  const id=el.dataset.t;const m=meta[id];
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const panel=document.getElementById('p-'+id);
+  if(panel) panel.classList.add('active');
+  document.getElementById('topTitle').innerHTML=m.title+' <span class="badge '+m.badgeClass+'">'+m.badge+'</span>';
+  if(window.innerWidth<=768){document.getElementById('sb').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+}
+function toggleSB(){document.getElementById('sb').classList.toggle('open');document.getElementById('overlay').classList.toggle('open')}
+
+// ─── EBOOK GRID ───
+function buildGrid(){
+  const g=document.getElementById('ebookGrid');
+  g.innerHTML=ebooks.map(e=>`
+    <div class="ebook-card" onclick="this.classList.toggle('selected')">
+      <h4>${e.topics[0]}</h4>
+      <div class="author">${e.author}</div>
+      <div class="topics">${e.topics.map(t=>'<span class="chip" style="background:'+e.color+'20);color:'+e.color+'">'+t+'</span>').join('')}</div>
+      <p>${e.insights[0].domain}: ${e.insights[0].text.substring(0,120)}...</p>
+    </div>
+  `).join('');
+}
+
+// ─── BUILD EBOOK DETAIL PANELS ───
+function buildEbookPanels(){
+  ebooks.forEach(e=>{
+    const el=document.getElementById('p-'+e.id);
+    if(!el) return;
+    const selectedPrompt = e.prompts[0];
+    el.innerHTML=`
+      <div class="card" style="border-left-color:${e.color}">
+        <h3><span class="emoji">&#x1f4d6;</span> ${e.title} <small style="font-weight:400;color:var(--muted)">— ${e.author}</small></h3>
+        <div class="topics" style="margin-bottom:12px">${e.topics.map(t=>'<span class="chip" style="background:'+e.color+'20);color:'+e.color+'">'+t+'</span>').join('')}</div>
+      </div>
+
+      ${e.insights.map((ins,i)=>`
+        <div class="principle" style="border-left-color:${e.color}">
+          <h4>#${i+1} ${ins.domain}</h4>
+          <p>${ins.text}</p>
+        </div>
+      `).join('')}
+
+      <div class="enh-section" style="border-color:${e.color}">
+        <h3><span class="emoji">&#x1f680;</span> Como Este Ebook Melhora Seus Prompts</h3>
+        <p>Quando gerar um prompt nestes dominios, inclua no seu prompt uma das frases abaixo (ou adicione o bloco completo ao final):</p>
+        <div style="margin-top:10px;background:var(--bg);border-radius:6px;padding:12px;font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap;font-family:'SF Mono','Cascadia Code','Fira Code','Consolas',monospace">${e.insights.map(ins=>'[RECOMENDACAO] '+ins.domain+': '+ins.text).join('\n\n')}</div>
+      </div>
+    `;
+  });
+}
+
+// ─── BUILD ENHANCED GENERATORS ───
+function buildGenerators(){
+  // Review + Quality
+  document.getElementById('p-gen-review').innerHTML=`
+    <div class="enh-section" style="border-color:var(--red)">
+      <h3><span class="emoji">&#x2705;</span> Dominios Ativos: Qualidade SW + Arq. Software + SOLID</h3>
+      <p>Este gerador combina verificacao de qualidade, revisao de codigo com padroes de arquitetura. Inclua automaticamente checklists de V&V, analise estatica, principios SOLID e atributos de qualidade.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="rq-repo" placeholder="/home/z/my-project/meu-app"></div>
+      <div class="fg"><label>Arquivo ou diretorio <span class="req">*</span></label><input type="text" id="rq-arq" placeholder="src/services/ ou src/utils/auth.ts"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto / Motivacao <span class="req">*</span></label>
+      <textarea id="rq-ctx" placeholder="Ex: Refatorar apos incidente de producao, preparando para PR..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Domínios de qualidade para incluir</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="rq-verif" checked> Verificacao e Validacao</label>
+        <label class="cb-item"><input type="checkbox" id="rq-test" checked> Testes (todos os niveis)</label>
+        <label class="cb-item"><input type="checkbox" id="rq-sast" checked> Analise Estatica (SAST)</label>
+        <label class="cb-item"><input type="checkbox" id="rq-rev" checked> Code Review</label>
+        <label class="cb-item"><input type="checkbox" id="rq-qual" checked> Atributos de Qualidade</label>
+        <label class="cb-item"><input type="checkbox" id="rq-solid" checked> Principios SOLID</label>
+        <label class="cb-item"><input type="checkbox" id="rq-clean"> Clean Code / 12-Factor</label>
+        <label class="cb-item"><input type="checkbox" id="rq-arqcb"> Arquitetura (C4, Refatoracao)</label>
+        <label class="cb-item"><input type="checkbox" id="rq-devops"> DevOps / Pipeline</label>
+        <label class="cb-item"><input type="checkbox" id="rq-perf"> Performance / Escalabilidade</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('review')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-review"></div>
+  `;
+
+  // API Design
+  document.getElementById('p-gen-api').innerHTML=`
+    <div class="enh-section" style="border-color:var(--green)">
+      <h3><span class="emoji">&#x1f310;</span> Dominios Ativos: API Design + Observabilidade + Anti-Patterns</h3>
+      <p>Inclui automaticamente verificacao de design RESTful, checagem de anti-patterns, requisitos de observabilidade e principios de API bem projetada.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="ap-repo" placeholder="/home/z/my-project/api-server"></div>
+      <div class="fg"><label>Arquivo(s) de API <span class="req">*</span></label><input type="text" id="ap-arq" placeholder="src/routes/users.ts ou src/routes/*"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto <span class="req">*</span></label>
+      <textarea id="ap-ctx" placeholder="Ex: Refatorar endpoints para producao, seguir boas praticas REST..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Framework/Linguagem</label>
+      <select id="ap-fw"><option value="">Deixe descobrir</option><option value="Express">Express</option><option value="FastAPI">FastAPI</option><option value="NestJS">NestJS</option><option value="Spring Boot">Spring Boot</option><option value="Django">Django</option><option value="Flask">Flask</option><option value="Outro">Outro</option></select>
+    </div>
+    <div class="fg">
+      <label>Tipos de analise</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="ap-design" checked> Design RESTful (URLs, metodos, headers)</label>
+        <label class="cb-item"><input type="checkbox" id="ap-anti" checked> Anti-Patterns de API</label>
+        <label class="cb-item"><input type="checkbox" id="ap-obs" checked> Observabilidade (logs/metricas/traces)</label>
+        <label class="cb-item"><input type="checkbox" id="ap-sec" checked> Seguranca (autenticacao, validacao, rate limit)</label>
+        <label class="cb-item"><input type="checkbox" id="ap-doc"> Documentacao e exemplos de resposta</label>
+        <label class="cb-item"><input type="checkbox" id="ap-perf"> Performance e escalabilidade</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('api')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-api"></div>
+  `;
+
+  // Architecture Refactoring
+  document.getElementById('p-gen-arch').innerHTML=`
+    <div class="enh-section" style="border-color:var(--purple)">
+      <h3><span class="emoji">&#x1f3d7;</span> Dominios Ativos: Arquitetura + Qualidade + DevOps</h3>
+      <p>Combina principios de arquitetura, atributos de qualidade e praticas DevOps para gerar diffs que respeitam a visao arquitetural do projeto.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="ar-repo" placeholder="/home/z/my-project/frontend"></div>
+      <div class="fg"><label>Arquivo(s) ou diretorio <span class="req">*</span></label><input type="text" id="ar-arq" placeholder="src/modules/auth/ ou src/components/"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto <span class="req">*</span></label>
+      <textarea id="ar-ctx" placeholder="Ex: Preparando monolito para migracao para microservicos..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Dimensoes da analise</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="ar-4pil" checked> 4 Pilares da Arquitetura</label>
+        <label class="cb-item"><input type="checkbox" id="ar-qual" checked> Atributos de Qualidade (-ilities)</label>
+        <label class="cb-item"><input type="checkbox" id="ar-leis"> Leis do Trabalho Arquitetural</label>
+        <label class="cb-item"><input type="checkbox" id="ar-c4" checked> Documentacao C4</label>
+        <label class="cb-item"><input type="checkbox" id="ar-refat"> Refatoracao e Evolucao</label>
+        <label class="cb-item"><input type="checkbox" id="ar-cloud"> Arq. de Nuvem / Cloud</label>
+        <label class="cb-item"><input type="checkbox" id="ar-devops" checked> DevOps / CI-CD</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('arch')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-arch"></div>
+  `;
+
+  // Security + LGPD
+  document.getElementById('p-gen-security').innerHTML=`
+    <div class="enh-section" style="border-color:var(--red)">
+      <h3><span class="emoji">&#x1f6e1;</span> Dominios Ativos: Privacy by Design + LGPD + OWASP</h3>
+      <p>Gera prompts que incluem automaticamente verificacao de conformidade com LGPD, principios de Privacy by Design, checagem OWASP e cadeia de evidencias.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="se-repo" placeholder="/home/z/my-project/app"></div>
+      <div class="fg"><label>Arquivo(s) <span class="req">*</span></label><input type="text" id="se-arq" placeholder="src/middleware/auth.ts ou src/controllers/*"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto <span class="req">*</span></label>
+      <textarea id="se-ctx" placeholder="Ex: Revisar endpoints que tratam dados pessoais para conformidade LGPD..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Nivel de conformidade</label>
+      <select id="se-nivel"><option value="lgpd-completa">LGPD Completa (todos os 10 principios)</option><option value="lgpd-essenciais">LGPD Essenciais (5 principios)</option><option value="owasp-top10">OWASP Top 10 + LGPD</option><option value="pbd-7principios">Privacy by Design (7 principios)</option><option value="completo">Tudo (LGPD + OWASP + PbD)</option></select>
+    </div>
+    <div class="fg">
+      <label>Tipo de dado predominante</label>
+      <select id="se-dado"><option value="geral">Dados pessoais gerais</option><option value="sensivel">Dados pessoais sensiveis</option><option value="critico">Dados criticos (saude, financeiro)</option><option value="crianca">Dados de criancas e adolescentes</option></select>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('security')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-security"></div>
+  `;
+
+  // UX + Usability
+  document.getElementById('p-gen-ux').innerHTML=`
+    <div class="enh-section" style="border-color:'#e2b34a">
+      <h3><span class="emoji">&#x1f3a8;</span> Dominios Ativos: UX + Usabilidade + Design Centrado</h3>
+      <p>Combina heuristicas de usabilidade, principios de design centrado no usuario e processos de design thinking para gerar prompts com foco na experiencia do usuario.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="ux-repo" placeholder="/home/z/my-project/frontend"></div>
+      <div class="fg"><label>Arquivo(s) de componente/interface <span class="req">*</span></label><input type="text" id="ux-arq" placeholder="src/components/LoginForm.tsx"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto <span class="req">*</span></label>
+      <textarea id="ux-ctx" placeholder="Ex: Revisar componente de login para melhorar a experiencia..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Frameworks</label>
+      <div class="fr">
+        <div class="fg"><label>UI Framework</label><select id="ux-ui"><option value="">Deixe descobrir</option><option value="React">React</option><option value="Next.js">Next.js</option><option value="Vue">Vue</option><option value="Angular">Angular</option><option value="Svelte">Svelte</option></select></div>
+        <div class="fg"><label>Estilo</label><select id="ux-style"><option value="">Deixe descobrir</option><option value="shadcn/ui + Tailwind">shadcn/ui + Tailwind</option><option value="Material UI">Material UI</option><option value="Chakra UI">Chakra UI</option><option value="CSS Modules">CSS Modules</option><option value="Styled Components">Styled Components</option></select></div>
+      </div>
+    </div>
+    <div class="fg">
+      <label>Aspectos UX para incluir</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="ux-heur" checked> Analise Heuristica (Nielsen)</label>
+        <label class="cb-item"><input type="checkbox" id="ux-acess" checked> Acessibilidade</label>
+        <label class="cb-item"><input type="checkbox" id="ux-design" checked> Design Centrado no Usuario</label>
+        <label class="cb-item"><input type="checkbox" id="ux-proto" checked> Prototipacao Rapida</label>
+        <label class="cb-item"><input type="checkbox" id="ux-ia" checked> Arq. de Informacao</label>
+        <label class="cb-item"><input type="checkbox" id="ux-journey"> Jornada do Usuario</label>
+        <label class="cb-item"><input type="checkbox" id="ux-mobile"> Mobile-first</label>
+        <label class="cb-item"><input type="checkbox" id="ux-a11y"> Internacionalizacao (i18n)</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('ux')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-ux"></div>
+  `;
+
+  // Canivete Suico Pro
+  document.getElementById('p-gen-canivete').innerHTML=`
+    <div class="enh-section" style="border-color:var(--yellow)">
+      <h3><span class="emoji">&#x91d;</span> Canivete Suico Pro — Todos os Dominios Ativos</h3>
+      <p>O gerador mais completo. Inclui automaticamente camadas de verificacao de codigo, arquitetura, qualidade, seguranca, performance, UX e processos. Gera prompts altamente especializados com diff pronto para git apply.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="cs-repo" placeholder="/home/z/my-project/meu-app"></div>
+      <div class="fg"><label>Arquivo(s) ou diretorio <span class="req">*</span></label><input type="text" id="cs-arq" placeholder="src/ ou src/services/*"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto / Motivacao <span class="req">*</span></label>
+      <textarea id="cs-ctx" placeholder="Ex: Analise completa do repositorio antes de PR, refatorar debito tecnico..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Tipo de melhoria predominante</label>
+      <select id="cs-tipo"><option value="tudo">Analise completa (todos os dominios)</option><option value="qualidade">Qualidade e Testes</option><option value="arquitetura">Arquitetura e Design</option><option value="seguranca">Seguranca e Compliance</option><option value="performance">Performance e Escalabilidade</option><option value="ux">UX e Usabilidade</option><option value="devops">DevOps e Pipeline</option><option value="processos">Processos e Automacao</option><option value="refatoracao">Refatoracao Geral</option></select>
+    </div>
+    <div class="fg">
+      <label>Profundidade da analise</label>
+      <select id="cs-profund"><option value="completa">Completa (todas as camadas)</option><option value="focada">Focada (apenas dominios relevantes)</option><option value="resumida">Resumida (checklist + diffs)</option></select>
+    </div>
+    <div class="fg">
+      <label>Entregaveis esperados</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="cs-sum" checked> Resumo executivo</label>
+        <label class="cb-item"><input type="checkbox" id="cs-just" checked> Justificativa por mudanca</label>
+        <label class="cb-item"><input type="checkbox" id="cs-diff" checked> Diffs completos (git apply)</label>
+        <label class="cb-item"><input type="checkbox" id="cs-riscos"> Riscos e mitigacoes</label>
+        <label class="cb-item"><input type="checkbox" id="cs-novos"> Novos arquivos criados (conteudo completo)</label>
+        <label class="cb-item"><input type="checkbox" id="cs-testes"> Testes atualizados/criados</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('canivete')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-canivete"></div>
+  `;
+
+  // Cloud / Infra
+  document.getElementById('p-gen-cloud').innerHTML=`
+    <div class="enh-section" style="border-color:var(--accent)">
+      <h3><span class="emoji">&#x2601;</span> Dominios Ativos: Cloud Computing + Seguranca + Compliance</h3>
+      <p>Combina verificacao de seguranca na nuvem, modelos de servico, migracao cloud-native e conformidade regulatória para gerar prompts especializados em infraestrutura cloud.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="cl-repo" placeholder="/home/z/my-project/cloud-app"></div>
+      <div class="fg"><label>Arquivo(s) <span class="req">*</span></label><input type="text" id="cl-arq" placeholder="terraform/ ou src/infra/"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto <span class="req">*</span></label>
+      <textarea id="cl-ctx" placeholder="Ex: Migrar infraestrutura para AWS, verificar seguranca de IAM..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Aspectos Cloud para incluir</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="cl-sec" checked> Seguranca na Nuvem (IAM, criptografia)</label>
+        <label class="cb-item"><input type="checkbox" id="cl-model" checked> Modelos de Servico (SaaS/PaaS/IaaS/FaaS)</label>
+        <label class="cb-item"><input type="checkbox" id="cl-migr"> Migracao e Adocao (6 pilares)</label>
+        <label class="cb-item"><input type="checkbox" id="cl-comp"> Compliance (LGPD, BACEN, NIST)</label>
+        <label class="cb-item"><input type="checkbox" id="cl-iac"> Infraestrutura como Codigo (IaC)</label>
+        <label class="cb-item"><input type="checkbox" id="cl-cont"> Containers e Orquestracao</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('cloud')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-cloud"></div>
+  `;
+
+  // IA / Machine Learning
+  document.getElementById('p-gen-ia').innerHTML=`
+    <div class="enh-section" style="border-color:var(--red)">
+      <h3><span class="emoji">&#x1f9e0;</span> Dominios Ativos: IA Responsavel + Etica + Qualidade de Dados</h3>
+      <p>Gera prompts que incluem verificacao de vies, qualidade de dados, overfitting, seguranca de IA e conformidade com principios de IA responsavel.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="ia-repo" placeholder="/home/z/my-project/ml-model"></div>
+      <div class="fg"><label>Arquivo(s) <span class="req">*</span></label><input type="text" id="ia-arq" placeholder="src/model/ ou notebooks/"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto <span class="req">*</span></label>
+      <textarea id="ia-ctx" placeholder="Ex: Avaliar modelo de classificacao para vies e conformidade LGPD..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Tipo de modelo</label>
+      <select id="ia-tipo"><option value="">Deixe descobrir</option><option value="Classificacao">Classificacao</option><option value="Regressao">Regressao</option><option value="NLP">NLP / Processamento de Linguagem</option><option value="Visao">Visao Computacional</option></select>
+    </div>
+    <div class="fg">
+      <label>Aspectos de IA para incluir</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="ia-vies" checked> Vies e Etica</label>
+        <label class="cb-item"><input type="checkbox" id="ia-qual" checked> Qualidade dos Dados</label>
+        <label class="cb-item"><input type="checkbox" id="ia-over" checked> Overfitting e Generalizacao</label>
+        <label class="cb-item"><input type="checkbox" id="ia-sec" checked> Seguranca de IA</label>
+        <label class="cb-item"><input type="checkbox" id="ia-expl"> Explicabilidade</label>
+        <label class="cb-item"><input type="checkbox" id="ia-lgpd"> Conformidade LGPD/GDPR</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('ia')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-ia"></div>
+  `;
+
+  // Dados / Analytics
+  document.getElementById('p-gen-dados').innerHTML=`
+    <div class="enh-section" style="border-color:var(--teal)">
+      <h3><span class="emoji">&#x1f4ca;</span> Dominios Ativos: Big Data + ETL + Microsservicos + Analytics</h3>
+      <p>Combina verificacao dos 5 Vs do Big Data, pipelines ETL, arquitetura de microsservicos e ciclo analítico completo.</p>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="da-repo" placeholder="/home/z/my-project/data-pipeline"></div>
+      <div class="fg"><label>Arquivo(s) <span class="req">*</span></label><input type="text" id="da-arq" placeholder="src/etl/ ou src/pipelines/"></div>
+    </div>
+    <div class="fg">
+      <label>Contexto <span class="req">*</span></label>
+      <textarea id="da-ctx" placeholder="Ex: Otimizar pipeline de ETL, implementar metricas SMART..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Aspectos de Dados para incluir</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="da-5vs" checked> Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)</label>
+        <label class="cb-item"><input type="checkbox" id="da-etl" checked> ETL e Qualidade de Dados</label>
+        <label class="cb-item"><input type="checkbox" id="da-ms"> Microsservicos</label>
+        <label class="cb-item"><input type="checkbox" id="da-anal"> Analise e Decisao (SMART)</label>
+        <label class="cb-item"><input type="checkbox" id="da-qd"> Qualidade dos Dados</label>
+        <label class="cb-item"><input type="checkbox" id="da-ml"> ML Aplicado</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('dados')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-dados"></div>
+  `;
+
+  // Gestao / Metricas
+  document.getElementById('p-gen-gestao').innerHTML=`
+    <div class="enh-section" style="border-color:var(--pink)">
+      <h3><span class="emoji">&#x1f4c5;</span> Dominios Ativos: Gestao de Projetos + OKR + Metricas de Fluxo</h3>
+      <p>Combina escopo e EAP, gestao de riscos, OKRs, metricas de fluxo e modelos de gestao para gerar prompts especializados em gestao de projetos de software.</p>
+    </div>
+    <div class="fg">
+      <label>Caminho do repositorio <span class="req">*</span></label>
+      <input type="text" id="ge-repo" placeholder="/home/z/my-project/meu-app">
+    </div>
+    <div class="fg">
+      <label>Contexto <span class="req">*</span></label>
+      <textarea id="ge-ctx" placeholder="Ex: Avaliar aderencia ao escopo, verificar riscos do projeto, analisar OKRs..."></textarea>
+    </div>
+    <div class="fg">
+      <label>Aspectos de Gestao para incluir</label>
+      <div class="cb-group">
+        <label class="cb-item"><input type="checkbox" id="ge-escopo" checked> Escopo e EAP</label>
+        <label class="cb-item"><input type="checkbox" id="ge-riscos" checked> Gerenciamento de Riscos</label>
+        <label class="cb-item"><input type="checkbox" id="ge-okr" checked> OKR e Alinhamento Estrategico</label>
+        <label class="cb-item"><input type="checkbox" id="ge-fluxo"> Fluxo e Entrega (Lead Time, WIP)</label>
+        <label class="cb-item"><input type="checkbox" id="ge-modelo"> Modelo de Gestao (Agil/Hibrido)</label>
+        <label class="cb-item"><input type="checkbox" id="ge-stake"> Stakeholders e Comunicacao</label>
+      </div>
+    </div>
+    <button class="btn-gen" onclick="genEnhanced('gestao')">&#x1f680; Gerar Prompt com Dominios</button>
+    <div class="out" id="out-gestao"></div>
+  `;
+}
+
+// ─── HELPERS ───
+function v(id){return(document.getElementById(id)||{}).value.trim()}
+function chk(id){return(document.getElementById(id)||{}).checked}
+
+// ─── ENHANCED GENERATORS ───
+const enhGen={
+  review(){
+    const repo=v('rq-repo'),arq=v('rq-arq'),ctx=v('rq-ctx');
+    const domains=checkedItems(['rq-verif','rq-test','rq-sast','rq-rev','rq-qual','rq-solid','rq-clean','rq-arqcb','rq-devops','rq-perf']);
+    const domainLabels={
+      'rq-verif':'Verificacao e Validacao (shift-left testing)',
+      'rq-test':'Testes em todos os niveis (unidade, integracao, sistema, aceitacao)',
+      'rq-sast':'Analise estatica automatizada (SAST) para code smells e vulnerabilidades',
+      'rq-rev':'Revisao de codigo por pares (detectar oportunidades de melhoria mutua)',
+      'rq-qual':'Atributos de qualidade: escalabilidade, performance, seguranca, disponibilidade, manutenibilidade',
+      'rq-solid':'Principios SOLID (Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion)',
+      'rq-clean':'Clean Code (nomes descritivos, funcoes curtas, sem duplicacao) + 12-Factor App',
+      'rq-arqcb':'Arquitetura (C4, 4+1), refatoracao e evolucao modular',
+      'rq-devops':'DevOps / CI-CD pipeline, automacao de build e deploy',
+      'rq-perf':'Performance e escalabilidade horizontal/vertical, metricas e balanceamento de carga'
+    };
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXTO: ${ctx}\n\n`;
+    p+=`INSTRUCAO DE DOMINIO:\nVerifique os seguintes aspectos de qualidade do codigo aplicando frameworks e principios reconhecidos de engenharia de software:\n\n`;
+    domains.forEach((_,i)=>{
+      const label=domainLabels[_];
+      p+=`${i+1}. ${label}\n`;
+    });
+    p+=`\nREGRAS OBRIGATORIAS:\n- Mantenha a interface publica (exports, tipos, contratos) sem breaking changes\n`;
+    p+=`- Siga EXATAMENTE os padroes existentes no restante do projeto\n`;
+    p+=`- O codigo gerado deve ser indistinguivel do estilo da codebase\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Resumo executivo das mudancas\n`;
+    p+=`2. Para cada mudanca: justificativa + trecho antes/depois\n`;
+    p+=`3. Diff completo de CADA arquivo (pronto para git apply)\n`;
+    p+=`4. Novos arquivos criados (com conteudo completo)\n`;
+    p+=`5. Testes atualizados/criados\n`;
+    p+=`6. Riscos da mudanca e como mitigar\n`;
+    return p;
+  },
+
+  api(){
+    const repo=v('ap-repo'),arq=v('ap-arq'),ctx=v('ap-ctx'),fw=sel('ap-fw');
+    const domains=checkedItems(['ap-design','ap-anti','ap-obs','ap-sec','ap-doc','ap-perf']);
+    const domainLabels={
+      'ap-design':'Design RESTful (substantivos autoexplicativos, metodos HTTP, feedback, exemplos de resposta)',
+      'ap-anti':'Anti-Patterns de API (versionamento, documentacao ausente, sem rate limiting, sem logs, sem docs)',
+      'ap-obs':'Observabilidade (logs estruturados com contexto, metricas de desempenho, tracing de requisicoes)',
+      'ap-sec':'Seguranca (autenticacao, validacao de input, rate limiting, protecao contra ataques comuns)',
+      'ap-doc':'Documentacao (OpenAPI/Swagger, exemplos de resposta claros, guias de uso)',
+      'ap-perf':'Performance e escalabilidade (identificar gargalos, testes de carga, balanceamento de carga)'
+    };
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXTO: ${ctx}\n`;
+    if(fw) p+=`FRAMEWORK: ${fw}\n`;
+    p+=`\nINSTRUCAO DE DOMINIO — Verifique os seguintes aspectos do design da API:\n\n`;
+    domains.forEach((_,i)=>{p+=`${i+1}. ${domainLabels[_]}\n`;});
+    p+=`\nREGRAS OBRIGATORIAS:\n- A API deve ser facil de ler e dificil de usar incorretamente\n`;
+    p+=`- Use substantivos no plural, autoexplicativos e consistentes\n`;
+    p+=`- Feedback deve ser informativo (erros HTTP padrao + mensagens claras)\n`;
+    p+=`- Inclua exemplos de resposta para GET (compreensivel em menos de 5s)\n`;
+    p+=`- Manter completude e concisao ao longo das verses\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Diagnostico com severidade (critica | alta | media | baixa)\n`;
+    p+=`2. Diff completo de cada arquivo corrigido\n3. Novos arquivos criados (se houver)\n`;
+    p+=`4. Migration SQL se o schema mudar\n5. Testes atualizados/criados`;
+    return p;
+  },
+
+  arch(){
+    const repo=v('ar-repo'),arq=v('ar-arq'),ctx=v('ar-ctx');
+    const domains=checkedItems(['ar-4pil','ar-qual','ar-leis','ar-c4','ar-refat','ar-cloud','ar-devops']);
+    const domainLabels={
+      'ar-4pil':'4 Pilares da Arquitetura (estrutura, "-ilities", decisoes, principios de design)',
+      'ar-qual':'Atributos de Qualidade (escalabilidade, performance, seguranca, disponibilidade, manutenibilidade, testabilidade)',
+      'ar-leis':'Leis do Trabalho Arquitetural: (1a) Toda decisao tem seu preco; (2a) Avalie no contexto especifico',
+      'ar-c4':'Documentacao C4 (Contexto, Container, Componente, Codigo) para comunicacao clara com stakeholders',
+      'ar-refat':'Refatoracao e Evolucao (dependencias, automacao, testes de validacao, padroes emergentes)',
+      'ar-cloud':'Arquiteturas Distribuidas e de Nuvem (escalabilidade, resiliencia, flexibilidade, observabilidade)',
+      'ar-devops':'DevOps / CI/CD (containers, microsservicos, cultura de iteracao continua, automacao de infra)'
+    };
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXO: ${ctx}\n\n`;
+    p+=`INSTRUCAO DE DOMINIO — Avalie o projeto considerando os seguintes principios arquiteturais:\n\n`;
+    domains.forEach((_,i)=>{p+=`${i+1}. ${domainLabels[_]}\n`;});
+    p+=`\nREGRAS OBRIGATORIAS:\n- Identifique as preocupacoes de dominio para extrair caracteristicas arquiteturais\n`;
+    p+=`- Cada nova requisicao pode ter impacto significativo na arquitetura\n`;
+    p+=`- Documente decisoes com trade-offs explicitos\n`;
+    p+=`- Use modelos de documentacao (C4 e 4+1) para comunicacao\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Mapa de stakeholders e suas preocupacoes\n`;
+    p+=`2. Caracteristicas arquiteturais identificadas (com severidade)\n`;
+    p+=`3. Justificativa para cada decisao de arquitetura\n`;
+    p+=`4. Documentacao C4 atualizada\n`;
+    p+=`5. Diff completo de cada arquivo alterado\n`;
+    p+=`6. Plano de evolucao gradual (sem breaking changes)\n`;
+    return p;
+  },
+
+  security(){
+    const repo=v('se-repo'),arq=v('se-arq'),ctx=v('se-ctx');
+    const nivel=sel('se-nivel'),dado=sel('se-dado');
+    const domainLabels={
+      'lgpd-completa':'LGPD Completa (todos os 10 principios + bases legais)',
+      'lgpd-essenciais':'LGPD Essenciais (5 principios + bases legais)',
+      'owasp-top10':'OWASP Top 10 + LGPD (API Security Top 10)',
+      'pbd-7principios':'Privacy by Design (7 principios de Ann Cavoukian)',
+      'completo':'Completo (LGPD + OWASP + Privacy by Design)'
+    };
+    const dataLabels={geral:'Dados pessoais gerais',sensivel:'Dados pessoais sensiveis',critico:'Dados criticos (saude, financeiro)',crianca:'Dados de criancas e adolescentes'};
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXO: ${ctx}\n`;
+    p+=`NIVEL DE CONFORMIDADE: ${domainLabels[nivel]}\n`;
+    p+=`TIPO DE DADO: ${dataLabels[dado]}\n\n`;
+    p+=`INSTRUCAO DE DOMINIO — Verifique conformidade com os seguintes principios de privacidade e seguranca:\n\n`;
+    if(nivel==='lgpd-completa'||nivel==='completo'){
+      p+=`1. Princípio da Finalidade: tratamento compatível com finalidade especificada\n`;
+      p+=`2. Princípio da Adequação: dados minimos, necessários, relevantes e transparentes\n`;
+      p+=`3. Princípio da Necessidade: apenas dados necessarios para a finalidade\n`;
+      p+=`4. Princípio da Livre Acesso: dados acessíveis ao titular\n`;
+      p+=`5. Princípio da Transparência: informar o titular de forma clara e acessível\n`;
+      p+=`6. Princípio da Segurança: proteção contra acesso não autorizado e breach\n`;
+      p+=`7. Princípio da Prevenção: medidas preventivas contra incidentes\n`;
+      p+=`8. Princípio da Não Discriminacao: tratamento igualitario\n`;
+      p+=`9. Princípio da Responsabilização: agentes prestam contas\n`;
+      p+=`10. Princípio da Integridade: dados consistentes entre sistemas\n`;
+    } else if(nivel==='pbd-7principios'){
+      p+=`1. Desenvolvimento Proativo e Preventivo\n2. Privacidade por Padrão (Privacy by Default)\n3. Privacidade Incorporada ao Design\n4. Soma Positiva (sem contrapartidas)\n5. Visibilidade e Transparência\n6. Segurança Ponta a Ponta\n7. Desenvolvimento Centrado no Usuário\n`;
+    }
+    if(nivel==='owasp-top10'||nivel==='completo'){
+      p+=`\nVERIFICACAO OWASP TOP 10 (2021):\n`;
+      p+=`A01 - Broken Access Control\nA02 - Cryptographic Failures\nA03 - Injection\nA04 - Insecure Design\nA05 - Security Misconfiguration\nA06 - Vulnerable and Outdated Components\nA07 - Identification and Authentication Failures\nA08 - Software and Data Integrity Failures\nA09 - Security Logging and Monitoring Failures\nA10 - Server-Side Request Forgery\n`;
+    }
+    if(nivel==='lgpd-essenciais'){
+      p+=`\nPRINCIPIOS LGPD ESSENCIAIS:\n1. Finalidade\n2. Adequacao\n3. Necessidade\n4. Livre Acesso\n5. Transparencia\n`;
+    }
+    p+=`\nREGRAS OBRIGATORIAS:\n- Documente a base legal (consentimento, obrigatoriedade)\n- Inclua cadeia de evidencias para auditoria\n- Forneça plano de resposta a incidentes\n- Verifique classificações de dados sensíveis\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Diagnostico de conformidade (itens em conformidade e pendentes)\n`;
+    p+=`2. Vulnerabilidades de seguranca e privacidade encontradas\n`;
+    p+=`3. Diff completo de cada arquivo corrigido\n`;
+    p+=`4. Guia de compliance para auditoria\n`;
+    p+=`5. Plano de resposta a incidentes\n`;
+    return p;
+  },
+
+  ux(){
+    const repo=v('ux-repo'),arq=v('ux-arq'),ctx=v('ux-ctx');
+    const ui=sel('ux-ui'),st=sel('ux-style');
+    const domains=checkedItems(['ux-heur','ux-acess','ux-design','ux-proto','ux-ia','ux-journey','ux-mobile','ux-a11y']);
+    const domainLabels={
+      'ux-heur':'Analise Heuristica de Usabilidade (Nielsen)',
+      'ux-acess':'Acessibilidade (WCAG 2.1 AA, contraste, adaptavel)',
+      'ux-design':'Design Centrado no Usuario (empatia, definir, idear, prototipar, testar)',
+      'ux-proto':'Prototipacao Rapida (Crazy 8s, wireframes de baixa fidelidade para co-criacao)',
+      'ux-ia':'Arquitetura de Informacao (organizacao, navegacao, rotulacao, hierarquia)',
+      'ux-journey':'Jornada do Usuario (antes, durante e depois — mapeamento de pontos de dor)',
+      'ux-mobile':'Mobile-first (responsividade, gestos touch, prioridade de conteudo)',
+      'ux-a11y':'Internacionalizacao i18n (suporte a multiplos idiomas e localizacao)'
+    };
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXTO: ${ctx}\n`;
+    if(ui) p+=`FRAMEWORK UI: ${ui}\n`;
+    if(st) p+=`ESTILO UI: ${st}\n`;
+    p+=`\nINSTRUCAO DE DOMINIO — Avalie a experiencia do usuario considerando:\n\n`;
+    domains.forEach((_,i)=>{p+=`${i+1}. ${domainLabels[_]}\n`;});
+    p+=`\nREGRAS OBRIGATORIAS:\n- A analise deve ir alem da estetica ("como se sente ao usar")\n`;
+    p+=`- Nao crie "usuario padrao" — considere necessidades explicitas e implicitas\n`;
+    p+=`- Priorize a acessibilidade universal desde o design\n`;
+    p+=`- Use personas como base para hipoteses de teste\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Resultados de pesquisa de usuario (quem sao, o que fazem)\n`;
+    p+=`2. Mapa de necessidades (explicitas e implicitas)\n`;
+    p+=`3. Analise heuristica ( Nielsen) com problemas por severidade\n`;
+    p+=`4. Sugestoes de melhoria com priorizacao\n`;
+    p+=`5. Wireframes ou especificacoes de prototipo\n`;
+    return p;
+  },
+
+  canivete(){
+    const repo=v('cs-repo'),arq=v('cs-arq'),ctx=v('cs-ctx');
+    const tipo=sel('cs-tipo'),prof=sel('cs-profund');
+    const domains=checkedItems(['rq-verif','rq-test','rq-sast','rq-rev','rq-qual','rq-solid','rq-clean','rq-arqcb','rq-devops','rq-perf']);
+    const domainLabels={
+      'rq-verif':'Verificacao e Validacao (shift-left)',
+      'rq-test':'Testes em todos os niveis',
+      'rq-sast':'Analise Estatica (SAST)',
+      'rq-rev':'Code Review por pares',
+      'rq-qual':'Atributos de Qualidade (-ilities)',
+      'rq-solid':'Principios SOLID',
+      'rq-clean':'Clean Code + 12-Factor App',
+      'rq-arqcb':'Arquitetura (C4, Refatoracao)',
+      'rq-devops':'DevOps / Pipeline',
+      'rq-perf':'Performance e Escalabilidade'
+    };
+    const profLabels={completa:'Completa (todas as camadas)',focada:'Focada (dominios relevantes)',resumida:'Resumida (checklist + diffs)'};
+    const tipoLabels={tudo:'Analise completa',qualidade:'Qualidade e Testes',arquitetura:'Arquitetura e Design',seguranca:'Seguranca e Compliance',performance:'Performance e Escalabilidade',ux:'UX e Usabilidade',devops:'DevOps e Pipeline',processos:'Processos e Automacao',refatoracao:'Refatoracao Geral'};
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXO: ${ctx}\n`;
+    p+=`PROFUNDIDADE: ${profLabels[prof]}\n`;
+    p+=`TIPO DE MELHORIA: ${tipoLabels[tipo]}\n\n`;
+    p+=`INSTRUCAO DE DOMINIO — Aplique camadas de verificacao de qualidade multi-domínio:\n\n`;
+    domains.forEach((_,i)=>{p+=`${i+1}. ${domainLabels[_]}\n`;});
+    p+=`\nREGRAS OBRIGATORIAS:\n- Todos os diffs devem manter a interface publica sem breaking changes\n`;
+    p+=`- O codigo gerado deve ser indistinguivel do estilo da codebase\n`;
+    p+=`- Priorize mudancas com maior impacto/complexidade\n`;
+    p+=`- Testes validam integridade apos cada alteracao\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n`;
+    p+=`1. Resumo executivo das mudancas (bullet points)\n`;
+    p+=`2. Justificativa detalhada para CADA mudanca\n`;
+    p+=`3. Diff completo de CADA arquivo (pronto para git apply)\n`;
+    p+=`4. Novos arquivos criados (conteudo completo)\n`;
+    p+=`5. Testes atualizados/criados para cada arquivo\n`;
+    p+=`6. Riscos da mudanca e como mitigar\n`;
+    p+=`7. Plano de validacao e regressao\n`;
+    return p;
+  },
+
+  cloud(){
+    const repo=v('cl-repo'),arq=v('cl-arq'),ctx=v('cl-ctx');
+    const domains=checkedItems(['cl-sec','cl-model','cl-migr','cl-comp','cl-iac','cl-cont']);
+    const domainLabels={
+      'cl-sec':'Seguranca na Nuvem (IAM, flags de protecao, criptografia, responsabilidade compartilhada)',
+      'cl-model':'Modelos de Servico (SaaS, PaaS, IaaS, FaaS) — verificacao de provisionamento otimizado',
+      'cl-migr':'Migracao e Adocao Cloud (6 pilares: negocios, pessoas, governanca, plataforma, seguranca, operacoes)',
+      'cl-comp':'Compliance (LGPD, resolucao BACEN 4.658, NIST CSF, seguranca by design)',
+      'cl-iac':'Infraestrutura como Codigo (IaC) — Terraform, CloudFormation, automacao',
+      'cl-cont':'Containers e Orquestracao (Docker, Kubernetes, resiliencia, escalabilidade)'
+    };
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXTO: ${ctx}\n\n`;
+    p+=`INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de computacao em nuvem:\n\n`;
+    domains.forEach((_,i)=>{p+=`${i+1}. ${domainLabels[_]}\n`;});
+    p+=`\nREGRAS OBRIGATORIAS:\n- Siga o modelo de responsabilidade compartilhada da nuvem\n`;
+    p+=`- Verifique configuracoes de seguranca (IAM, policies, criptografia at-rest e in-transit)\n`;
+    p+=`- Avalie otimizacao de custos (Pay as you Go, right-sizing)\n`;
+    p+=`- Garanta conformidade regulatória aplicavel ao setor\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Diagnostico de seguranca cloud (critica | alta | media | baixa)\n`;
+    p+=`2. Avaliacao de modelo de servico e provisionamento\n`;
+    p+=`3. Verificacao de compliance e regulacao\n`;
+    p+=`4. Diff completo de cada arquivo corrigido\n`;
+    p+=`5. Recomendacoes de otimizacao e hardening\n`;
+    return p;
+  },
+
+  ia(){
+    const repo=v('ia-repo'),arq=v('ia-arq'),ctx=v('ia-ctx');
+    const tipo=sel('ia-tipo');
+    const domains=checkedItems(['ia-vies','ia-qual','ia-over','ia-sec','ia-expl','ia-lgpd']);
+    const domainLabels={
+      'ia-vies':'Vies e Etica (datasets diversos e representativos, auditoria de vies, prevencao de discriminacao)',
+      'ia-qual':'Qualidade dos Dados (completude, consistencia, veracidade, principio "garbage in, trash out")',
+      'ia-over':'Overfitting e Generalizacao (separacao treino/teste, metricas de avaliacao, generalizacao)',
+      'ia-sec':'Seguranca de IA (ataques adversarios, supervisao humana, principios de IA responsavel)',
+      'ia-expl':'Explicabilidade (transparencia, justica, interpretabilidade do modelo)',
+      'ia-lgpd':'Conformidade LGPD/GDPR (tratamento de dados sensiveis, base legal, direitos do titular)'
+    };
+    const tipoLabels={Classificacao:'Classificacao',Regressao:'Regressao','NLP':'NLP / Processamento de Linguagem',Visao:'Visao Computacional'};
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXTO: ${ctx}\n`;
+    if(tipo) p+=`TIPO DE MODELO: ${tipoLabels[tipo]}\n`;
+    p+=`\nINSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de engenharia de IA:\n\n`;
+    domains.forEach((_,i)=>{p+=`${i+1}. ${domainLabels[_]}\n`;});
+    p+=`\nREGRAS OBRIGATORIAS:\n- Verifique vies nos dados de treinamento e nos resultados do modelo\n`;
+    p+=`- Aplique o principio "garbage in, trash out" na avaliacao de qualidade dos dados\n`;
+    p+=`- Garanta separacao adequada treino/teste com metricas condizentes\n`;
+    p+=`- Avalie robustez contra ataques adversarios\n`;
+    p+=`- Verifique conformidade com LGPD/GDPR no tratamento de dados\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Diagnostico de vies e etica no modelo\n`;
+    p+=`2. Avaliacao de qualidade dos dados e pipeline\n`;
+    p+=`3. Analise de overfitting/underfitting com metricas\n`;
+    p+=`4. Diff completo de cada arquivo corrigido\n`;
+    p+=`5. Plano de mitigacao de riscos de IA\n`;
+    return p;
+  },
+
+  dados(){
+    const repo=v('da-repo'),arq=v('da-arq'),ctx=v('da-ctx');
+    const domains=checkedItems(['da-5vs','da-etl','da-ms','da-anal','da-qd','da-ml']);
+    const domainLabels={
+      'da-5vs':'Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)',
+      'da-etl':'ETL e Qualidade de Dados (tratamento de faltantes, anomalias, normalizacao, rastreabilidade)',
+      'da-ms':'Microsservicos (dominio bem definido, baixo acoplamento, deploy independente, resiliencia)',
+      'da-anal':'Analise e Decisao (ciclo completo: definicao, coleta, preparacao, modelagem, comunicacao, feedback)',
+      'da-qd':'Qualidade dos Dados (completude, consistencia, veracidade, integracao de multiplas fontes)',
+      'da-ml':'ML Aplicado (modelos preditivos, metricas SMART, validacao com dados reais)'
+    };
+    let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+    p+=`CONTEXTO: ${ctx}\n\n`;
+    p+=`INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de sistemas intensivos em dados:\n\n`;
+    domains.forEach((_,i)=>{p+=`${i+1}. ${domainLabels[_]}\n`;});
+    p+=`\nREGRAS OBRIGATORIAS:\n- Avalie se a arquitetura suporta os 5 Vs do Big Data\n`;
+    p+=`- Verifique integridade do pipeline ETL completo\n`;
+    p+=`- Garanta consistencia e rastreabilidade na integracao de multiplas fontes\n`;
+    p+=`- Defina metricas segundo o modelo SMART\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Avaliacao dos 5 Vs do Big Data na arquitetura\n`;
+    p+=`2. Diagnostico do pipeline ETL (qualidade, consistencia, rastreabilidade)\n`;
+    p+=`3. Diff completo de cada arquivo corrigido\n`;
+    p+=`4. Recomendacoes de arquitetura e performance\n`;
+    p+=`5. Plano de metricas e monitoramento\n`;
+    return p;
+  },
+
+  gestao(){
+    const repo=v('ge-repo'),ctx=v('ge-ctx');
+    const domains=checkedItems(['ge-escopo','ge-riscos','ge-okr','ge-fluxo','ge-modelo','ge-stake']);
+    const domainLabels={
+      'ge-escopo':'Escopo e EAP (declaracao de escopo, Work Breakdown Structure, prevencao de scope creep)',
+      'ge-riscos':'Gerenciamento de Riscos (identificacao, probabilidade, impacto, respostas: evitar/transferir/mitigar/aceitar)',
+      'ge-okr':'OKR e Alinhamento Estrategico (Key Results quantitativos, orientados a resultado, nao apenas entregas)',
+      'ge-fluxo':'Fluxo e Entrega (Lead Time, Throughput, Work in Progress, limites de WIP, Lei de Little)',
+      'ge-modelo':'Modelo de Gestao (tradicional, agil ou hibrido — analise de complexidade e maturidade)',
+      'ge-stake':'Stakeholders e Comunicacao (mapeamento poder/interesse, Project Charter, plano de comunicacao)'
+    };
+    let p=`Analise detalhadamente o repositorio ${repo}.\n\n`;
+    p+=`CONTEXTO: ${ctx}\n\n`;
+    p+=`INSTRUCAO DE DOMINIO — Avalie o projeto considerando os seguintes aspectos de gestao:\n\n`;
+    domains.forEach((_,i)=>{p+=`${i+1}. ${domainLabels[_]}\n`;});
+    p+=`\nREGRAS OBRIGATORIAS:\n- Verifique se o escopo esta claramente definido e alinhado com entregas reais\n`;
+    p+=`- Identifique riscos tecnicos e de negocio com probabilidade e impacto\n`;
+    p+=`- Avalie se as metricas medem impacto real no negocio (eficacia), nao apenas produtividade (eficiencia)\n`;
+    p+=`- Recomende o modelo de gestao mais adequado baseado na complexidade\n`;
+    p+=`\nFORMATO DE RESPOSTA:\n1. Analise de escopo e aderencia a EAP\n`;
+    p+=`2. Matriz de riscos (probabilidade x impacto) com plano de mitigacao\n`;
+    p+=`3. Avaliacao de OKRs e alinhamento estrategico\n`;
+    p+=`4. Metricas de fluxo (Lead Time, Throughput, WIP)\n`;
+    p+=`5. Recomendacao de modelo de gestao\n`;
+    p+=`6. Plano de comunicacao e gestao de stakeholders\n`;
+    return p;
+  }
+};
+
+function checkedItems(ids){return ids.filter(id=>chk(id));}
+function sel(id){const e=document.getElementById(id);return e?e.value:'';}
+function genEnhanced(type){
+  const gen=enhGen[type];
+  if(!gen)return;
+  const prompt=gen();
+  const container=document.getElementById('out-'+type);
+  container.innerHTML=`
+    <div class="out-hdr"><h3>&#x2705; Prompt com Dominios Gerado</h3>
+      <div class="btn-row"><button class="btn-copy" onclick="copyP('${type}')">&#x1f4cb; Copiar</button>
+      <button class="btn-clr" onclick="clearO('${type}')">&#x2716; Limpar</button></div>
+    </div>
+    <div class="out-box"><div class="out-text" id="prompt-${type}"></div></div>
+  `;
+  container.classList.add('vis');
+  container.scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('prompt-'+type).textContent=prompt;
+}
+
+function copyP(type){
+  const text=document.getElementById('prompt-'+type).textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector(`#out-${type} .btn-copy`);
+    btn.classList.add('copied');
+    btn.innerHTML='&#x2705; Copiado!';
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='&#x1f4cb; Copiar';},2000);
+  }).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    const btn=document.querySelector(`#out-${type} .btn-copy`);
+    btn.classList.add('copied');btn.innerHTML='&#x2705; Copiado!';
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='&#x1f4cb; Copiar';},2000);
+  });
+}
+function clearO(type){
+  const c=document.getElementById('out-'+type);
+  c.classList.remove('vis');c.innerHTML='';
+}
+
+// ─── INIT ───
+buildGrid();
+buildEbookPanels();
+buildGenerators();
+</script>
+</body>
+</html>

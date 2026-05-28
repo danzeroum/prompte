@@ -1,0 +1,22 @@
+# Dependências
+node_modules/
+
+# Build
+frontend/dist/
+dist/
+
+# Vite / PWA
+frontend/dev-dist/
+
+# Ambiente
+.env
+.env.*
+!.env.example
+
+# Logs e SO
+*.log
+.DS_Store
+
+# Editores
+.vscode/
+.idea/

@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual — Prompt Engineering Pro</title>
+<meta name="description" content="Guia completo de uso da ferramenta Prompt Engineering Pro.">
+<meta name="theme-color" content="#0d1117">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co">
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="/assets/css/theme.css">
+<script type="module" src="/assets/js/app.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh;display:flex}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* SIDEBAR */
+  .sidebar{width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);height:100vh;position:fixed;top:0;left:0;overflow-y:auto;z-index:100;transition:transform .3s}
+  .sidebar::-webkit-scrollbar{width:4px}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  .sidebar-hdr{padding:24px 20px;border-bottom:1px solid var(--border);text-align:center}
+  .sidebar-hdr h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3px}
+  .sidebar-hdr span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+  .sb-sec{padding:10px 0}
+  .sb-sec-title{padding:6px 20px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
+  .sb-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:.15s;border-left:3px solid transparent}
+  .sb-item:hover{background:var(--bg3);color:var(--text)}
+  .sb-item.active{background:var(--bg3);color:var(--accent);border-left-color:var(--accent)}
+  .sb-item .icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+  .sb-item .badge-new{font-size:8px;font-weight:700;background:var(--green);color:#0d1117;padding:1px 5px;border-radius:8px;margin-left:auto}
+
+  /* MAIN */
+  .main{margin-left:var(--sidebar-w);flex:1;min-height:100vh}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:50}
+  .topbar h2{font-size:17px;font-weight:600;display:flex;align-items:center;gap:10px}
+  .badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:12px;text-transform:uppercase;letter-spacing:.5px}
+  .b-manual{background:rgba(88,166,255,.12);color:var(--accent)}
+  .menu-toggle{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px 8px}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90}
+
+  .content{max-width:860px;margin:0 auto;padding:32px 28px 60px}
+
+  /* CONTENT ELEMENTS */
+  h2.section-title{font-size:22px;font-weight:700;color:var(--text);margin:48px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+  h2.section-title:first-of-type{margin-top:0}
+  h3{font-size:16px;font-weight:700;color:var(--text);margin:28px 0 10px;display:flex;align-items:center;gap:8px}
+  h4{font-size:14px;font-weight:600;color:var(--text);margin:20px 0 8px}
+
+  p{font-size:13.5px;color:var(--text2);line-height:1.75;margin-bottom:12px}
+  ul,ol{padding-left:22px;margin-bottom:14px}
+  li{font-size:13.5px;color:var(--text2);line-height:1.75;margin-bottom:6px}
+  li strong{color:var(--text)}
+
+  /* CARDS */
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:20px}
+  .card.accent{border-left:3px solid var(--accent)}
+  .card.green{border-left:3px solid var(--green)}
+  .card.purple{border-left:3px solid var(--purple)}
+  .card.orange{border-left:3px solid var(--orange)}
+  .card.red{border-left:3px solid var(--red)}
+  .card.teal{border-left:3px solid var(--teal)}
+  .card.yellow{border-left:3px solid var(--yellow)}
+  .card h3{margin-top:0;font-size:15px}
+
+  /* CONCEPT BOX */
+  .concept-box{background:linear-gradient(135deg,rgba(88,166,255,.08),rgba(188,140,255,.06));border:1px solid rgba(88,166,255,.25);border-radius:12px;padding:24px;margin:20px 0}
+  .concept-box h3{color:var(--accent);margin-top:0}
+  .concept-box p{font-size:14px;color:var(--text);margin-bottom:10px}
+
+  /* ANALOGY */
+  .analogy{background:linear-gradient(135deg,rgba(63,185,80,.06),rgba(45,212,191,.06));border:1px solid rgba(63,185,80,.25);border-radius:12px;padding:24px;margin:20px 0}
+  .analogy h4{color:var(--green);margin-top:0;font-size:15px}
+
+  /* WARNING */
+  .warning{background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.3);border-radius:10px;padding:16px 20px;margin:16px 0}
+  .warning p{margin:0}
+  .warning strong{color:var(--orange)}
+
+  /* TIP */
+  .tip{background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.25);border-radius:10px;padding:16px 20px;margin:16px 0}
+  .tip p{margin:0}
+  .tip strong{color:var(--green)}
+
+  /* CODE BLOCK */
+  pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;margin:14px 0;overflow-x:auto;font-size:12px;line-height:1.7;color:var(--text)}
+  code{font-family:'SF Mono','Cascadia Code','Fira Code','Consolas',monospace;font-size:.9em;background:rgba(88,166,255,.1);padding:1px 6px;border-radius:4px;color:var(--accent)}
+  pre code{background:none;padding:0}
+
+  /* STEP */
+  .step{display:flex;gap:16px;margin-bottom:20px}
+  .step-num{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#0d1117;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center}
+  .step-content{flex:1}
+  .step-content h4{margin-top:0;color:var(--text)}
+  .step-content p{margin-bottom:0}
+
+  /* CHIP */
+  .chip{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin:2px;cursor:default}
+  .chip-devops{background:rgba(88,166,255,.12);color:var(--accent)}
+  .chip-arch{background:rgba(188,140,255,.12);color:var(--purple)}
+  .chip-api{background:rgba(63,185,80,.12);color:var(--green)}
+  .chip-ux{background:rgba(226,179,64,.12);color:#e2b34a}
+  .chip-qual{background:rgba(248,81,73,.12);color:var(--red)}
+  .chip-ds{background:rgba(210,153,34,.12);color:var(--orange)}
+  .chip-proc{background:rgba(45,212,191,.12);color:var(--teal)}
+  .chip-priv{background:rgba(248,81,73,.12);color:var(--red)}
+  .chip-algo{background:rgba(188,140,255,.12);color:var(--purple)}
+  .chip-analytics{background:rgba(88,166,255,.12);color:var(--accent)}
+  .chip-cloud{background:rgba(88,166,255,.12);color:var(--accent)}
+  .chip-requisitos{background:rgba(210,153,34,.12);color:var(--orange)}
+  .chip-agile{background:rgba(226,179,64,.12);color:#e2b34a}
+  .chip-squads{background:rgba(63,185,80,.12);color:var(--green)}
+  .chip-lideranca{background:rgba(188,140,255,.12);color:var(--purple)}
+  .chip-ia{background:rgba(248,81,73,.12);color:var(--red)}
+  .chip-dados{background:rgba(45,212,191,.12);color:var(--teal)}
+  .chip-arq2{background:rgba(227,179,65,.12);color:var(--yellow)}
+  .chip-metricas{background:rgba(247,120,186,.12);color:var(--pink)}
+  .chip-gestao{background:rgba(121,192,255,.12);color:var(--sky)}
+
+  /* TABLE */
+  .tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
+  .tbl th{background:var(--bg3);color:var(--accent);font-weight:600;text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);white-space:nowrap}
+  .tbl td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+  .tbl tr:hover td{background:var(--bg3)}
+  .tbl .check{color:var(--green);font-weight:600}
+  .tbl .cross{color:var(--red)}
+
+  /* DIVIDER */
+  .divider{border:none;border-top:1px solid var(--border);margin:36px 0}
+
+  /* COMPARISON */
+  .comparison{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+  .comp-box{border-radius:10px;padding:18px}
+  .comp-bad{background:rgba(248,81,73,.06);border:1px solid rgba(248,81,73,.2)}
+  .comp-good{background:rgba(63,185,80,.06);border:1px solid rgba(63,185,80,.2)}
+  .comp-box h4{font-size:13px;font-weight:700;margin-bottom:8px}
+  .comp-bad h4{color:var(--red)}
+  .comp-good h4{color:var(--green)}
+  .comp-box p{font-size:12.5px;margin:0}
+  .comp-box pre{margin:8px 0 0;font-size:11.5px}
+
+  /* GLOSSARY */
+  .gloss-item{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+  .gloss-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+  .gloss-term{font-weight:700;color:var(--accent);font-size:14px;margin-bottom:2px}
+  .gloss-def{font-size:13px;color:var(--text2);margin:0}
+
+  /* RESPONSIVE */
+  @media(max-width:768px){
+    .sidebar{transform:translateX(-100%)}
+    .sidebar.open{transform:translateX(0)}
+    .overlay.open{display:block}
+    .main{margin-left:0}
+    .menu-toggle{display:block}
+    .content{padding:18px 16px 40px}
+    .topbar{padding:12px 16px}
+    .comparison{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="toggleSB()"></div>
+
+<nav class="sidebar" id="sb">
+  <div class="sidebar-hdr">
+    <h1>Manual do Usuario</h1>
+    <span>Prompt Engineering Pro</span>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Navegacao</div>
+    <a class="sb-item" href="/index.html"><span class="icon">&#x1f4ca;</span> Analise &amp; Gerador</a>
+    <a class="sb-item" href="/generator.html"><span class="icon">&#x1f680;</span> Gerador de Prompts</a>
+    <a class="sb-item active" href="/manual.html"><span class="icon">&#x1f4d6;</span> Manual</a>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Fundamentos</div>
+    <div class="sb-item active" onclick="nav(this,'#o-que-e-prompt')"><span class="icon">&#x2753;</span> O que e um Prompt?</div>
+    <div class="sb-item" onclick="nav(this,'#por-que-importa')"><span class="icon">&#x1f4a1;</span> Por que a Qualidade Importa?</div>
+    <div class="sb-item" onclick="nav(this,'#anatomia')"><span class="icon">&#x1f9f9;</span> Anatomia de um Bom Prompt</div>
+    <div class="sb-item" onclick="nav(this,'#antes-depois')"><span class="icon">&#x1f4ca;</span> Antes vs Depois</div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">A Ferramenta</div>
+    <div class="sb-item" onclick="nav(this,'#visao-geral-ferramenta')"><span class="icon">&#x1f3af;</span> Visao Geral da Ferramenta</div>
+    <div class="sb-item" onclick="nav(this,'#estrutura')"><span class="icon">&#x1f3d7;</span> Estrutura e Navegacao</div>
+    <div class="sb-item" onclick="nav(this,'#secao-analise')"><span class="icon">&#x1f4ca;</span> Secao de Analise</div>
+    <div class="sb-item" onclick="nav(this,'#ebooks')"><span class="icon">&#x1f4d6;</span> Ebooks Analisados</div>
+    <div class="sb-item" onclick="nav(this,'#matriz')"><span class="icon">&#x1f4cb;</span> Matriz de Impacto</div>
+    <div class="sb-item" onclick="nav(this,'#e-cloud')"><span class="icon">&#x2601;</span> Cloud Computing</div>
+    <div class="sb-item" onclick="nav(this,'#e-requisitos')"><span class="icon">&#x1f4dd;</span> Eng. Requisitos</div>
+    <div class="sb-item" onclick="nav(this,'#e-agile')"><span class="icon">&#x1f3c3;</span> Metodos Ageis</div>
+    <div class="sb-item" onclick="nav(this,'#e-squads')"><span class="icon">&#x1f465;</span> Tech Squads</div>
+    <div class="sb-item" onclick="nav(this,'#e-lideranca')"><span class="icon">&#x1f31f;</span> Lideranca / Gestao</div>
+    <div class="sb-item" onclick="nav(this,'#e-ia')"><span class="icon">&#x1f9e0;</span> Engenharia de IA</div>
+    <div class="sb-item" onclick="nav(this,'#e-dados')"><span class="icon">&#x1f4ca;</span> Dados Intensivos</div>
+    <div class="sb-item" onclick="nav(this,'#e-arq2')"><span class="icon">&#x1f3d7;</span> Arq. Software II</div>
+    <div class="sb-item" onclick="nav(this,'#e-metricas')"><span class="icon">&#x1f4c8;</span> Metricas / OKR</div>
+    <div class="sb-item" onclick="nav(this,'#e-gestao')"><span class="icon">&#x1f4c5;</span> Gestao de Projetos</div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Geradores Avancados</div>
+    <div class="sb-item" onclick="nav(this,'#geradores')"><span class="icon">&#x2699;</span> O que sao os Geradores?</div>
+    <div class="sb-item" onclick="nav(this,'#gen-review')"><span class="icon">&#x1f504;</span> Revisao + Qualidade</div>
+    <div class="sb-item" onclick="nav(this,'#gen-api')"><span class="icon">&#x1f310;</span> Design de API</div>
+    <div class="sb-item" onclick="nav(this,'#gen-arch')"><span class="icon">&#x1f3d7;</span> Refatoracao Arquitetural</div>
+    <div class="sb-item" onclick="nav(this,'#gen-security')"><span class="icon">&#x1f6e1;</span> Seguranca + LGPD</div>
+    <div class="sb-item" onclick="nav(this,'#gen-ux')"><span class="icon">&#x1f3a8;</span> UX + Usabilidade</div>
+    <div class="sb-item" onclick="nav(this,'#gen-canivete')"><span class="icon">&#x1f91d;</span> Canivete Suico Pro</div>
+    <div class="sb-item" onclick="nav(this,'#gen-cloud')"><span class="icon">&#x2601;</span> Cloud / Infra</div>
+    <div class="sb-item" onclick="nav(this,'#gen-ia')"><span class="icon">&#x1f9e0;</span> IA / Machine Learning</div>
+    <div class="sb-item" onclick="nav(this,'#gen-dados')"><span class="icon">&#x1f4ca;</span> Dados / Analytics</div>
+    <div class="sb-item" onclick="nav(this,'#gen-gestao')"><span class="icon">&#x1f4c5;</span> Gestao / Metricas</div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-title">Pratico</div>
+    <div class="sb-item" onclick="nav(this,'#passo-a-passo')"><span class="icon">&#x1f449;</span> Passo a Passo</div>
+    <div class="sb-item" onclick="nav(this,'#dicas')"><span class="icon">&#x2b50;</span> Dicas Avancadas</div>
+    <div class="sb-item" onclick="nav(this,'#glossario')"><span class="icon">&#x1f4d7;</span> Glossario</div>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="menu-toggle" onclick="toggleSB()">&#9776;</button>
+      <h2>Manual do Usuario <span class="badge b-manual">Guia Completo</span></h2>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECAO 1: FUNDAMENTOS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="o-que-e-prompt">&#x2753; O que e um Prompt?</h2>
+
+    <div class="concept-box">
+      <h3>Definicao Simples</h3>
+      <p>Um <strong>prompt</strong> e o texto que voce digita para instruir uma Inteligencia Artificial (como ChatGPT, Claude, Gemini, etc.) a fazer algo por voce. E a sua forma de "conversar" com a maquina, dando-lhe um comando, uma pergunta ou uma tarefa.</p>
+    </div>
+
+    <p>Imagine que voce acabou de contratar um estagiario muito inteligente, porem ele nao conhece o seu projeto, nao sabe o que voce precisa exatamente e so faz o que voce escreve no papel. Quanto mais claro, detalhado e organizado for o seu bilhete para ele, melhor sera o resultado. O prompt e exatamente esse bilhete.</p>
+
+    <div class="analogy">
+      <h4>&#x1f3af; Analogia do Restaurante</h4>
+      <p>Pense no prompt como o seu pedido no restaurante. Se voce diz apenas <em>"quero comer algo"</em>, o garcom pode trazer qualquer coisa. Mas se voce diz <em>"quero um risoto de cogumelos com parmesao, ao ponto, sem cebola, por favor"</em>, voce recebe exatamente o que deseja. Com IAs funciona da mesma forma: quanto mais detalhes voce da, mais o resultado se aproxima do que voce imagina.</p>
+    </div>
+
+    <h3>Tipos de Prompt no Dia a Dia</h3>
+    <ul>
+      <li><strong>Pergunta simples:</strong> "Qual a capital do Brasil?" — a IA responde com informacao.</li>
+      <li><strong>Instrucao:</strong> "Resuma este texto em 3 bullet points" — a IA executa uma tarefa especifica.</li>
+      <li><strong>Contexto + Tarefa:</strong> "Analise este codigo e sugira melhorias de performance" — a IA usa o que voce forneceu para gerar analise.</li>
+      <li><strong>Prompt estruturado:</strong> Mensagens longas com contexto, regras, exemplos e formato esperado de saida — e aqui que entra a nossa ferramenta.</li>
+    </ul>
+
+    <h3>Prompt vs "Pergunta Normal" — Qual a Diferenca?</h3>
+    <p>A diferenca fundamental esta na <strong>estrutura e profundidade</strong>. Uma pergunta normal pede algo de forma vaga. Um prompt estruturado fornece contexto, define restricoes, especifica o formato de saida e estabelece regras claras. A nossa ferramenta gera prompts do tipo estruturado, que sao significativamente mais poderosos.</p>
+
+    <div class="comparison">
+      <div class="comp-box comp-bad">
+        <h4>&#x274c; Pergunta Normal</h4>
+        <p>"Melhore meu codigo"</p>
+        <pre>"Revise meu codigo de login
+e melhore ele"</pre>
+      </div>
+      <div class="comp-box comp-good">
+        <h4>&#x2705; Prompt Estruturado (gerado pela ferramenta)</h4>
+        <p>"Analise detalhadamente o repositorio, verifique V&amp;V, SOLID, gere diffs completos..."</p>
+        <pre>"Analise detalhadamente o repositorio
+/home/z/my-project/app com foco em
+src/middleware/auth.ts
+
+INSTRUCAO DE DOMINIO:
+1. Verificacao e Validacao
+2. Principios SOLID
+3. Atributos de Qualidade...
+
+FORMATO DE RESPOSTA:
+1. Resumo executivo
+2. Diffs completos
+3. Testes atualizados..."</pre>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="por-que-importa">&#x1f4a1; Por que a Qualidade do Prompt Importa?</h2>
+
+    <p>Uma IA generativa e como um motor muito potente: ela pode fazer coisas incriveis, mas precisa de uma direcao precisa. Se voce der uma instrucao vaga, recebe uma resposta generica. Se voce der uma instrucao rica em contexto e detalhes, recebe uma resposta que parece feita por um especialista.</p>
+
+    <div class="card accent">
+      <h3>&#x1f4c8; Impacto Direto na Qualidade</h3>
+      <p>Estudos e experimentos praticos mostram que a diferenca entre um prompt ruim e um prompt bom pode significar:</p>
+      <ul>
+        <li><strong>Respostas 3x a 10x mais uteis</strong> — prompts com contexto produzem resultados muito mais aplicaveis ao problema real.</li>
+        <li><strong>Codigo gerado que funciona de verdade</strong> — em vez de exemplos genericos que precisam de muita adaptacao, voce recebe codigo alinhado com a arquitetura do seu projeto.</li>
+        <li><strong>Reducao de iteracoes</strong> — com um bom prompt, voce raramente precisa pedir "tente de novo" ou "nao era isso que eu queria".</li>
+        <li><strong>Economia de tempo</strong> — um prompt bem feito pode poupar dezenas de minutos de ida e volta com a IA.</li>
+      </ul>
+    </div>
+
+    <h3>Os 5 Pilares de um Prompt Eficaz</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Contexto</h4>
+        <p>Informe <strong>onde</strong> esta o codigo, <strong>qual</strong> e o projeto, <strong>por que</strong> voce precisa da analise. Contexto e o combustivel do prompt — sem ele, a IA trabalha no escuro.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Papel/Especialidade</h4>
+        <p>Diga qual <strong>perspectiva</strong> a IA deve assumir: revisor de codigo, arquiteto de software, especialista em seguranca, etc. Isso calibra o "tom" e a profundidade da resposta.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Tarefa Especifica</h4>
+        <p>Deixe claro <strong>exatamente o que</strong> voce espera: revisar, refatorar, gerar diff, identificar vulnerabilidades, testar. Uma tarefa vaga gera resposta vaga.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Restricoes e Regras</h4>
+        <p>Defina <strong>limites</strong>: mantenha a interface publica, siga os padroes existentes, sem breaking changes, use determinados frameworks. Restricoes guiam a IA para dentro da sua caixa.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Formato de Saida</h4>
+        <p>Especifique <strong>como</strong> quer a resposta: diff para git apply, resumo executivo, checklist, tabela de diagnosticos. Sem formato definido, a IA inventa um que pode nao servir.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="anatomia">&#x1f9f9; Anatomia de um Bom Prompt</h2>
+
+    <p>Um prompt gerado pela ferramenta <strong>Prompt Engineering Pro</strong> segue uma estrutura precisa. Veja cada parte e entenda o que ela faz:</p>
+
+    <div class="card accent">
+      <h3>Estrutura de um Prompt Gerado</h3>
+      <pre style="font-size:11.5px;margin-top:12px">
+<b>1. CABECALHO — O que analisar e onde</b>
+   "Analise detalhadamente o repositorio [CAMINHO], com foco em [ARQUIVO]."
+
+<b>2. CONTEXTO — Por que esta fazendo isso</b>
+   "CONTEXTO: [Sua motivacao, o problema, o cenario]."
+
+<b>3. INSTRUCAO DE DOMINIO — O que verificar (frameworks e principios)</b>
+   "INSTRUCAO DE DOMINIO:
+   Verifique os seguintes aspectos aplicando frameworks reconhecidos:
+   1. Verificacao e Validacao (shift-left testing)
+   2. Principios SOLID (SRP, OCP, LSP, ISP, DIP)
+   3. Atributos de Qualidade (-ilities)
+   ..."
+
+<b>4. REGRAS OBRIGATORIAS — O que a IA NAO pode fazer</b>
+   "REGRAS OBRIGATORIAS:
+   - Mantenha a interface publica sem breaking changes
+   - Siga EXATAMENTE os padroes existentes
+   - O codigo deve ser indistinguivel do estilo da codebase"
+
+<b>5. FORMATO DE RESPOSTA — Como a IA deve organizar a saida</b>
+   "FORMATO DE RESPOSTA:
+   1. Resumo executivo
+   2. Justificativa por mudanca
+   3. Diff completo de CADA arquivo (git apply)
+   4. Novos arquivos criados
+   5. Testes atualizados/criados
+   6. Riscos e mitigacoes"
+      </pre>
+    </div>
+
+    <p>Cada secao tem um proposito claro. O cabecalho define o alvo. O contexto justifica a analise. A instrucao de dominio carrega o "conhecimento especializado" dos ebooks. As regras impedem a IA de sair dos trilhos. E o formato garante que a resposta seja util e aplicavel.</p>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="antes-depois">&#x1f4ca; Antes vs Depois — O Efeito Pratico</h2>
+
+    <p>Veja a diferenca concreta entre pedir de forma simples e usar a ferramenta para gerar um prompt estruturado:</p>
+
+    <div class="comparison">
+      <div class="comp-box comp-bad">
+        <h4>&#x274c; SEM a ferramenta</h4>
+        <pre>"Olha esse codigo de login e melhora,
+precisa estar mais seguro e seguindo
+boas praticas"</pre>
+        <p><strong>Resultado provavel:</strong> A IA dara sugestoes genericas como "use bcrypt" e "adicione validacao de input" — coisas que voce ja sabia. Sem contexto do seu projeto, sem dominio tecnico especifico, sem formato de saida util.</p>
+      </div>
+      <div class="comp-box comp-good">
+        <h4>&#x2705; COM a ferramenta</h4>
+        <pre>"Analise detalhadamente o repositorio
+/home/z/my-project/app com foco em
+src/middleware/auth.ts
+
+CONTEXTO: Preparando endpoints de
+autenticacao para producao, preciso
+garantir conformidade LGPD.
+
+INSTRUCAO DE DOMINIO:
+1. OWASP Top 10 (A01-A10)
+2. Privacy by Design (7 principios)
+3. LGPD (bases legais, dados sensiveis)
+...
+
+FORMATO: Diffs completos + Guia
+de compliance + Plano de resposta
+a incidentes"</pre>
+        <p><strong>Resultado:</strong> A IA faz analise especializada, verifica vulnerabilidades especificas, gera diffs prontos para aplicar, documenta conformidade legal e cria plano de seguranca.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECAO 2: A FERRAMENTA -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="visao-geral-ferramenta">&#x1f3af; Visao Geral da Ferramenta</h2>
+
+    <p>A ferramenta <strong>Prompt Engineering Pro</strong> e uma pagina HTML que funciona direto no navegador. Nao precisa de internet, servidor ou instalacao. Voce abre o arquivo <code>prompt-engineering-pro.html</code> no Chrome, Firefox ou Edge e pronto — ela esta pronta para usar.</p>
+
+    <div class="card green">
+      <h3>O que ela faz, em uma frase</h3>
+      <p>Ela transforma conhecimento especializado de 20 areas da engenharia de software em <strong>prompts ultra-estruturados</strong> que voce copia e cola em qualquer IA (ChatGPT, Claude, Gemini, etc.) para obter resultados de nivel profissional.</p>
+    </div>
+
+    <p>A ferramenta tem duas grandes funcionalidades principais:</p>
+
+    <div class="comparison">
+      <div class="comp-box" style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2)">
+        <h4 style="color:var(--teal)">&#x1f4ca; Secao de Analise</h4>
+        <p>Mostra os 20 ebooks de pos-graduacao que foram analisados, quais dominios de conhecimento foram extraidos, como cada dominio melhora seus prompts, e uma matriz que cruza templates com areas de conhecimento.</p>
+      </div>
+      <div class="comp-box" style="background:rgba(63,185,80,.06);border:1px solid rgba(63,185,80,.2)">
+        <h4 style="color:var(--green)">&#x2699; Geradores Avancados</h4>
+        <p>Sao 6 geradores com formulario. Voce preenche campos (repositorio, arquivo, contexto, checkboxes), clica em um botao e a ferramenta monta um prompt completo e especializado que voce copia com um clique.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="estrutura">&#x1f3d7; Estrutura e Navegacao</h2>
+
+    <p>A ferramenta e dividida em tres partes visuais principais:</p>
+
+    <h3>1. Sidebar (Barra Lateral Esquerda)</h3>
+    <p>E o menu de navegacao. Esta organizada em tres secoes com icones coloridos:</p>
+    <ul>
+      <li><strong>Analise</strong> — Visao Geral e Mapa de Dominios. Sao telas informativas que mostram como o conhecimento foi mapeado.</li>
+      <li><strong>Ebooks Analisados</strong> — Os 20 ebooks mapeados (DevOps, Transformacao Digital, UX, APIs, Arquitetura, Analytics, Privacidade, Qualidade, Algoritmos, Processos, Cloud Computing, Eng. Requisitos, Metodos Ageis, Tech Squads, Lideranca, IA, Dados, Arq. Software II, Metricas, Gestao de Projetos). Clique em qualquer um para ver os insights detalhados.</li>
+      <li><strong>Gerador Avancado</strong> — Os 6 geradores praticos (Revisao, API, Arquitetura, Seguranca, UX, Canivete Suico). Clique para abrir o formulario.</li>
+    </ul>
+    <p>Em telas pequenas (celular), a sidebar se esconde e aparece um botao de hamburger (&#9776;) no canto superior.</p>
+
+    <h3>2. Barra Superior (Topbar)</h3>
+    <p>Mostra o titulo da secao atual com um badge colorido indicando o tipo: <span class="badge" style="background:rgba(45,212,191,.12);color:var(--teal)">Analise</span> para telas informativas, <span class="badge" style="background:rgba(63,185,80,.12);color:var(--green)">Gerador</span> para telas de formulario.</p>
+
+    <h3>3. Area de Conteudo (Centro)</h3>
+    <p>E onde o conteudo de cada secao aparece. Pode conter cards informativos, tabelas, grids de ebooks, formularios com campos de entrada e areas de saida com os prompts gerados.</p>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="secao-analise">&#x1f4ca; Secao de Analise</h2>
+
+    <p>A secao de analise e puramente informativa — ela nao gera prompts, mas te ensina o que esta por tras de cada gerador. E como o "livro de instrucoes" que explica o conhecimento embutido na ferramenta.</p>
+
+    <h3 id="visao-geral-panel">Visao Geral</h3>
+    <p>Quando voce abre a ferramenta, a primeira tela e a <strong>Visao Geral</strong>. Ela contem:</p>
+    <ul>
+      <li><strong>Objetivo da Analise:</strong> Explica que a ferramenta analisou 20 ebooks de pos-graduacao para extrair conhecimento de dominio e incorpora-lo nos prompts.</li>
+      <li><strong>Dominios Identificados:</strong> Mostra os 10 dominios mapeados com chips coloridos: DevOps, Arquitetura, APIs, UX, Qualidade, Transformacao Digital, Analytics, Privacidade, Padroes e Processos.</li>
+      <li><strong>Melhoria no Prompt:</strong> Lista 5 beneficios concretos de adicionar contexto de dominio: especificidade tecnica, rigor metodologico, perspectiva multidimensional, critica profissional e alinhamento regulatorio.</li>
+      <li><strong>Matriz de Impacto por Template:</strong> Uma tabela que cruza cada tipo de prompt com cada dominio, mostrando o nivel de influencia (baixa, media, alta). Isso te ajuda a entender quais ebooks sao mais relevantes para cada situacao.</li>
+    </ul>
+
+    <h3>Mapa de Dominios</h3>
+    <p>A segunda tela da analise mostra uma <strong>grade de cards</strong> com todos os 20 ebooks. Cada card mostra o nome do dominio, o autor, os topicos principais e um resumo do primeiro insight. Ao clicar em um card, ele fica marcado como selecionado (borda verde).</p>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="ebooks">&#x1f4d6; Ebooks Analisados</h2>
+
+    <p>Cada ebook foi mapeado para extrair insights que podem ser incorporados nos prompts. Quando voce clica em um ebook na sidebar, veja:</p>
+
+    <ul>
+      <li><strong>Card de cabecalho:</strong> Titulo, autor e topicos principais (chips coloridos).</li>
+      <li><strong>Principios (blocos roxos):</strong> Cada insight e apresentado com um dominio e uma explicacao detalhada de como ele melhora os prompts. Por exemplo, o ebook de Arquitetura traz o insight "Atributos de Qualidade (-ilities)" que ensina a pedir a IA para identificar escalabilidade, performance, seguranca etc.</li>
+      <li><strong>Bloco de Recomendacao:</strong> Um bloco preto no final que mostra as recomendacoes formatadas em texto pronto para copiar e colar. Voce pode usar essas recomendacoes diretamente nos seus prompts, mesmo sem usar os geradores.</li>
+    </ul>
+
+    <p>Abaixo, a tabela com os 20 ebooks e seus topicos principais:</p>
+
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>Ebook</th><th>Autor</th><th>Topicos Principais</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>DevOps e Integracao Continua</strong></td>
+            <td>Andre Borges</td>
+            <td><span class="chip chip-devops">DevSecOps</span> <span class="chip chip-devops">CI/CD</span> <span class="chip chip-devops">Containers</span> <span class="chip chip-devops">Kubernetes</span> <span class="chip chip-devops">Observabilidade</span> <span class="chip chip-devops">Microservicos</span></td>
+          </tr>
+          <tr>
+            <td><strong>Transformacao Digital</strong></td>
+            <td>Italo Flammia</td>
+            <td><span class="chip chip-ds">Inovacao</span> <span class="chip chip-ds">Customer-Centric</span> <span class="chip chip-ds">Data-Driven</span> <span class="chip chip-ds">Culture</span> <span class="chip chip-ds">Ecossistema</span></td>
+          </tr>
+          <tr>
+            <td><strong>UX no Desenvolvimento</strong></td>
+            <td>Paula A. Macedo</td>
+            <td><span class="chip chip-ux">Usabilidade</span> <span class="chip chip-ux">Design Centrado</span> <span class="chip chip-ux">Prototipacao</span> <span class="chip chip-ux">Info Architecture</span> <span class="chip chip-ux">Empatia</span></td>
+          </tr>
+          <tr>
+            <td><strong>Projeto e Arq. de APIs</strong></td>
+            <td>Rafael Lachi / Weber Ress</td>
+            <td><span class="chip chip-api">REST Design</span> <span class="chip chip-api">Anti-Patterns</span> <span class="chip chip-api">Observabilidade</span> <span class="chip chip-api">Seguranca</span> <span class="chip chip-api">Open Banking</span></td>
+          </tr>
+          <tr>
+            <td><strong>Arquitetura de Software</strong></td>
+            <td>Adriano Carezzato</td>
+            <td><span class="chip chip-arch">4 Pilares</span> <span class="chip chip-arch">Atributos Qualidade</span> <span class="chip chip-arch">Refatoracao</span> <span class="chip chip-arch">C4/4+1</span> <span class="chip chip-arch">Cloud</span></td>
+          </tr>
+          <tr>
+            <td><strong>Analytics / Tomada de Decisao</strong></td>
+            <td>Marcelo H. de Araujo</td>
+            <td><span class="chip chip-analytics">Estatistica</span> <span class="chip chip-analytics">Inferencia</span> <span class="chip chip-analytics">Regressao</span> <span class="chip chip-analytics">Dashboards</span> <span class="chip chip-analytics">Sampling</span></td>
+          </tr>
+          <tr>
+            <td><strong>Privacy by Design / LGPD</strong></td>
+            <td>Samara Schuch</td>
+            <td><span class="chip chip-priv">LGPD</span> <span class="chip chip-priv">GDPR</span> <span class="chip chip-priv">7 Principios PbD</span> <span class="chip chip-priv">Bases Legais</span> <span class="chip chip-priv">Dados Pessoais</span></td>
+          </tr>
+          <tr>
+            <td><strong>Garantia e Controle de Qualidade</strong></td>
+            <td>Jeniffer Deus</td>
+            <td><span class="chip chip-qual">V&V</span> <span class="chip chip-qual">Testes</span> <span class="chip chip-qual">Automacao</span> <span class="chip chip-qual">TDD/BDD</span> <span class="chip chip-qual">Code Review</span></td>
+          </tr>
+          <tr>
+            <td><strong>Algoritmos e Padroes</strong></td>
+            <td>Renan de Oliveira</td>
+            <td><span class="chip chip-algo">SOLID</span> <span class="chip chip-algo">Design Patterns</span> <span class="chip chip-algo">Estruturas</span> <span class="chip chip-algo">Big-O</span> <span class="chip chip-algo">Clean Code</span></td>
+          </tr>
+          <tr>
+            <td><strong>Sistemas Orientados a Processos</strong></td>
+            <td>Erica Siqueira</td>
+            <td><span class="chip chip-proc">BPM</span> <span class="chip chip-proc">BPMN</span> <span class="chip chip-proc">DMN</span> <span class="chip chip-proc">BPMS</span> <span class="chip chip-proc">Low-Code</span></td>
+          </tr>
+          <tr>
+            <td><strong>Computacao em Nuvem</strong></td>
+            <td>Marcelo Zillo</td>
+            <td><span class="chip chip-cloud">Cloud Computing</span> <span class="chip chip-cloud">Seguranca</span> <span class="chip chip-cloud">SaaS/PaaS/IaaS</span> <span class="chip chip-cloud">Migracao</span> <span class="chip chip-cloud">Compliance</span></td>
+          </tr>
+          <tr>
+            <td><strong>Engenharia de Requisitos</strong></td>
+            <td>Enock Godoy de Souza</td>
+            <td><span class="chip chip-requisitos">Requisitos Nao Funcionais</span> <span class="chip chip-requisitos">Historias de Usuario</span> <span class="chip chip-requisitos">PMBOK</span> <span class="chip chip-requisitos">Prototipos</span> <span class="chip chip-requisitos">Product Ownership</span></td>
+          </tr>
+          <tr>
+            <td><strong>Metodos Ageis em Projetos</strong></td>
+            <td>Alexandre Ferraz</td>
+            <td><span class="chip chip-agile">Scrum</span> <span class="chip chip-agile">Kanban</span> <span class="chip chip-agile">BDD</span> <span class="chip chip-agile">SAFe</span> <span class="chip chip-agile">Lean Inception</span></td>
+          </tr>
+          <tr>
+            <td><strong>Formacao e Gestao de Tech Squads</strong></td>
+            <td>Gilberto Guimaraes</td>
+            <td><span class="chip chip-squads">Squads Multifuncionais</span> <span class="chip chip-squads">OKR</span> <span class="chip chip-squads">Tuckman</span> <span class="chip chip-squads">Autogestao</span> <span class="chip chip-squads">Lideranca Situacional</span></td>
+          </tr>
+          <tr>
+            <td><strong>Lideranca e Gestao de Pessoas</strong></td>
+            <td>Gilberto Guimaraes</td>
+            <td><span class="chip chip-lideranca">Lideranca Positiva</span> <span class="chip chip-lideranca">Gestao de Mudancas</span> <span class="chip chip-lideranca">Cultura</span> <span class="chip chip-lideranca">Kotter 8 Etapas</span> <span class="chip chip-lideranca">Mobilizacao</span></td>
+          </tr>
+          <tr>
+            <td><strong>Engenharia de Inteligencia Artificial</strong></td>
+            <td>Adriano Carezzato</td>
+            <td><span class="chip chip-ia">Machine Learning</span> <span class="chip chip-ia">Deep Learning</span> <span class="chip chip-ia">Etica e Vies</span> <span class="chip chip-ia">IA Responsavel</span> <span class="chip chip-ia">Redes Neurais</span></td>
+          </tr>
+          <tr>
+            <td><strong>Sistemas de Uso Intensivo de Dados</strong></td>
+            <td>Etienne Cartolano</td>
+            <td><span class="chip chip-dados">Big Data</span> <span class="chip chip-dados">Business Intelligence</span> <span class="chip chip-dados">ETL</span> <span class="chip chip-dados">Microsservicos</span> <span class="chip chip-dados">Data Science</span></td>
+          </tr>
+          <tr>
+            <td><strong>Arquitetura de Softwares</strong></td>
+            <td>Adriano Carezzato</td>
+            <td><span class="chip chip-arq2">Atributos Qualidade</span> <span class="chip chip-arq2">Microsservicos</span> <span class="chip chip-arq2">DevOps</span> <span class="chip chip-arq2">Observabilidade</span> <span class="chip chip-arq2">Seguranca por Design</span></td>
+          </tr>
+          <tr>
+            <td><strong>Metricas na Gestao de Projetos</strong></td>
+            <td>Raphael Donaire Albino</td>
+            <td><span class="chip chip-metricas">OKR</span> <span class="chip chip-metricas">Lead Time</span> <span class="chip chip-metricas">Throughput</span> <span class="chip chip-metricas">Monte Carlo</span> <span class="chip chip-metricas">Lei de Little</span></td>
+          </tr>
+          <tr>
+            <td><strong>Praticas de Gestao de Projetos</strong></td>
+            <td>Adriano Neves</td>
+            <td><span class="chip chip-gestao">PMBOK</span> <span class="chip chip-gestao">Escopo/EAP</span> <span class="chip chip-gestao">Riscos</span> <span class="chip chip-gestao">Metodos Hibridos</span> <span class="chip chip-gestao">Stakeholders</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="matriz">&#x1f4cb; Matriz de Impacto</h2>
+
+    <p>A Matriz de Impacto esta na tela <strong>Visao Geral</strong> e e uma das partes mais importantes da ferramenta. Ela cruza cada tipo de prompt (linha) com cada dominio de conhecimento (coluna) e mostra o nivel de influencia. Funciona como um guia de "qual ebook usar para qual situacao".</p>
+
+    <div class="card teal">
+      <h3>Como ler a Matriz</h3>
+      <p>As linhas representam os <strong>templates de prompt</strong> (Revisao de Codigo, Design de API, Refatoracao Arquitetural, etc.). As colunas representam os <strong>dominios de conhecimento</strong> dos ebooks. Onde ha <span style="color:var(--green);font-weight:700">Alta</span>, aquele dominio tem forte influencia sobre aquele tipo de prompt. Onde ha <span style="color:var(--text2)">Baixa</span>, a influencia e menor.</p>
+    </div>
+
+    <div class="tip">
+      <p><strong>Dica:</strong> Use a Matriz para decidir qual gerador usar. Se voce precisa revisar codigo com foco em qualidade, olhe a linha "Revisao de Codigo" e veja que "Qual." (Qualidade) tem influencia Alta. Entao, use o gerador "Revisao + Qualidade" e marque os checkboxes de qualidade.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECAO 3: GERADORES AVANCADOS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="geradores">&#x2699; O que sao os Geradores Avancados?</h2>
+
+    <p>Os Geradores Avancados sao a parte pratica da ferramenta. Eles sao <strong>formularios inteligentes</strong> que montam prompts completos e especializados para voce. Em vez de escrever um prompt do zero, voce preenche alguns campos e a ferramenta faz o resto.</p>
+
+    <h3>Como funciona qualquer gerador (fluxo padrao)</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Preencha os campos obrigatorios</h4>
+        <p>Todo gerador tem campos marcados com asterisco vermelho (<span style="color:var(--red)">*</span>) que sao obrigatorios. Geralmente sao: <strong>caminho do repositorio</strong>, <strong>arquivo ou diretorio</strong> e <strong>contexto/motivacao</strong>. Sem esses campos, o prompt ficaria incompleto.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Marque os checkboxes desejados</h4>
+        <p>Cada gerador tem uma lista de checkboxes com dominios de qualidade (SOLID, V&amp;V, SAST, etc.). Alguns vem marcados por padrao — voce pode desmarcar ou marcar mais conforme sua necessidade. Quanto mais checkboxes marcados, mais profundo e detalhado sera o prompt gerado.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Clique em "Gerar Prompt com Dominios"</h4>
+        <p>O botao verde monta o prompt com base em tudo que voce preencheu e marca. O prompt aparece em uma area de saida na parte inferior da tela, com formatacao de codigo e scroll.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Copie e cole na IA</h4>
+        <p>Clique no botao <strong>"Copiar"</strong> para copiar o prompt para a area de transferencia. Abra o ChatGPT, Claude ou qualquer outra IA e cole. A IA vai receber um prompt rico em contexto, dominio e formato — e vai produzir um resultado muito superior.</p>
+      </div>
+    </div>
+
+    <div class="warning">
+      <p><strong>Importante:</strong> Nenhum dado e enviado para nenhum servidor. Tudo acontece localmente no seu navegador. Os campos de formulario sao apenas para montar o texto do prompt — voce pode preencher com caminhos ficticios ou reais, nao importa, pois o proprio prompt que voce copia e cola manualmente na sua IA de preferencia.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="gen-review">&#x1f504; Gerador: Revisao + Qualidade</h2>
+
+    <div class="card red">
+      <h3>Dominios Ativos</h3>
+      <p>Este gerador combina conhecimentos dos ebooks de <strong>Qualidade de Software</strong>, <strong>Arquitetura de Software</strong> e <strong>Algoritmos e Padroes</strong>. Ele e focado em revisar codigo com rigor profissional, verificando qualidade em multiplas dimensoes.</p>
+    </div>
+
+    <h3>Campos do Formulario</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>Tipo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Caminho do repositorio</strong></td><td>Texto</td><td>O caminho absoluto do repositorio que sera analisado. Ex: <code>/home/z/my-project/meu-app</code></td></tr>
+        <tr><td><strong>Arquivo ou diretorio</strong></td><td>Texto</td><td>O arquivo ou pasta especifico. Pode ser um arquivo (<code>src/utils/auth.ts</code>) ou diretorio (<code>src/services/</code>)</td></tr>
+        <tr><td><strong>Contexto / Motivacao</strong></td><td>Textarea</td><td>Por que voce precisa dessa analise? Ex: "Refatorar apos incidente de producao" ou "Preparando para PR"</td></tr>
+        <tr><td><strong>Dominios de qualidade</strong></td><td>Checkboxes</td><td>10 opcoes (V&amp;V, Testes, SAST, Code Review, Atributos, SOLID, Clean Code, Arquitetura, DevOps, Performance)</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Quando usar:</strong> Sempre que precisar de uma revisao de codigo rigorosa que va alem de "olho nu" — incluindo principios SOLID, atributos de qualidade, teste em multiplos niveis e analise estatica. E o gerador mais usado para o dia a dia.</p>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-api">&#x1f310; Gerador: Design de API</h2>
+
+    <div class="card green">
+      <h3>Dominios Ativos</h3>
+      <p>Combina os ebooks de <strong>Projeto e Arquitetura de APIs</strong> com principios de <strong>Observabilidade</strong> e <strong>Arquitetura de Software</strong>. Focado em criar ou revisar APIs RESTful profissionais.</p>
+    </div>
+
+    <h3>Campos Especificos</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Caminho do repositorio</strong></td><td>Caminho do projeto de API. Ex: <code>/home/z/my-project/api-server</code></td></tr>
+        <tr><td><strong>Arquivo(s) de API</strong></td><td>Arquivos de rotas/endpoints. Ex: <code>src/routes/users.ts</code> ou <code>src/routes/*</code></td></tr>
+        <tr><td><strong>Contexto</strong></td><td>Motivacao. Ex: "Refatorar endpoints para producao"</td></tr>
+        <tr><td><strong>Framework/Linguagem</strong></td><td>Selecione o framework (Express, FastAPI, NestJS, Spring Boot, etc.) ou deixe "Deixe descobrir" para a IA identificar</td></tr>
+        <tr><td><strong>Tipos de analise</strong></td><td>Checkboxes: Design RESTful, Anti-Patterns, Observabilidade, Seguranca, Documentacao, Performance</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Quando usar:</strong> Ao criar novos endpoints, revisar design de API existente, ou preparar APIs para producao. Garante que a IA verifique metodos HTTP corretos, anti-patterns comuns, observabilidade e seguranca.</p>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-arch">&#x1f3d7; Gerador: Refatoracao Arquitetural</h2>
+
+    <div class="card purple">
+      <h3>Dominios Ativos</h3>
+      <p>Combina os ebooks de <strong>Arquitetura de Software</strong>, <strong>Qualidade</strong> e <strong>DevOps</strong>. Focado em mudancas estruturais que respeitam a arquitetura existente e evoluem o projeto sem breaking changes.</p>
+    </div>
+
+    <h3>Checkboxes Especificos</h3>
+    <ul>
+      <li><strong>4 Pilares da Arquitetura</strong> — Estrutura, atributos de qualidade, decisoes arquiteturais e principios de design.</li>
+      <li><strong>Atributos de Qualidade (-ilities)</strong> — Escalabilidade, performance, seguranca, disponibilidade, manutenibilidade, testabilidade.</li>
+      <li><strong>Leis do Trabalho Arquitetural</strong> — "Toda decisao tem seu preco" e "Avalie no contexto especifico".</li>
+      <li><strong>Documentacao C4</strong> — Gera documentacao nos niveis Contexto, Container, Componente e Codigo.</li>
+      <li><strong>Refatoracao e Evolucao</strong> — Reducao de acoplamento, automacao de testes, padroes emergentes.</li>
+      <li><strong>Cloud / DevOps</strong> — Arquiteturas distribuidas, containers, microsservicos.</li>
+    </ul>
+
+    <p><strong>Quando usar:</strong> Ao planejar grandes mudancas estruturais como migracao de monolito para microsservicos, reorganizacao de modulos, ou qualquer refatoracao que impacte a arquitetura do projeto como um todo.</p>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-security">&#x1f6e1; Gerador: Seguranca + LGPD</h2>
+
+    <div class="card red">
+      <h3>Dominios Ativos</h3>
+      <p>Combina os ebooks de <strong>Privacy by Design / LGPD</strong> com <strong>OWASP</strong> e principios de seguranca. Gera prompts que verificam conformidade legal e seguranca tecnica simultaneamente.</p>
+    </div>
+
+    <h3>Campos Especificos</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nivel de conformidade</strong></td><td>
+          <ul>
+            <li><strong>LGPD Completa:</strong> Todos os 10 principios da LGPD + bases legais</li>
+            <li><strong>LGPD Essenciais:</strong> 5 principios principais</li>
+            <li><strong>OWASP Top 10 + LGPD:</strong> Foco em vulnerabilidades web + conformidade</li>
+            <li><strong>Privacy by Design:</strong> 7 principios de Ann Cavoukian</li>
+            <li><strong>Tudo:</strong> LGPD + OWASP + PbD (mais completo)</li>
+          </ul>
+        </td></tr>
+        <tr><td><strong>Tipo de dado predominante</strong></td><td>
+          <ul>
+            <li><strong>Dados pessoais gerais:</strong> Nome, email, telefone</li>
+            <li><strong>Dados pessoais sensiveis:</strong> Religiao, orientacao politica, biometria</li>
+            <li><strong>Dados criticos:</strong> Saude, financeiro</li>
+            <li><strong>Dados de criancas:</strong> Requer protecao额外 conforme LGPD Art. 14</li>
+          </ul>
+        </td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Quando usar:</strong> Sempre que o projeto lida com dados pessoais de usuarios brasileiros. Especialmente util antes de lancamentos em producao, auditorias, ou quando se trata de dados sensiveis/criticos. O prompt gerado inclui verificacao OWASP completa e os principios legais da LGPD.</p>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-ux">&#x1f3a8; Gerador: UX + Usabilidade</h2>
+
+    <div class="card orange">
+      <h3>Dominios Ativos</h3>
+      <p>Combina os ebooks de <strong>UX no Desenvolvimento de Software</strong> com principios de <strong>Design Centrado no Usuario</strong> e <strong>Analise Heuristica</strong>.</p>
+    </div>
+
+    <h3>Campos Especificos</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Framework UI</strong></td><td>React, Next.js, Vue, Angular, Svelte — ou deixe a IA descobrir</td></tr>
+        <tr><td><strong>Estilo</strong></td><td>shadcn/ui + Tailwind, Material UI, Chakra UI, CSS Modules, Styled Components</td></tr>
+        <tr><td><strong>Aspectos UX</strong></td><td>
+          <ul>
+            <li><strong>Analise Heuristica (Nielsen):</strong> Avalia 10 heuristicas de usabilidade</li>
+            <li><strong>Acessibilidade:</strong> WCAG 2.1 AA, contraste, adaptabilidade</li>
+            <li><strong>Design Centrado no Usuario:</strong> Empatizar, definir, idear, prototipar, testar</li>
+            <li><strong>Prototipacao Rapida:</strong> Crazy 8s, wireframes de baixa fidelidade</li>
+            <li><strong>Arq. de Informacao:</strong> Organizacao, navegacao, rotulagem, hierarquia</li>
+            <li><strong>Jornada do Usuario:</strong> Mapeamento de pontos de dor (antes, durante, depois)</li>
+            <li><strong>Mobile-first:</strong> Responsividade, gestos touch</li>
+            <li><strong>Internacionalizacao:</strong> Suporte a multiplos idiomas</li>
+          </ul>
+        </td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Quando usar:</strong> Ao revisar componentes de interface, criar novas telas, melhorar a experiencia do usuario, ou preparar o frontend para producao. Garante que a IA va alem da estetica e avalie acessibilidade, usabilidade e jornada do usuario.</p>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-canivete">&#x1f91d; Gerador: Canivete Suico Pro</h2>
+
+    <div class="card yellow">
+      <h3>Dominios Ativos: TODOS</h3>
+      <p>O gerador mais completo e poderoso da ferramenta. Ativa <strong>todos os dominios simultaneamente</strong> e gera o prompt mais rico e profundo possivel. E a opcao "sem filtro" para quando voce precisa de uma analise exaustiva.</p>
+    </div>
+
+    <h3>Campos Adicionais</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tipo de melhoria predominante</strong></td><td>Analise completa, Qualidade, Arquitetura, Seguranca, Performance, UX, DevOps, Processos, Refatoracao</td></tr>
+        <tr><td><strong>Profundidade da analise</strong></td><td>
+          <ul>
+            <li><strong>Completa:</strong> Todas as camadas — a analise mais profunda possivel</li>
+            <li><strong>Focada:</strong> Apenas dominios relevantes para o tipo selecionado</li>
+            <li><strong>Resumida:</strong> Checklist rapido + diffs (para quando precisa de velocidade)</li>
+          </ul>
+        </td></tr>
+        <tr><td><strong>Entregaveis esperados</strong></td><td>Checkboxes para: Resumo executivo, Justificativa por mudanca, Diffs completos, Riscos e mitigacoes, Novos arquivos criados, Testes atualizados/criados</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Quando usar:</strong> Quando voce precisa da analise mais completa possivel — por exemplo, antes de um PR grande, para debito tecnico acumulado, ou quando nao tem certeza de qual gerador especifico usar. O Canivete Suico Pro cobre todos os angulos.</p>
+
+    <div class="tip">
+      <p><strong>Dica:</strong> O Canivete Suico Pro gera prompts longos e muito detalhados. Para IAs com limite de tokens, considere usar a opcao "Resumida" na profundidade, ou usar um gerador mais especifico para um prompt mais curto.</p>
+    </div>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-cloud">&#x2601; Gerador: Cloud / Infra</h2>
+    <div class="card accent">
+      <h3>Dominios Ativos</h3>
+      <p>Combina o ebook de <strong>Computacao em Nuvem</strong> (Marcelo Zillo) com principios de seguranca na nuvem e conformidade regulatória. Gera prompts que verificam infraestrutura cloud, modelos de servico (SaaS/PaaS/IaaS), seguranca (responsabilidade compartilhada, IAM, criptografia) e compliance (LGPD, NIST CSF, BACEN).</p>
+    </div>
+    <h3>Campos Especificos</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Provedor de Nuvem</strong></td><td>AWS, Azure, Google Cloud ou Multi-cloud. Ajuda a calibrar as verificacoes especificas de cada provedor.</td></tr>
+        <tr><td><strong>Aspectos para verificar</strong></td><td>Checkboxes: Seguranca (IAM, criptografia, flags), Modelo de servico (SaaS/PaaS/IaaS), Preparacao para migracao, Compliance (LGPD, NIST, BACEN), Infra as Code (Terraform), Containers (Docker/K8s)</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Quando usar:</strong> Ao revisar infraestrutura em nuvem, preparar para migracao, auditar seguranca cloud, ou garantir compliance regulatorio em ambientes hospedados.</p>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-ia">&#x1f9e0; Gerador: IA / Machine Learning</h2>
+    <div class="card red">
+      <h3>Dominios Ativos</h3>
+      <p>Baseado no ebook <strong>Engenharia de Inteligencia Artificial</strong> (Adriano Carezzato). Focado em revisar codigo de IA/ML com verificacao de etica e vies, qualidade dos dados (garbage in, trash out), overfitting/generalizacao, seguranca adversarial e IA responsavel.</p>
+    </div>
+    <h3>Campos Especificos</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tipo de modelo</strong></td><td>Classificacao, Regressao, NLP, Visao Computacional, Sistema de Recomendacao. Calibra a analise para o tipo especifico de IA.</td></tr>
+        <tr><td><strong>Aspectos de IA</strong></td><td>Checkboxes: Vies e Etica, Qualidade dos Dados, Overfitting/Generalizacao, Seguranca Adversarial, Explicabilidade (XAI), Conformidade LGPD</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Quando usar:</strong> Ao revisar pipelines de ML, modelos de IA, dados de treinamento, ou quando o sistema trata dados pessoais com algoritmos de IA que precisam ser auditados.</p>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-dados">&#x1f4ca; Gerador: Dados / Analytics</h2>
+    <div class="card teal">
+      <h3>Dominios Ativos</h3>
+      <p>Combina o ebook <strong>Sistemas de Uso Intensivo de Dados</strong> (Etienne Cartolano) com principios de Big Data (5 Vs), ETL, microsservicos de dados e ciclo completo de analise (SMART).</p>
+    </div>
+    <h3>Campos Especificos</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tecnologia principal</strong></td><td>Spark, Kafka, Airflow, dbt, Python/Pandas. Identifica o stack de dados para verificacoes especificas.</td></tr>
+        <tr><td><strong>Aspectos de dados</strong></td><td>Checkboxes: Big Data (5 Vs), Qualidade ETL, Microsservicos de Dados, Ciclo Analise Completo, ML Aplicado</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Quando usar:</strong> Ao revisar pipelines de dados ETL, data lakes, data warehouses, sistemas de analytics ou qualquer projeto que processe grandes volumes de dados.</p>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="gen-gestao">&#x1f4c5; Gerador: Gestao / Metricas</h2>
+    <div class="card yellow">
+      <h3>Dominios Ativos</h3>
+      <p>Combina os ebooks de <strong>Praticas de Gestao de Projetos</strong> (Adriano Neves) e <strong>Metricas na Gestao de Projetos</strong> (Raphael Donaire Albino). Gera prompts com foco em PMBOK, escopo (EAP), riscos, OKRs, metricas de fluxo e previsibilidade.</p>
+    </div>
+    <h3>Campos Especificos</h3>
+    <table class="tbl">
+      <thead><tr><th>Campo</th><th>O que colocar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Modelo de gestao</strong></td><td>PMBOK (tradicional), Agil (Scrum/Kanban), Hibrido. A LLM adapta as verificacoes conforme o modelo escolhido.</td></tr>
+        <tr><td><strong>Aspectos de gestao</strong></td><td>Checkboxes: Escopo e EAP, Riscos, Stakeholders e Comunicacao, Project Charter, Gestao de Aquisicoes</td></tr>
+        <tr><td><strong>Metricas para incluir</strong></td><td>Checkboxes: OKR (Output vs Outcome), Fluxo (Lead Time, Throughput, WIP), Eficiencia vs Eficacia, Previsibilidade (Monte Carlo), Lei de Little</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Quando usar:</strong> Ao planejar projetos, fazer auditorias de gestao, definir OKRs, medir fluxo de entrega, ou quando precisar de previsibilidade e metricas orientadas a resultado (nao apenas produtividade).</p>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SECAO 4: PRATICO -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="passo-a-passo">&#x1f449; Passo a Passo — Tutorial Rapido</h2>
+
+    <p>Um exemplo pratico completo de como usar a ferramenta do inicio ao fim:</p>
+
+    <!-- Playground interativo (montado por app.js) -->
+    <div id="pe-playground"></div>
+
+    <div class="card accent">
+      <h3>Cenario: Revisar codigo de autenticacao antes de lancar em producao</h3>
+      <p>Vamos imaginar que voce tem um projeto em <code>/home/z/my-project/app</code> e quer revisar o arquivo <code>src/middleware/auth.ts</code> que trata autenticacao de usuarios.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Abra a ferramenta</h4>
+        <p>Duplo-clique no arquivo <code>prompt-engineering-pro.html</code> para abrir no navegador. A tela inicial (Visao Geral) carrega automaticamente.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Escolha o gerador adequado</h4>
+        <p>No sidebar, clique em <strong>"Seguranca + LGPD"</strong> (esta na secao "Gerador Avancado"). Isso abre o formulario focado em seguranca e conformidade.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Preencha os campos</h4>
+        <ul>
+          <li><strong>Caminho do repositorio:</strong> <code>/home/z/my-project/app</code></li>
+          <li><strong>Arquivo(s):</strong> <code>src/middleware/auth.ts</code></li>
+          <li><strong>Contexto:</strong> "Preparando modulo de autenticacao para producao. O sistema armazena dados pessoais de usuarios brasileiros (nome, email, CPF). Preciso garantir conformidade LGPD e seguranca contra ataques comuns."</li>
+          <li><strong>Nivel de conformidade:</strong> Selecione "Tudo (LGPD + OWASP + PbD)" para a analise mais completa</li>
+          <li><strong>Tipo de dado:</strong> Selecione "Dados pessoais sensiveis" (porque CPF e dados de saude podem estar envolvidos)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Gere o prompt</h4>
+        <p>Clique no botao verde <strong>"Gerar Prompt com Dominios"</strong>. O prompt aparece na area de saida abaixo, formatado como codigo, com todas as secoes preenchidas.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Copie e cole</h4>
+        <p>Clique em <strong>"Copiar"</strong>. Abra o ChatGPT, Claude ou sua IA preferida. Cole o prompt e envie. A IA vai fazer uma analise completa cobrindo: principios LGPD, OWASP Top 10, Privacy by Design, e gerar diffs prontos para aplicar.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>Aplique os resultados</h4>
+        <p>A IA vai retornar diffs no formato <code>--- a/arquivo.ts</code> / <code>+++ b/arquivo.ts</code>. Salve o diff em um arquivo (ex: <code>fix.patch</code>) e aplique com <code>git apply fix.patch</code> no seu repositorio.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <h2 class="section-title" id="dicas">&#x2b50; Dicas Avancadas</h2>
+
+    <div class="card green">
+      <h3>10 Dicas para Extrair o Maximo da Ferramenta</h3>
+    </div>
+
+    <h4>1. O contexto e tudo</h4>
+    <p>Nao economize no campo "Contexto/Motivacao". Quanto mais detalhes voce der sobre o problema, o cenario, o que ja tentou, o que precisa — melhor sera o resultado da IA. Um contexto de uma linha gera resposta generica. Um contexto de tres linhas gera resposta especializada.</p>
+
+    <h4>2. Nem sempre mais e melhor</h4>
+    <p>Marcar todos os checkboxes pode gerar um prompt tao longo que a IA perde foco. Selecione apenas os dominios relevantes para o seu caso. Para uma revisao simples de codigo, marque V&amp;V + SOLID + Testes. Deixe os outros para quando realmente precisar.</p>
+
+    <h4>3. Use os insights dos ebooks manualmente</h4>
+    <p>Na secao de Ebooks Analisados, cada ebook tem um bloco de "Recomendacoes" em texto puro. Voce pode copiar essas recomendacoes e adicionar a qualquer prompt que escrever manualmente, mesmo fora da ferramenta.</p>
+
+    <h4>4. Combine geradores</h4>
+    <p>Nada impede voce de gerar dois prompts diferentes e combinar partes de cada um. Gere um com o gerador de "Seguranca" e outro com o de "Qualidade", depois junte os melhores trechos de cada.</p>
+
+    <h4>5. Adapte o prompt gerado</h4>
+    <p>O prompt gerado e um excelente ponto de partida, mas voce pode (e deve) edita-lo antes de enviar. Adicione detalhes especificos do seu projeto, remova partes irrelevantes, ajuste o tom. A ferramenta faz 80% do trabalho — voce faz os 20% finais de personalizacao.</p>
+
+    <h4>6. Para IAs com limite de tokens</h4>
+    <p>Se estiver usando uma IA com limite curto de contexto, prefira geradores mais especificos (em vez do Canivete Suico) e selecione menos checkboxes. O prompt gerado sera mais curto e consumira menos tokens.</p>
+
+    <h4>7. Teste e itere</h4>
+    <p>Se o resultado nao foi satisfatorio, ajuste o prompt: mude o contexto, adicione mais detalhes, selecione outros dominios. A engenharia de prompt e iterativa — cada tentativa te ensina o que funciona melhor.</p>
+
+    <h4>8. Use os diffs na pratica</h4>
+    <p>Os prompts gerados pedem diffs no formato <code>git apply</code>. Quando a IA retornar diffs, salve em um arquivo <code>.patch</code> e aplique com o comando <code>git apply --check fix.patch</code> (para verificar) e depois <code>git apply fix.patch</code> (para aplicar).</p>
+
+    <h4>9. Consulte a Matriz de Impacto</h4>
+    <p>Antes de escolher um gerador, olhe a Matriz de Impacto na Visao Geral. Ela te diz quais dominios sao mais relevantes para cada tipo de tarefa, ajudando a escolher o gerador certo e os checkboxes certos.</p>
+
+    <h4>10. Funciona offline</h4>
+    <p>A ferramenta e 100% offline. Nao precisa de internet, nao envia dados, nao tem servidor. Voce pode usar em qualquer computador apenas abrindo o arquivo HTML. Isso e util quando voce trabalha com codigo confidencial e nao quer que dados do repositorio vazem.</p>
+
+    <hr class="divider">
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- GLOSSARIO -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <h2 class="section-title" id="glossario">&#x1f4d7; Glossario</h2>
+
+    <p>Termos tecnicos usados na ferramenta e neste manual, explicados de forma simples:</p>
+
+    <div class="gloss-item">
+      <div class="gloss-term">Prompt</div>
+      <p class="gloss-def">O texto que voce envia para uma IA como instrucao. Pode ser uma pergunta, um comando ou um texto estruturado com contexto, regras e formato de saida.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">LLM (Large Language Model)</div>
+      <p class="gloss-def">O "cerebro" por tras de IAs como ChatGPT, Claude e Gemini. E um modelo de linguagem treinado com bilhoes de textos para entender e gerar linguagem humana.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Diff</div>
+      <p class="gloss-def">Abreviacao de "difference". Mostra as diferencas entre duas versoes de um arquivo — o que foi adicionado (linhas com +) e o que foi removido (linhas com -). Pode ser aplicado com o comando <code>git apply</code>.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">SOLID</div>
+      <p class="gloss-def">Conjunto de 5 principios de programacao orientada a objetos: Single Responsibility (cada classe faz uma coisa), Open/Closed (aberto para extensao, fechado para modificacao), Liskov Substitution (subtipos devem substituir o tipo base), Interface Segregation (interfaces pequenas e focadas) e Dependency Inversion (dependa de abstracoes, nao de implementacoes).</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">LGPD</div>
+      <p class="gloss-def">Lei Geral de Protecao de Dados (Lei 13.709/2018). A lei brasileira que regula como empresas coletam, armazenam, processam e compartilham dados pessoais de cidadaos brasileiros.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">OWASP</div>
+      <p class="gloss-def">Open Worldwide Application Security Project. Uma organizacao que mantem listas das 10 vulnerabilidades mais comuns em aplicacoes web (OWASP Top 10), usada como referencia global de seguranca.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Privacy by Design (PbD)</div>
+      <p class="gloss-def">Conceito de Ann Cavoukian que diz que a privacidade deve ser incorporada no design dos sistemas desde o inicio, nao adicionada depois. Tem 7 principios fundamentais.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">V&amp;V (Verificacao e Validacao)</div>
+      <p class="gloss-def">Verificacao = "estamos construindo o produto certo?" (checa se o codigo segue especificacoes). Validacao = "estamos construindo o produto certo?" (checa se atende as necessidades reais do usuario).</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">SAST (Static Application Security Testing)</div>
+      <p class="gloss-def">Analise de seguranca feita no codigo-fonte sem executa-lo. Ferramentas SAST verificam automaticamente vulnerabilidades como injection, XSS, hardcoded secrets, etc.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">C4 Model</div>
+      <p class="gloss-def">Metodo de documentacao de arquitetura com 4 niveis de detalhe: Contexto (sistema no mundo), Container (aplicacoes e bancos), Componente (modulos internos) e Codigo (classes e funcoes).</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">CI/CD</div>
+      <p class="gloss-def">Continuous Integration / Continuous Deployment. Pipeline automatizado que compila, testa e publica codigo toda vez que alguem faz um commit. Garante que mudancas sejam validadas automaticamente.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">TDD / BDD</div>
+      <p class="gloss-def">Test-Driven Development (escreve o teste antes do codigo) e Behavior-Driven Development (escreve comportamentos esperados em linguagem natural antes do codigo). Ambos sao metodologias que melhoram a qualidade do software.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Atributos de Qualidade (-ilities)</div>
+      <p class="gloss-def">Caracteristicas nao funcionais do software: escalabili<b>dade</b>, performa<b>nce</b>, segura<b>nca</b>, disponibili<b>dade</b>, manutenibili<b>dade</b>, testabili<b>dade</b>. Em ingles, quase todos terminam com "-ility".</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">BPMN</div>
+      <p class="gloss-def">Business Process Model and Notation. Uma notacao visual padrao para modelar processos de negocio com diagramas de fluxo, eventos, gateways e swimlanes.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Breaking Change</div>
+      <p class="gloss-def">Mudanca no codigo que quebra a compatibilidade com versoes anteriores. Por exemplo, renomear uma funcao que outros modulos usam, ou mudar o formato de retorno de uma API. Deve ser evitado sempre que possivel.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Code Smell</div>
+      <p class="gloss-def">Indicio de problema no codigo que nao necessariamente e um bug, mas sugere mau design. Exemplos: funcoes muito longas, duplicacao de codigo, nomes confusos, dependencias ciclicas.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">git apply</div>
+      <p class="gloss-def">Comando do Git que aplica as mudancas descritas em um arquivo diff ao codigo-fonte. Se voce gerar um diff com a IA, pode salva-lo como <code>.patch</code> e aplicar diretamente ao seu repositorio.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Anti-Pattern</div>
+      <p class="gloss-def">Um padrao de design que parece ser uma solucao mas que na verdade causa mais problemas do que resolve. O oposto de um Design Pattern (que e uma solucao boa e testada).</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Cloud Computing</div>
+      <p class="gloss-def">Modelo de computacao que oferece recursos (servidores, storage, banco de dados) pela internet, com pagamento por uso (pay-as-you-go). Os principais modelos sao SaaS (software como servico), PaaS (plataforma como servico) e IaaS (infraestrutura como servico).</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Responsabilidade Compartilhada (Shared Responsibility)</div>
+      <p class="gloss-def">Modelo de seguranca da nuvem onde provedor e cliente dividem responsabilidades. O provedor protege a infraestrutura; o cliente protege os dados e a configuracao. Ignorar essa divisao e a maior causa de vazamentos em nuvem.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">BDD (Behavior-Driven Development)</div>
+      <p class="gloss-def">Metodologia agil que define comportamentos esperados do software usando cenarios Given-When-Then (Dado-Quando-Entao). Os testes escritos dessa forma funcionam como "especificacao viva" que guia o desenvolvimento e valida requisitos automaticamente.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">INVEST</div>
+      <p class="gloss-def">Acrônimo para qualificar boas historias de usuario: Independente, Negociavel, Valiosa, Estimavel, Pequena e Testavel. Se uma historia de usuario nao satisfaz esses criterios, precisa ser refinada.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">OKR (Objectives and Key Results)</div>
+      <p class="gloss-def">Framework de definicao de metas onde Objective (Objetivo) e uma meta qualitativa inspiradora e Key Results (Resultados Chave) sao metricas quantitativas que medem progresso. A principal vantagem do OKR sobre metas tradicionais e focar em resultado (outcome) em vez de atividade (output).</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Lead Time e Throughput</div>
+      <p class="gloss-def">Lead Time e o tempo total desde a solicitacao do cliente ate a entrega. Throughput e o numero de itens entregues por periodo. Juntos, medem a velocidade e capacidade de entrega do time.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Monte Carlo (Simulacao)</div>
+      <p class="gloss-def">Tecnica estatistica que simula milhares de cenarios possiveis usando dados historicos para estimar prazos com probabilidade. Em vez de um prazo unico ("vai demorar 2 semanas"), diz "ha 85% de chance de entregar em ate 3 semanas".</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">WSJF (Weighted Shortest Job First)</div>
+      <p class="gloss-def">Formula do SAFe para priorizar itens por valor: WSJF = (Business Value + Time Criticality + Risk Reduction) / Job Size. Ajuda a decidir o que fazer primeiro quando ha mais itens do que capacidade.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">Modelo de Tuckman</div>
+      <p class="gloss-def">Modelo que descreve 4 fases de evolucao de equipes: Forming (formacao, incerteza), Storming (conflitos), Norming (normas estabelecidas) e Performing (alta performance). Entender em qual fase o time esta ajuda a definir intervencoes adequadas.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">5 Vs do Big Data</div>
+      <p class="gloss-def">Cinco dimensoes que caracterizam dados massivos: Volume (quantidade), Velocidade (velocidade de geracao), Variedade (diversidade de formatos), Veracidade (qualidade/confiabilidade) e Valor (utilidade para o negocio). Todo pipeline de dados deve considerar os 5 Vs.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">EAP (Estrutura Analitica do Projeto)</div>
+      <p class="gloss-def">Work Breakdown Structure (WBS). Decomposicao hierarquica do escopo do projeto em entregas menores e gerenciaveis. Cada nivel inferior detalha mais o trabalho. A EAP e a base para estimativas, cronogramas e controle do projeto.</p>
+    </div>
+    <div class="gloss-item">
+      <div class="gloss-term">IA Responsavel</div>
+      <p class="gloss-def">Conjunto de principios para desenvolvimento etico de IA: Transparencia (como o modelo decide), Justica (sem discriminacao), Privacidade (protecao de dados), Responsabilidade (quem responde por erros) e Seguranca (robustez contra ataques).</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="card teal" style="text-align:center">
+      <h3 style="justify-content:center">&#x1f680; Pronto para comecar?</h3>
+      <p>Agora que voce entende o que e um prompt, como a ferramenta funciona e como usar cada gerador, abra o <strong>prompt-engineering-pro.html</strong> e comece a gerar prompts profissionais para suas analises de codigo.</p>
+      <p>Se tiver duvidas, volte a este manual — ele esta organizado por secoes no menu lateral para facilitar a navegacao.</p>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function nav(el,id){
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  const target=document.querySelector(id);
+  if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+  if(window.innerWidth<=768){
+    document.getElementById('sb').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+}
+function toggleSB(){
+  document.getElementById('sb').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+
+// Highlight active section on scroll
+const sections=document.querySelectorAll('[id]');
+const sbItems=document.querySelectorAll('.sb-item');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const id=entry.target.id;
+      sbItems.forEach(item=>{
+        if(item.getAttribute('onclick')&&item.getAttribute('onclick').includes(id)){
+          document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+          item.classList.add('active');
+        }
+      });
+    }
+  });
+},{rootMargin:'-20% 0px -70% 0px'});
+sections.forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+/* ============================================================
+   Prompt Engineering Pro — Design System compartilhado
+   Tokens unificados para as três páginas (index / generator / manual).
+   Define os DOIS esquemas de nomes que existiam nos HTMLs originais:
+     - curto:  --bg, --bg2, --bg3, --text, --text2, --muted ...
+     - longo:  --bg-primary, --bg-secondary, --text-primary ...
+   Ambos apontam para os mesmos valores, então cada página pode
+   remover seu próprio :root e herdar daqui. O tema claro
+   (.light-theme no <html>) sobrescreve os dois esquemas.
+   ============================================================ */
+
+:root {
+  color-scheme: dark;
+
+  /* Esquema curto (index.html / manual.html) */
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1c2333;
+  --bg-input: #0d1117;
+  --border: #30363d;
+  --border-focus: #58a6ff;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --muted: #6e7681;
+  --accent: #58a6ff;
+  --accent-h: #79c0ff;
+  --green: #3fb950;
+  --green-h: #56d364;
+  --orange: #d29922;
+  --red: #f85149;
+  --purple: #bc8cff;
+  --teal: #2dd4bf;
+  --yellow: #e3b341;
+  --pink: #f778ba;
+  --sky: #79c0ff;
+  --sidebar-w: 280px;
+
+  /* Esquema longo (generator.html) — mesmos valores */
+  --bg-primary: var(--bg);
+  --bg-secondary: var(--bg2);
+  --bg-tertiary: var(--bg3);
+  --text-primary: var(--text);
+  --text-secondary: var(--text2);
+  --text-muted: var(--muted);
+  --accent-hover: var(--accent-h);
+  --green-hover: var(--green-h);
+}
+
+/* ---------- Tema claro ---------- */
+.light-theme {
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --bg2: #f6f8fa;
+  --bg3: #eaeef2;
+  --bg-input: #ffffff;
+  --border: #d0d7de;
+  --border-focus: #0969da;
+  --text: #1f2328;
+  --text2: #57606a;
+  --muted: #6e7781;
+  --accent: #0969da;
+  --accent-h: #0550ae;
+  --green: #1a7f37;
+  --green-h: #116329;
+  --orange: #9a6700;
+  --red: #cf222e;
+  --purple: #8250df;
+  --teal: #0f766e;
+  --yellow: #7d4e00;
+  --pink: #bf3989;
+  --sky: #0969da;
+}
+
+/* ============================================================
+   Componentes compartilhados adicionados pela fundação
+   (controles de topbar, toasts, menu de preferências,
+    playground do manual). Os estilos específicos de cada
+    página continuam nos respectivos <style> inline.
+   ============================================================ */
+
+/* Controles injetados na topbar */
+.pe-topbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.pe-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.pe-icon-btn:hover {
+  background: var(--bg3);
+  color: var(--text);
+  border-color: var(--accent);
+}
+.pe-icon-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Dropdown de preferências */
+.pe-menu {
+  position: absolute;
+  top: 54px;
+  right: 16px;
+  z-index: 200;
+  min-width: 220px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+.pe-menu[hidden] {
+  display: none;
+}
+.pe-menu button,
+.pe-menu select {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--text);
+  border: none;
+  border-radius: 6px;
+  padding: 9px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.pe-menu button:hover {
+  background: var(--bg3);
+}
+.pe-menu select {
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  margin: 4px 0;
+  cursor: pointer;
+}
+.pe-menu .pe-menu-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  padding: 8px 10px 2px;
+}
+
+/* Toasts */
+.pe-toast-wrap {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 40px));
+}
+.pe-toast {
+  background: var(--bg2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  animation: pe-toast-in 0.2s ease;
+}
+.pe-toast.pe-toast-error {
+  border-left-color: var(--red);
+}
+.pe-toast.pe-toast-success {
+  border-left-color: var(--green);
+}
+.pe-toast.pe-toast-info {
+  border-left-color: var(--accent);
+}
+.pe-toast strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12.5px;
+}
+@keyframes pe-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Campo inválido destacado pela validação */
+.pe-invalid,
+.pe-invalid:focus {
+  border-color: var(--red) !important;
+  box-shadow: 0 0 0 3px rgba(248, 81, 73, 0.15) !important;
+}
+
+/* Foco visível consistente para itens de navegação (acessibilidade) */
+.sb-item:focus-visible,
+.sidebar-item:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: -2px;
+}
+
+/* Playground do manual */
+.pe-playground {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 18px;
+  margin: 16px 0;
+}
+.pe-playground label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  margin: 10px 0 4px;
+}
+.pe-playground select,
+.pe-playground input {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+}
+.pe-playground pre {
+  margin-top: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.pe-playground .pe-btn {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: var(--green);
+  color: #0d1117;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pe-playground .pe-btn:hover {
+  background: var(--green-h);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

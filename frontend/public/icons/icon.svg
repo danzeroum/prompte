@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Prompt Engineering Pro">
+  <rect width="512" height="512" rx="96" fill="#0d1117"/>
+  <rect x="56" y="56" width="400" height="400" rx="64" fill="#161b22" stroke="#30363d" stroke-width="4"/>
+  <text x="120" y="300" font-family="monospace" font-size="180" font-weight="700" fill="#3fb950">&gt;_</text>
+  <circle cx="372" cy="160" r="28" fill="#58a6ff"/>
+</svg>

@@ -1,0 +1,2268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Prompts — Super Z</title>
+<meta name="description" content="Gerador prático de prompts com 25 templates para trabalho direto com código.">
+<meta name="theme-color" content="#0d1117">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co">
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="/assets/css/theme.css">
+<script type="module" src="/assets/js/app.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    height: 100vh;
+    position: fixed;
+    top: 0; left: 0;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .sidebar-header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.3px;
+  }
+
+  .sidebar-header span {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .sidebar-section {
+    padding: 12px 0;
+  }
+
+  .sidebar-section-title {
+    padding: 6px 20px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .sidebar-item:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  .sidebar-item.active {
+    background: var(--bg-tertiary);
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+
+  .sidebar-item .icon {
+    font-size: 16px;
+    width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  /* ─── MAIN ─── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar h2 {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .topbar .badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-codigo { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .badge-repo { background: rgba(188,140,255,0.15); color: var(--purple); }
+  .badge-diff { background: rgba(63,185,80,0.15); color: var(--green); }
+  .badge-avancado { background: rgba(210,153,34,0.15); color: var(--orange); }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+
+  .content {
+    flex: 1;
+    padding: 32px;
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ─── TEMPLATE PANELS ─── */
+  .template-panel {
+    display: none;
+  }
+
+  .template-panel.active {
+    display: block;
+  }
+
+  .template-description {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 28px;
+    line-height: 1.7;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  /* ─── FORM ─── */
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+
+  .form-group label .required {
+    color: var(--red);
+    margin-left: 2px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="url"],
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
+  }
+
+  .form-group textarea {
+    min-height: 160px;
+    resize: vertical;
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    tab-size: 2;
+  }
+
+  .form-group textarea.code-area {
+    min-height: 200px;
+  }
+
+  .form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .form-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .checkbox-item input[type="checkbox"] {
+    accent-color: var(--accent);
+    width: 15px;
+    height: 15px;
+  }
+
+  .indent-select {
+    margin-top: 6px;
+  }
+
+  /* ─── BUTTONS ─── */
+  .btn-generate {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: var(--green);
+    color: #0d1117;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .btn-generate:hover {
+    background: var(--green-hover);
+    transform: translateY(-1px);
+  }
+
+  .btn-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-copy:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent);
+  }
+
+  .btn-copy.copied {
+    color: var(--green);
+    border-color: var(--green);
+  }
+
+  .btn-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-clear:hover {
+    color: var(--red);
+    border-color: var(--red);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* ─── OUTPUT ─── */
+  .output-container {
+    margin-top: 32px;
+    display: none;
+  }
+
+  .output-container.visible {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .output-header h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .output-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+  }
+
+  .output-content {
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  .output-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  .output-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .output-content::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+
+  /* ─── OVERLAY ─── */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .sidebar-overlay.open {
+      display: block;
+    }
+    .main {
+      margin-left: 0;
+    }
+    .menu-toggle {
+      display: block;
+    }
+    .content {
+      padding: 20px 16px;
+    }
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+    .topbar {
+      padding: 12px 16px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>Prompt Generator</h1>
+    <span>Super Z Toolkit</span>
+  </div>
+
+  <!-- Navegação entre páginas -->
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Navegacao</div>
+    <a class="sidebar-item" href="/index.html"><span class="icon">&#x1f4ca;</span> Analise &amp; Gerador</a>
+    <a class="sidebar-item active" href="/generator.html"><span class="icon">&#x1f680;</span> Gerador de Prompts</a>
+    <a class="sidebar-item" href="/manual.html"><span class="icon">&#x1f4d6;</span> Manual</a>
+  </div>
+
+  <!-- Código Direto -->
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Codigo Direto</div>
+    <div class="sidebar-item active" data-template="revisao-correcao" onclick="showTemplate(this)">
+      <span class="icon">&#x1f504;</span> Revisao e Correcao
+    </div>
+    <div class="sidebar-item" data-template="melhoria-refatoracao" onclick="showTemplate(this)">
+      <span class="icon">&#x2728;</span> Melhoria / Refatoracao
+    </div>
+    <div class="sidebar-item" data-template="tela-para-github" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4cb;</span> Tela para GitHub
+    </div>
+    <div class="sidebar-item" data-template="debug-erros" onclick="showTemplate(this)">
+      <span class="icon">&#x1f41b;</span> Debug de Erros
+    </div>
+    <div class="sidebar-item" data-template="criar-do-zero" onclick="showTemplate(this)">
+      <span class="icon">&#x1f3a8;</span> Criar do Zero
+    </div>
+    <div class="sidebar-item" data-template="explicar-codigo" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4d6;</span> Explicar Codigo
+    </div>
+  </div>
+
+  <!-- Analise de Repositorio -->
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Analise de Repositorio</div>
+    <div class="sidebar-item" data-template="analise-geral" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4e6;</span> Analise Geral
+    </div>
+    <div class="sidebar-item" data-template="analise-especifica" onclick="showTemplate(this)">
+      <span class="icon">&#x1f3af;</span> Analise Especifica
+    </div>
+    <div class="sidebar-item" data-template="analise-comparativa" onclick="showTemplate(this)">
+      <span class="icon">&#x1f50d;</span> Analise Comparativa
+    </div>
+    <div class="sidebar-item" data-template="refatoracao-orientada" onclick="showTemplate(this)">
+      <span class="icon">&#x1f527;</span> Refatoracao Orientada
+    </div>
+  </div>
+
+  <!-- Melhoria com Diff -->
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Melhoria com Diff</div>
+    <div class="sidebar-item" data-template="diff-arquivo" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4c4;</span> Melhoria de Arquivo
+    </div>
+    <div class="sidebar-item" data-template="diff-modulo" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4c2;</span> Melhoria de Modulo
+    </div>
+    <div class="sidebar-item" data-template="diff-react" onclick="showTemplate(this)">
+      <span class="icon">&#x269b;</span> Refatoracao React
+    </div>
+    <div class="sidebar-item" data-template="diff-api" onclick="showTemplate(this)">
+      <span class="icon">&#x1f310;</span> Refatoracao API
+    </div>
+    <div class="sidebar-item" data-template="diff-testes" onclick="showTemplate(this)">
+      <span class="icon">&#x1f9ea;</span> Revisao de Testes
+    </div>
+    <div class="sidebar-item" data-template="diff-performance" onclick="showTemplate(this)">
+      <span class="icon">&#x26a1;</span> Foco em Performance
+    </div>
+    <div class="sidebar-item" data-template="diff-canivete" onclick="showTemplate(this)">
+      <span class="icon">&#x1f91d;</span> Canivete Suico
+    </div>
+  </div>
+
+  <!-- Dominios Avancados -->
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Dominios Avancados</div>
+    <div class="sidebar-item" data-template="cloud-review" onclick="showTemplate(this)">
+      <span class="icon">&#x2601;</span> Cloud / Infra
+    </div>
+    <div class="sidebar-item" data-template="requisitos-review" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4dd;</span> Eng. Requisitos
+    </div>
+    <div class="sidebar-item" data-template="agile-review" onclick="showTemplate(this)">
+      <span class="icon">&#x1f3c3;</span> Metodos Ageis
+    </div>
+    <div class="sidebar-item" data-template="ia-ml-review" onclick="showTemplate(this)">
+      <span class="icon">&#x1f9e0;</span> IA / Machine Learning
+    </div>
+    <div class="sidebar-item" data-template="dados-pipeline" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4ca;</span> Dados Intensivos
+    </div>
+    <div class="sidebar-item" data-template="gestao-projeto" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4c5;</span> Gestao de Projetos
+    </div>
+    <div class="sidebar-item" data-template="metricas-okr" onclick="showTemplate(this)">
+      <span class="icon">&#x1f4c8;</span> Metricas / OKR
+    </div>
+    <div class="sidebar-item" data-template="squads-review" onclick="showTemplate(this)">
+      <span class="icon">&#x1f465;</span> Tech Squads
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="menu-toggle" onclick="toggleSidebar()">&#9776;</button>
+      <h2 id="topbarTitle">Revisao e Correcao <span class="badge badge-codigo">Codigo</span></h2>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- TEMPLATES -->
+    <!-- ══════════════════════════════════════════════ -->
+
+    <!-- 1. REVISÃO E CORREÇÃO -->
+    <div class="template-panel active" id="panel-revisao-correcao">
+      <div class="template-description">
+        Revise e corrija um codigo, identificando bugs, problemas de logica e sugerindo correcoes prontas para aplicar.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Linguagem <span class="required">*</span></label>
+          <input type="text" id="rc-linguagem" placeholder="Ex: Python, TypeScript, JavaScript...">
+        </div>
+        <div class="form-group">
+          <label>Contexto <span class="required">*</span></label>
+          <input type="text" id="rc-contexto" placeholder="O que o codigo deveria fazer">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Codigo <span class="required">*</span></label>
+        <textarea class="code-area" id="rc-codigo" placeholder="Cole seu codigo aqui..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Problemas que voce percebe (opcional)</label>
+        <textarea id="rc-problemas" rows="3" placeholder="Descreva os problemas que notou, um por linha..."></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('revisao-correcao')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-revisao-correcao"></div>
+    </div>
+
+    <!-- 2. MELHORIA / REFAÇÃO -->
+    <div class="template-panel" id="panel-melhoria-refatoracao">
+      <div class="template-description">
+        Melhore um codigo existente priorizando performance, legibilidade e boas praticas.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Linguagem <span class="required">*</span></label>
+          <input type="text" id="mr-linguagem" placeholder="Ex: Python, TypeScript, JavaScript...">
+        </div>
+        <div class="form-group">
+          <label>O que o codigo faz <span class="required">*</span></label>
+          <input type="text" id="mr-funcionalidade" placeholder="Descreva a funcionalidade">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Prioridades</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="mr-perf" checked> Performance</label>
+          <label class="checkbox-item"><input type="checkbox" id="mr-legi" checked> Legibilidade</label>
+          <label class="checkbox-item"><input type="checkbox" id="mr-boas" checked> Boas praticas</label>
+          <label class="checkbox-item"><input type="checkbox" id="mr-seg"> Seguranca</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Preocupacao especifica (opcional)</label>
+        <input type="text" id="mr-preocupacao" placeholder="Ex: uso de memoria, complexidade O(n2)...">
+      </div>
+      <div class="form-group">
+        <label>Codigo <span class="required">*</span></label>
+        <textarea class="code-area" id="mr-codigo" placeholder="Cole seu codigo aqui..."></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('melhoria-refatoracao')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-melhoria-refatoracao"></div>
+    </div>
+
+    <!-- 3. TELA PARA GITHUB -->
+    <div class="template-panel" id="panel-tela-para-github">
+      <div class="template-description">
+        Prepare codigo copiado da tela para commit no GitHub, corrigindo formatacao, caracteres e indentacao.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Linguagem <span class="required">*</span></label>
+          <input type="text" id="tg-linguagem" placeholder="Ex: Python, TypeScript, JavaScript...">
+        </div>
+        <div class="form-group">
+          <label>Indentacao</label>
+          <select id="tg-indent">
+            <option value="espacos">Espacos</option>
+            <option value="tabs">Tabs</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tamanho da indentacao</label>
+        <select id="tg-indent-size">
+          <option value="2">2 espacos</option>
+          <option value="4" selected>4 espacos</option>
+          <option value="8">8 espacos</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Codigo copiado da tela <span class="required">*</span></label>
+        <textarea class="code-area" id="tg-codigo" placeholder="Cole o codigo que copiou da tela..." style="min-height:240px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Convenoes do projeto (opcional)</label>
+        <input type="text" id="tg-convencao" placeholder="Ex: ESLint + Prettier, PEP8, Gofmt...">
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('tela-para-github')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-tela-para-github"></div>
+    </div>
+
+    <!-- 4. DEBUG DE ERROS -->
+    <div class="template-panel" id="panel-debug-erros">
+      <div class="template-description">
+        Diagnostique erros no codigo com base na mensagem de erro e no comportamento observado.
+      </div>
+      <div class="form-group">
+        <label>Codigo <span class="required">*</span></label>
+        <textarea class="code-area" id="db-codigo" placeholder="Cole seu codigo aqui..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Mensagem de erro exata <span class="required">*</span></label>
+        <textarea id="db-erro" rows="4" placeholder="Cole a mensagem de erro completa aqui..." style="font-family:'SF Mono','Cascadia Code','Fira Code','Consolas',monospace;font-size:12px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Comportamento esperado <span class="required">*</span></label>
+        <textarea id="db-esperado" rows="2" placeholder="O que deveria acontecer"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Comportamento atual <span class="required">*</span></label>
+        <textarea id="db-atual" rows="2" placeholder="O que esta acontecendo"></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('debug-erros')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-debug-erros"></div>
+    </div>
+
+    <!-- 5. CRIAR DO ZERO -->
+    <div class="template-panel" id="panel-criar-do-zero">
+      <div class="template-description">
+        Crie codigo do zero com requisitos especificos, restricoes e estilo definidos.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo de componente/funcao <span class="required">*</span></label>
+          <input type="text" id="cz-tipo" placeholder="Ex: hook customizado, API REST, component React...">
+        </div>
+        <div class="form-group">
+          <label>Linguagem/Framework <span class="required">*</span></label>
+          <input type="text" id="cz-linguagem" placeholder="Ex: TypeScript + React, Python + FastAPI...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Funcionalidades (uma por linha) <span class="required">*</span></label>
+        <textarea id="cz-funcionalidades" rows="5" placeholder="1. Validar input do usuario&#10;2. Enviar dados para API&#10;3. Exibir feedback de erro"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Restricoes (opcional)</label>
+        <textarea id="cz-restricoes" rows="3" placeholder="Uma por linha. Ex:&#10;- Nao usar biblioteca X&#10;- Deve ser compativel com Y&#10;- Sem efeitos colaterais"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Estilo / Convenoes (opcional)</label>
+        <input type="text" id="cz-estilo" placeholder="Ex: seguir ESLint do projeto, PEP8, Clean Architecture...">
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('criar-do-zero')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-criar-do-zero"></div>
+    </div>
+
+    <!-- 6. EXPLICAR CÓDIGO -->
+    <div class="template-panel" id="panel-explicar-codigo">
+      <div class="template-description">
+        Receba uma explicacao detalhada de um codigo, ajustada ao seu nivel de conhecimento.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Linguagem <span class="required">*</span></label>
+          <input type="text" id="ec-linguagem" placeholder="Ex: Python, TypeScript, Rust...">
+        </div>
+        <div class="form-group">
+          <label>Nivel de detalhe</label>
+          <select id="ec-nivel">
+            <option value="iniciante">Iniciante</option>
+            <option value="intermediario" selected>Intermediario</option>
+            <option value="avancado">Avancado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Foco da explicacao</label>
+        <select id="ec-foco">
+          <option value="logica geral">Logica geral (visao panoramica)</option>
+          <option value="algoritmo especifico">Algoritmo especifico</option>
+          <option value="padrao de design">Padrao de design</option>
+          <option value="fluxo de dados">Fluxo de dados</option>
+          <option value="performance">Performance e otimizacoes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Codigo <span class="required">*</span></label>
+        <textarea class="code-area" id="ec-codigo" placeholder="Cole o codigo que deseja entender..."></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('explicar-codigo')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-explicar-codigo"></div>
+    </div>
+
+    <!-- ═══ ANALISE DE REPOSITORIO ═══ -->
+
+    <!-- 7. ANÁLISE GERAL -->
+    <div class="template-panel" id="panel-analise-geral">
+      <div class="template-description">
+        Obtenha uma visao ampla e completa de um repositorio: estrutura, qualidade, seguranca e documentacao.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="ag-caminho" placeholder="Ex: /home/z/my-project/meu-app">
+        </div>
+        <div class="form-group">
+          <label>Nivel de profundidade</label>
+          <select id="ag-profundidade">
+            <option value="resumida">Resumida</option>
+            <option value="moderada" selected>Moderada</option>
+            <option value="completa">Completa</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Aspectos para analisar</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="ag-est" checked> Estrutura e organizacao</label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-qual" checked> Qualidade do codigo</label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-seg" checked> Seguranca</label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-doc"> Documentacao</label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-dep" checked> Dependencias</label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-perf"> Performance</label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-test"> Testes</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto adicional (opcional)</label>
+        <textarea id="ag-contexto" rows="2" placeholder="Ex: Projeto que herdei, sem documentacao..."></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('analise-geral')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-analise-geral"></div>
+    </div>
+
+    <!-- 8. ANÁLISE ESPECÍFICA -->
+    <div class="template-panel" id="panel-analise-especifica">
+      <div class="template-description">
+        Investigue algo especifico no repositorio: um modulo, um bug recorrente, ou prepare-se para um PR.
+      </div>
+      <div class="form-group">
+        <label>Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="ae-caminho" placeholder="Ex: /home/z/my-project/api-server">
+      </div>
+      <div class="form-group">
+        <label>Area de interesse <span class="required">*</span></label>
+        <input type="text" id="ae-area" placeholder="Ex: src/auth/, arquivo X, pasta de services...">
+      </div>
+      <div class="form-group">
+        <label>Cenario</label>
+        <select id="ae-cenario">
+          <option value="personalizado">Personalizado (descreva abaixo)</option>
+          <option value="pre-pr">Revisao antes de PR</option>
+          <option value="investigacao">Investigacao de bug incidente</option>
+          <option value="onboarding">Onboarding / entender modulo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Problema motivador</label>
+        <textarea id="ae-contexto" rows="4" placeholder="Descreva o problema que motivou esta analise...&#10;Ex: Tivemos 3 incidentes de login falhando na ultima semana."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Entregaveis esperados</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="ae-lista" checked> Lista de problemas com severidade</label>
+          <label class="checkbox-item"><input type="checkbox" id="ae-sugestoes" checked> Sugestoes de correcao</label>
+          <label class="checkbox-item"><input type="checkbox" id="ae-codigo"> Codigo corrigido pronto</label>
+          <label class="checkbox-item"><input type="checkbox" id="ae-mapadep"> Mapa de dependencias</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('analise-especifica')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-analise-especifica"></div>
+    </div>
+
+    <!-- 9. ANÁLISE COMPARATIVA -->
+    <div class="template-panel" id="panel-analise-comparativa">
+      <div class="template-description">
+        Compare duas versoes, branches ou estados de um repositorio para identificar mudancas significativas.
+      </div>
+      <div class="form-group">
+        <label>Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="ac-caminho" placeholder="Ex: /home/z/my-project/ecommerce">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Branch / Pasta A <span class="required">*</span></label>
+          <input type="text" id="ac-branchA" placeholder="Ex: main, src/v1/...">
+        </div>
+        <div class="form-group">
+          <label>Branch / Pasta B <span class="required">*</span></label>
+          <input type="text" id="ac-branchB" placeholder="Ex: feature/payments, src/v2/...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Aspectos para comparar</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="ac-arq" checked> Mudancas de arquitetura</label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-reg" checked> Regressoes potenciais</label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-perf" checked> Performance</label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-dep" checked> Novas dependencias</label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-schema"> Mudancas no schema do BD</label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-test"> Impacto nos testes</label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-api"> Impacto nas rotas/API</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('analise-comparativa')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-analise-comparativa"></div>
+    </div>
+
+    <!-- 10. REFAÇÃO ORIENTADA -->
+    <div class="template-panel" id="panel-refatoracao-orientada">
+      <div class="template-description">
+        Proponha refatoracoes completas com codigo pronto, priorizando os criterios que voce definir.
+      </div>
+      <div class="form-group">
+        <label>Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="ro-caminho" placeholder="Ex: /home/z/my-project/bot-service">
+      </div>
+      <div class="form-group">
+        <label>Prioridade</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="ro-manut"> Manutenibilidade</label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-perf"> Performance</label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-legi"> Legibilidade</label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-seg"> Seguranca</label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-todos"> Todas as anteriores</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Restricoes (uma por linha)</label>
+        <textarea id="ro-restricoes" rows="3" placeholder="Ex:&#10;- Nao alterar a interface publica das APIs&#10;- Manter compatibilidade com PostgreSQL 14+&#10;- Nao adicionar dependencias externas"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Area especifica (opcional)</label>
+        <input type="text" id="ro-area" placeholder="Deixe em branco para analisar o repo inteiro, ou especifique pasta/arquivo">
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('refatoracao-orientada')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-refatoracao-orientada"></div>
+    </div>
+
+    <!-- ═══ MELHORIA COM DIFF ═══ -->
+
+    <!-- 11. DIFF - ARQUIVO -->
+    <div class="template-panel" id="panel-diff-arquivo">
+      <div class="template-description">
+        Analise um arquivo e gere o diff completo corrigido, coerente com os padroes do projeto.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="da-repo" placeholder="Ex: /home/z/my-project/frontend">
+        </div>
+        <div class="form-group">
+          <label>Caminho do arquivo <span class="required">*</span></label>
+          <input type="text" id="da-arquivo" placeholder="Ex: src/services/auth.ts">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Foco da analise</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="da-perf" checked> Performance</label>
+          <label class="checkbox-item"><input type="checkbox" id="da-legi" checked> Legibilidade</label>
+          <label class="checkbox-item"><input type="checkbox" id="da-seg" checked> Seguranca</label>
+          <label class="checkbox-item"><input type="checkbox" id="da-padr" checked> Padronizacao</label>
+          <label class="checkbox-item"><input type="checkbox" id="da-anti" checked> Anti-padroes</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Observacoes adicionais (opcional)</label>
+        <textarea id="da-obs" rows="2" placeholder="Ex: Esse arquivo foi recentemente modificado por outro dev..."></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('diff-arquivo')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-diff-arquivo"></div>
+    </div>
+
+    <!-- 12. DIFF - MÓDULO -->
+    <div class="template-panel" id="panel-diff-modulo">
+      <div class="template-description">
+        Analise um diretorio inteiro, identifique inconsistencias e gere diffs completos para cada arquivo.
+      </div>
+      <div class="form-group">
+        <label>Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="dm-repo" placeholder="Ex: /home/z/my-project/api-server">
+      </div>
+      <div class="form-group">
+        <label>Caminho do diretorio <span class="required">*</span></label>
+        <input type="text" id="dm-dir" placeholder="Ex: src/services/ ou src/modules/auth/">
+      </div>
+      <div class="form-group">
+        <label>O que esse modulo faz (contexto)</label>
+        <textarea id="dm-contexto" rows="2" placeholder="Ex: Gerencia autenticacao JWT com refresh tokens..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Linguagem/Framework</label>
+          <input type="text" id="dm-ling" placeholder="Ex: TypeScript / Node.js">
+        </div>
+        <div class="form-group">
+          <label>Preocupacao principal</label>
+          <select id="dm-preoc">
+            <option value="">Nenhuma especifica</option>
+            <option value="performance">Performance</option>
+            <option value="bugs">Bugs / erros recorrentes</option>
+            <option value="debito">Debito tecnico</option>
+            <option value="seguranca">Seguranca</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('diff-modulo')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-diff-modulo"></div>
+    </div>
+
+    <!-- 13. DIFF - REACT -->
+    <div class="template-panel" id="panel-diff-react">
+      <div class="template-description">
+        Refatore componentes React gerando diffs completos, seguindo os padroes do projeto.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="dr-repo" placeholder="Ex: /home/z/my-project/frontend">
+        </div>
+        <div class="form-group">
+          <label>Caminho do componente <span class="required">*</span></label>
+          <input type="text" id="dr-comp" placeholder="Ex: src/components/LoginForm.tsx">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Framework</label>
+          <select id="dr-framework">
+            <option value="Next.js 14">Next.js 14</option>
+            <option value="Next.js 15">Next.js 15</option>
+            <option value="React 18">React 18</option>
+            <option value="React 19">React 19</option>
+            <option value="Remix">Remix</option>
+            <option value="Outro">Outro (especifique nas obs)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estilo UI</label>
+          <select id="dr-estilo">
+            <option value="shadcn/ui + Tailwind">shadcn/ui + Tailwind</option>
+            <option value="Material UI">Material UI</option>
+            <option value="Chakra UI">Chakra UI</option>
+            <option value="CSS Modules">CSS Modules</option>
+            <option value="Styled Components">Styled Components</option>
+            <option value="Outro">Outro (especifique nas obs)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Gerenciamento de estado</label>
+        <select id="dr-estado">
+          <option value="deixe descobrir">Deixe a LLM descobrir</option>
+          <option value="Zustand">Zustand</option>
+          <option value="React Context">React Context</option>
+          <option value="Redux">Redux</option>
+          <option value="Jotai">Jotai</option>
+          <option value="TanStack Query">TanStack Query</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Foco da refatoracao</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="dr-logica"> Separar logica de apresentacao</label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-hooks"> Extrair hooks customizados</label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-tipo"> Melhorar tipagem TypeScript</label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-rend"> Otimizar re-renders</label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-a11y"> Acessibilidade (a11y)</label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-error"> Error boundaries</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('diff-react')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-diff-react"></div>
+    </div>
+
+    <!-- 14. DIFF - API -->
+    <div class="template-panel" id="panel-diff-api">
+      <div class="template-description">
+        Refatore endpoints e servicos de backend com foco em seguranca, performance e consistencia.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="di-repo" placeholder="Ex: /home/z/my-project/api-server">
+        </div>
+        <div class="form-group">
+          <label>Arquivo/Endpoint <span class="required">*</span></label>
+          <input type="text" id="di-arquivo" placeholder="Ex: src/routes/auth.ts ou src/controllers/UserController.ts">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Framework</label>
+          <select id="di-framework">
+            <option value="Express">Express</option>
+            <option value="FastAPI">FastAPI</option>
+            <option value="NestJS">NestJS</option>
+            <option value="Django">Django</option>
+            <option value="Flask">Flask</option>
+            <option value="Spring Boot">Spring Boot</option>
+            <option value="Outro">Outro (especifique nas obs)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Banco de dados</label>
+          <select id="di-db">
+            <option value="PostgreSQL com Prisma">PostgreSQL + Prisma</option>
+            <option value="PostgreSQL com TypeORM">PostgreSQL + TypeORM</option>
+            <option value="MySQL">MySQL</option>
+            <option value="MongoDB">MongoDB</option>
+            <option value="SQLite">SQLite</option>
+            <option value="Outro">Outro (especifique nas obs)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Autenticacao</label>
+        <select id="di-auth">
+          <option value="JWT">JWT</option>
+          <option value="OAuth2">OAuth2</option>
+          <option value="Session-based">Session-based</option>
+          <option value="API Key">API Key</option>
+          <option value="Nenhuma">Nenhuma</option>
+          <option value="Outro">Outro (especifique nas obs)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Foco da analise</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="di-val" checked> Validacao de input</label>
+          <label class="checkbox-item"><input type="checkbox" id="di-err" checked> Tratamento de erros</label>
+          <label class="checkbox-item"><input type="checkbox" id="di-sec" checked> Seguranca</label>
+          <label class="checkbox-item"><input type="checkbox" id="di-perf"> Performance (N+1, paginacao)</label>
+          <label class="checkbox-item"><input type="checkbox" id="di-log"> Logging e monitoramento</label>
+          <label class="checkbox-item"><input type="checkbox" id="di-contr"> Contratos de resposta</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Observacoes adicionais (opcional)</label>
+        <textarea id="di-obs" rows="2" placeholder="Ex: Esse endpoint tem SLA de 200ms..."></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('diff-api')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-diff-api"></div>
+    </div>
+
+    <!-- 15. DIFF - TESTES -->
+    <div class="template-panel" id="panel-diff-testes">
+      <div class="template-description">
+        Revise e melhore testes existentes, identifique gaps de coverage e gere testes faltantes.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="dt-repo" placeholder="Ex: /home/z/my-project/api-server">
+        </div>
+        <div class="form-group">
+          <label>Arquivo de teste <span class="required">*</span></label>
+          <input type="text" id="dt-arquivo" placeholder="Ex: src/__tests__/auth.test.ts">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Framework de testes</label>
+        <select id="dt-framework">
+          <option value="deixe descobrir">Deixe a LLM descobrir</option>
+          <option value="Jest">Jest</option>
+          <option value="Vitest">Vitest</option>
+          <option value="Pytest">Pytest</option>
+          <option value="Cypress">Cypress</option>
+          <option value="Playwright">Playwright</option>
+          <option value="Testing Library">Testing Library</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Problemas que voce percebe (opcional)</label>
+        <textarea id="dt-problemas" rows="3" placeholder="Ex:&#10;- Testes quebram com frequencia&#10;- Nao testam casos de erro&#10;- Mocks excessivos"></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('diff-testes')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-diff-testes"></div>
+    </div>
+
+    <!-- 16. DIFF - PERFORMANCE -->
+    <div class="template-panel" id="panel-diff-performance">
+      <div class="template-description">
+        Analise com foco exclusivo em performance: identifique gargalos e gere diffs otimizados.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="dp-repo" placeholder="Ex: /home/z/my-project/api-server">
+        </div>
+        <div class="form-group">
+          <label>Arquivo para analisar <span class="required">*</span></label>
+          <input type="text" id="dp-arquivo" placeholder="Ex: src/services/ReportGenerator.ts">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Frequencia de execucao</label>
+          <select id="dp-freq">
+            <option value="a cada request">A cada request</option>
+            <option value="em background">Em background / batch</option>
+            <option value="periodico">Periodico (cron/job)</option>
+            <option value="sob demanda">Sob demanda (trigger manual)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Volume esperado</label>
+          <input type="text" id="dp-volume" placeholder="Ex: 10k requests/dia, 1M registros...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Gargalo percebido</label>
+        <textarea id="dp-gargalo" rows="2" placeholder="Ex: Resposta lenta acima de 2s, alto uso de CPU, timeout..."></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('diff-performance')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-diff-performance"></div>
+    </div>
+
+    <!-- 17. DIFF - CANIVETE SUÍÇO -->
+    <div class="template-panel" id="panel-diff-canivete">
+      <div class="template-description">
+        Analise completa e flexivel: gera diffs prontos para aplicar em qualquer escopo do repositorio.
+      </div>
+      <div class="form-group">
+        <label>Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="dc-repo" placeholder="Ex: /home/z/my-project/frontend">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Arquivos / Diretorios</label>
+          <input type="text" id="dc-escopo" placeholder="Ex: src/services/auth/* ou caminho especifico">
+        </div>
+        <div class="form-group">
+          <label>Tipo de melhoria</label>
+          <select id="dc-tipo">
+            <option value="tudo">Tudo (refatoracao + performance + seguranca)</option>
+            <option value="refatoracao">Refatoracao</option>
+            <option value="performance">Performance</option>
+            <option value="seguranca">Seguranca</option>
+            <option value="legibilidade">Legibilidade</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto adicional (opcional)</label>
+        <textarea id="dc-contexto" rows="3" placeholder="Ex:&#10;- Preparando para PR&#10;- Removendo debito tecnico antes da v2&#10;- Após incidente de seguranca"></textarea>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('diff-canivete')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-diff-canivete"></div>
+    </div>
+
+    <!-- ═══ DOMINIOS AVANCADOS ═══ -->
+
+    <!-- 18. CLOUD / INFRA -->
+    <div class="template-panel" id="panel-cloud-review">
+      <div class="template-description">
+        Revise codigo e infraestrutura em nuvem com foco em seguranca (responsabilidade compartilhada), modelos de servico (SaaS/PaaS/IaaS), conformidade (LGPD, NIST) e boas praticas cloud-native.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="cl-repo" placeholder="Ex: /home/z/my-project/app">
+        </div>
+        <div class="form-group">
+          <label>Provedor de Nuvem</label>
+          <select id="cl-provider">
+            <option value="">Nao especificar</option>
+            <option value="AWS">AWS</option>
+            <option value="Azure">Azure</option>
+            <option value="GCP">Google Cloud</option>
+            <option value="Multi-cloud">Multi-cloud</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Arquivo ou diretorio <span class="required">*</span></label>
+        <input type="text" id="cl-arquivo" placeholder="Ex: src/ ou infra/terraform/">
+      </div>
+      <div class="form-group">
+        <label>Contexto <span class="required">*</span></label>
+        <textarea id="cl-contexto" rows="3" placeholder="Ex: Migrando para nuvem, preciso garantir seguranca e compliance..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos para verificar</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="cl-sec" checked> Seguranca (IAM, criptografia, flags)</label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-model"> Modelo de servico (SaaS/PaaS/IaaS)</label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-mig"> Preparacao para migracao</label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-comp"> Compliance (LGPD, NIST, BACEN)</label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-iac"> Infra as Code (Terraform/CloudFormation)</label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-cont"> Containers (Docker/K8s)</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('cloud-review')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-cloud-review"></div>
+    </div>
+
+    <!-- 19. ENGENHARIA DE REQUISITOS -->
+    <div class="template-panel" id="panel-requisitos-review">
+      <div class="template-description">
+        Analise codigo verificando se os requisitos (funcionais e nao funcionais) foram implementados corretamente, se historias de usuario seguem INVEST e se ha gaps entre especificacao e codigo.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="rq-repo" placeholder="Ex: /home/z/my-project/app">
+        </div>
+        <div class="form-group">
+          <label>Arquivo ou modulo <span class="required">*</span></label>
+          <input type="text" id="rq-arquivo" placeholder="Ex: src/features/auth/">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Requisito original <span class="required">*</span></label>
+        <textarea id="rq-contexto" rows="3" placeholder="Descreva o requisito ou cole a historia de usuario..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos para verificar</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="rq-inv" checked> Historias de Usuario (INVEST)</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-nf"> Requisitos Nao Funcionais</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-back"> Alinhamento com Backlog</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-proto"> Prototipos e Especificacoes</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-sla"> SLAs e Metricas de Aceite</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('requisitos-review')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-requisitos-review"></div>
+    </div>
+
+    <!-- 20. METODOS AGEIS -->
+    <div class="template-panel" id="panel-agile-review">
+      <div class="template-description">
+        Revise codigo com foco em praticas ageis: BDD (Given-When-Then), artefatos Scrum (burndown, DoD), metricas de fluxo (lead time, throughput) e priorizacao por valor (WSJF).
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="agl-repo" placeholder="Ex: /home/z/my-project/app">
+        </div>
+        <div class="form-group">
+          <label>Framework agil</label>
+          <select id="agl-framework">
+            <option value="">Nao especificar</option>
+            <option value="Scrum">Scrum</option>
+            <option value="Kanban">Kanban</option>
+            <option value="SAFe">SAFe</option>
+            <option value="Hibrido">Hibrido</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Arquivo ou diretorio <span class="required">*</span></label>
+        <input type="text" id="agl-arquivo" placeholder="Ex: src/ ou tests/">
+      </div>
+      <div class="form-group">
+        <label>Contexto da sprint/projeto <span class="required">*</span></label>
+        <textarea id="agl-contexto" rows="3" placeholder="Ex: Sprint 12, foco em modulo de pagamentos..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos ageis</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="agl-bdd" checked> BDD (Given-When-Then)</label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-art"> Artefatos Scrum (Burndown, DoD)</label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-fluxo"> Metricas de Fluxo (Lead Time)</label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-wsjf"> Priorizacao por Valor (WSJF)</label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-dod"> Definition of Done</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('agile-review')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-agile-review"></div>
+    </div>
+
+    <!-- 21. IA / MACHINE LEARNING -->
+    <div class="template-panel" id="panel-ia-ml-review">
+      <div class="template-description">
+        Revise codigo de IA/ML com foco em etica e vies, qualidade dos dados, overfitting/generalizacao, seguranca adversarial e conformidade com LGPD para dados sensiveis.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="ia-repo" placeholder="Ex: /home/z/my-project/ml-service">
+        </div>
+        <div class="form-group">
+          <label>Tipo de modelo</label>
+          <select id="ia-tipo">
+            <option value="">Nao especificar</option>
+            <option value="Classificacao">Classificacao</option>
+            <option value="Regressao">Regressao</option>
+            <option value="NLP">NLP / Processamento de Linguagem</option>
+            <option value="Visao">Visao Computacional</option>
+            <option value="Recomendacao">Sistema de Recomendacao</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Arquivo ou modulo <span class="required">*</span></label>
+        <input type="text" id="ia-arquivo" placeholder="Ex: src/models/ ou src/pipelines/">
+      </div>
+      <div class="form-group">
+        <label>Contexto <span class="required">*</span></label>
+        <textarea id="ia-contexto" rows="3" placeholder="Ex: Modelo de classificacao de risco de credito..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos de IA</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="ia-vies" checked> Vies e Etica nos Dados</label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-qual" checked> Qualidade dos Dados</label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-over" checked> Overfitting / Generalizacao</label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-sec"> Seguranca Adversarial</label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-exp"> Explicabilidade (XAI)</label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-lgpd"> Conformidade LGPD</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('ia-ml-review')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-ia-ml-review"></div>
+    </div>
+
+    <!-- 22. DADOS INTENSIVOS -->
+    <div class="template-panel" id="panel-dados-pipeline">
+      <div class="template-description">
+        Revise pipelines e arquiteturas de dados com foco nos 5 Vs do Big Data, qualidade ETL, design de microsservicos de dados e ciclo completo de analise (SMART).
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="dl-repo" placeholder="Ex: /home/z/my-project/data-platform">
+        </div>
+        <div class="form-group">
+          <label>Tecnologia principal</label>
+          <select id="dl-tech">
+            <option value="">Nao especificar</option>
+            <option value="Spark">Apache Spark</option>
+            <option value="Kafka">Apache Kafka</option>
+            <option value="Airflow">Apache Airflow</option>
+            <option value="dbt">dbt</option>
+            <option value="Python/Pandas">Python / Pandas</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Arquivo ou modulo <span class="required">*</span></label>
+        <input type="text" id="dl-arquivo" placeholder="Ex: src/etl/ ou src/analytics/">
+      </div>
+      <div class="form-group">
+        <label>Contexto <span class="required">*</span></label>
+        <textarea id="dl-contexto" rows="3" placeholder="Ex: Pipeline ETL que processa dados de vendas diarios..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos de dados</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="dl-5v" checked> Big Data (5 Vs)</label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-etl" checked> Qualidade ETL</label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-ms"> Microsservicos de Dados</label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-ciclo"> Ciclo Analise Completo</label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-ml"> ML Aplicado</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('dados-pipeline')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-dados-pipeline"></div>
+    </div>
+
+    <!-- 23. GESTAO DE PROJETOS -->
+    <div class="template-panel" id="panel-gestao-projeto">
+      <div class="template-description">
+        Analise o projeto sob a perspectiva de gestao: escopo (EAP), riscos (probabilidade/impacto), stakeholders (poder/interesse), modelo de gestao adequado e PMBOK.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="gp-repo" placeholder="Ex: /home/z/my-project/enterprise-app">
+        </div>
+        <div class="form-group">
+          <label>Modelo de gestao</label>
+          <select id="gp-modelo">
+            <option value="">Nao especificar</option>
+            <option value="PMBOK">PMBOK (Tradicional)</option>
+            <option value="Agil">Agil (Scrum/Kanban)</option>
+            <option value="Hibrido">Hibrido</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto do projeto <span class="required">*</span></label>
+        <textarea id="gp-contexto" rows="3" placeholder="Ex: Projeto enterprise em fase de migracao, 3 equipes envolvidas..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos de gestao</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="gp-escopo" checked> Escopo e EAP</label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-risco" checked> Gerenciamento de Riscos</label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-stake"> Stakeholders e Comunicacao</label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-charter"> Project Charter</label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-aqui"> Gestao de Aquisicoes</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gestao-projeto')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-gestao-projeto"></div>
+    </div>
+
+    <!-- 24. METRICAS / OKR -->
+    <div class="template-panel" id="panel-metricas-okr">
+      <div class="template-description">
+        Analise entregas e codigo sob a lente de metricas: OKR (output vs outcome), fluxo (Lead Time, Throughput, WIP), eficiencia vs eficacia, e previsibilidade (Monte Carlo).
+      </div>
+      <div class="form-group">
+        <label>Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="mo-repo" placeholder="Ex: /home/z/my-project/product-app">
+      </div>
+      <div class="form-group">
+        <label>Contexto / OKRs do time <span class="required">*</span></label>
+        <textarea id="mo-contexto" rows="3" placeholder="Ex: OKR Q3: Reduzir tempo de resposta em 40%. KR1: Lead Time < 3 dias..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Metricas para incluir</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="mo-okr" checked> OKR (Output vs Outcome)</label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-fluxo" checked> Fluxo (Lead Time, Throughput, WIP)</label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-eff"> Eficiencia vs Eficacia</label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-prev"> Previsibilidade (Monte Carlo)</label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-little"> Lei de Little</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('metricas-okr')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-metricas-okr"></div>
+    </div>
+
+    <!-- 25. TECH SQUADS -->
+    <div class="template-panel" id="panel-squads-review">
+      <div class="template-description">
+        Revise codigo sob a perspectiva de dinamica de squads: estrutura multifuncional, OKRs do time, competencias necessarias, fase do time (Tuckman) e lideranca positiva.
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="sq-repo" placeholder="Ex: /home/z/my-project/product-app">
+        </div>
+        <div class="form-group">
+          <label>Tamanho do squad</label>
+          <select id="sq-tam">
+            <option value="">Nao especificar</option>
+            <option value="pequeno">Pequeno (3-5 pessoas)</option>
+            <option value="medio">Medio (5-10 pessoas)</option>
+            <option value="grande">Grande (10+ pessoas)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Perfil do time <span class="required">*</span></label>
+        <textarea id="sq-contexto" rows="3" placeholder="Ex: Squad de produto, backend + frontend + QA, ciclo Scrum de 2 semanas..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos de squad</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="sq-okr" checked> OKRs do Time</label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-estrut"> Estrutura Multifuncional</label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-comp"> Competencias e Skills</label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-tuck"> Modelo de Tuckman</label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-lider"> Lideranca Positiva</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('squads-review')">&#x1f680; Gerar Prompt</button>
+      <div class="output-container" id="output-squads-review"></div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+// ─── TEMPLATE METADATA ───
+const templateMeta = {
+  'revisao-correcao':    { title: 'Revisao e Correcao',           badge: 'Codigo',     badgeClass: 'badge-codigo' },
+  'melhoria-refatoracao':{ title: 'Melhoria / Refatoracao',       badge: 'Codigo',     badgeClass: 'badge-codigo' },
+  'tela-para-github':    { title: 'Tela para GitHub',              badge: 'Codigo',     badgeClass: 'badge-codigo' },
+  'debug-erros':         { title: 'Debug de Erros',               badge: 'Codigo',     badgeClass: 'badge-codigo' },
+  'criar-do-zero':       { title: 'Criar do Zero',                badge: 'Codigo',     badgeClass: 'badge-codigo' },
+  'explicar-codigo':     { title: 'Explicar Codigo',              badge: 'Codigo',     badgeClass: 'badge-codigo' },
+  'analise-geral':       { title: 'Analise Geral do Repo',        badge: 'Repositorio', badgeClass: 'badge-repo' },
+  'analise-especifica':  { title: 'Analise Especifica',            badge: 'Repositorio', badgeClass: 'badge-repo' },
+  'analise-comparativa': { title: 'Analise Comparativa',          badge: 'Repositorio', badgeClass: 'badge-repo' },
+  'refatoracao-orientada':{ title: 'Refatoracao Orientada',       badge: 'Repositorio', badgeClass: 'badge-repo' },
+  'diff-arquivo':        { title: 'Melhoria de Arquivo (Diff)',   badge: 'Diff',       badgeClass: 'badge-diff' },
+  'diff-modulo':         { title: 'Melhoria de Modulo (Diff)',    badge: 'Diff',       badgeClass: 'badge-diff' },
+  'diff-react':          { title: 'Refatoracao React (Diff)',     badge: 'Diff',       badgeClass: 'badge-diff' },
+  'diff-api':            { title: 'Refatoracao API (Diff)',       badge: 'Diff',       badgeClass: 'badge-diff' },
+  'diff-testes':         { title: 'Revisao de Testes (Diff)',     badge: 'Diff',       badgeClass: 'badge-diff' },
+  'diff-performance':    { title: 'Foco em Performance (Diff)',   badge: 'Diff',       badgeClass: 'badge-diff' },
+  'diff-canivete':       { title: 'Canivete Suico (Diff)',        badge: 'Diff',       badgeClass: 'badge-diff' },
+  'cloud-review':        { title: 'Cloud / Infra Review',         badge: 'Avancado',   badgeClass: 'badge-avancado' },
+  'requisitos-review':   { title: 'Eng. Requisitos Review',       badge: 'Avancado',   badgeClass: 'badge-avancado' },
+  'agile-review':        { title: 'Metodos Ageis Review',         badge: 'Avancado',   badgeClass: 'badge-avancado' },
+  'ia-ml-review':        { title: 'IA / Machine Learning Review', badge: 'Avancado',   badgeClass: 'badge-avancado' },
+  'dados-pipeline':      { title: 'Dados Intensivos Review',      badge: 'Avancado',   badgeClass: 'badge-avancado' },
+  'gestao-projeto':      { title: 'Gestao de Projetos Review',    badge: 'Avancado',   badgeClass: 'badge-avancado' },
+  'metricas-okr':        { title: 'Metricas / OKR Review',        badge: 'Avancado',   badgeClass: 'badge-avancado' },
+  'squads-review':       { title: 'Tech Squads Review',           badge: 'Avancado',   badgeClass: 'badge-avancado' },
+};
+
+// ─── SIDEBAR & NAVIGATION ───
+function showTemplate(el) {
+  const id = el.dataset.template;
+  const meta = templateMeta[id];
+
+  // update sidebar active
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+
+  // update panels
+  document.querySelectorAll('.template-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+
+  // update topbar
+  document.getElementById('topbarTitle').innerHTML =
+    `${meta.title} <span class="badge ${meta.badgeClass}">${meta.badge}</span>`;
+
+  // close sidebar on mobile
+  if (window.innerWidth <= 768) toggleSidebar();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+// ─── HELPERS ───
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function chk(id) {
+  const el = document.getElementById(id);
+  return el ? el.checked : false;
+}
+
+function sel(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function bulletList(text) {
+  if (!text) return '';
+  return text.split('\n').filter(l => l.trim()).map(l => '- ' + l.trim()).join('\n');
+}
+
+function checkedItems(ids) {
+  return ids.filter(id => chk(id));
+}
+
+// ─── PROMPT GENERATORS ───
+const generators = {
+  'revisao-correcao'() {
+    const lang = val('rc-linguagem');
+    const ctx  = val('rc-contexto');
+    const code = val('rc-codigo');
+    const probs = val('rc-problemas');
+    let p = `Revise e corrija o seguinte codigo ${lang}:\n\n`;
+    p += '```\n' + code + '\n```\n\n';
+    p += `Contexto: ${ctx}\n`;
+    if (probs) p += `\nProblemas que percebo:\n${bulletList(probs)}\n`;
+    p += `\nPara cada correcao:\n1. Descreva o problema\n2. Justifique a solucao\n3. Forneça o trecho corrigido\n4. Codigo completo corrigido ao final`;
+    return p;
+  },
+
+  'melhoria-refatoracao'() {
+    const lang = val('mr-linguagem');
+    const func = val('mr-funcionalidade');
+    const code = val('mr-codigo');
+    const preoc = val('mr-preocupacao');
+    const pr = checkedItems(['mr-perf','mr-legi','mr-boas','mr-seg']).map(id => {
+      const map = { 'mr-perf':'Performance', 'mr-legi':'Legibilidade', 'mr-boas':'Boas praticas', 'mr-seg':'Seguranca' };
+      return map[id];
+    });
+    let p = `Melhore este codigo ${lang}, priorizando:\n${pr.map(x => '- ' + x).join('\n')}\n\n`;
+    p += '```\n' + code + '\n```\n\n';
+    p += `Este codigo faz: ${func}\n`;
+    if (preoc) p += `Preocupo-me especialmente com: ${preoc}\n`;
+    p += `\nEntregue:\n1. Analise dos problemas encontrados\n2. Para cada melhoria: justificativa + trecho antes/depois\n3. Codigo completo melhorado ao final`;
+    return p;
+  },
+
+  'tela-para-github'() {
+    const lang = val('tg-linguagem');
+    const indent = sel('tg-indent');
+    const size = sel('tg-indent-size');
+    const code = val('tg-codigo');
+    const conv = val('tg-convencao');
+    let p = `Analise este codigo ${lang} que copiei da tela e prepare-o para commit no GitHub:\n\n`;
+    p += '```\n' + code + '\n```\n\n';
+    p += `Fazer:\n1. Corrigir possiveis problemas de formatacao da copia\n`;
+    p += `2. Identificar e corrigir caracteres corrompidos\n`;
+    p += `3. Garantir indentacao correta em ${indent} (${size})\n`;
+    p += `4. Verificar se ha trechos cortados ou incompletos\n`;
+    if (conv) p += `5. Seguir as convencoes: ${conv}\n`;
+    p += `\nEntregue o codigo corrigido completo, pronto para colar no arquivo e commitar.`;
+    return p;
+  },
+
+  'debug-erros'() {
+    const code = val('db-codigo');
+    const erro = val('db-erro');
+    const esp  = val('db-esperado');
+    const atu  = val('db-atual');
+    let p = `Este codigo esta gerando o seguinte erro:\n\n`;
+    p += '```\n' + code + '\n```\n\n';
+    p += `Erro/mensagem:\n\`\`\`\n${erro}\n\`\`\`\n\n`;
+    p += `O que eu esperava: ${esp}\n`;
+    p += `O que acontece: ${atu}\n\n`;
+    p += `Faca:\n1. Identifique a causa raiz\n2. Explique o erro em linguagem clara\n3. Forneça o codigo corrigido completo\n4. Sugira como prevenir o problema no futuro`;
+    return p;
+  },
+
+  'criar-do-zero'() {
+    const tipo = val('cz-tipo');
+    const lang = val('cz-linguagem');
+    const func = val('cz-funcionalidades');
+    const rest = val('cz-restricoes');
+    const est  = val('cz-estilo');
+    let p = `Crie ${tipo} em ${lang} com os seguintes requisitos:\n\n`;
+    p += `Funcionalidades:\n${bulletList(func)}\n`;
+    if (rest) p += `\nRestricoes:\n${bulletList(rest)}\n`;
+    if (est) p += `\nEstilo: ${est}\n`;
+    p += `\nEntregue:\n1. Explicacao da solucao escolhida\n2. Codigo completo pronto para uso\n3. Instrucoes de integracao com o projeto\n4. Testes basicos se aplicavel`;
+    return p;
+  },
+
+  'explicar-codigo'() {
+    const lang = val('ec-linguagem');
+    const nivel = sel('ec-nivel');
+    const foco = sel('ec-foco');
+    const code = val('ec-codigo');
+    let p = `Explique detalhadamente este codigo ${lang}:\n\n`;
+    p += '```\n' + code + '\n```\n\n';
+    p += `Nivel de detalhe: ${nivel}\nFoco em: ${foco}\n\n`;
+    p += `Faca:\n1. Visao geral do que o codigo faz\n2. Explicacao linha a linha (ou bloco a bloco)\n3. Conceitos usados (padroes, algoritmos, tecnicas)\n4. Pontos de atencao e possiveis armadilhas`;
+    return p;
+  },
+
+  'analise-geral'() {
+    const repo = val('ag-caminho');
+    const prof = sel('ag-profundidade');
+    const ctx  = val('ag-contexto');
+    const aspects = checkedItems(['ag-est','ag-qual','ag-seg','ag-doc','ag-dep','ag-perf','ag-test']).map(id => {
+      const map = { 'ag-est':'Estrutura e organizacao', 'ag-qual':'Qualidade do codigo', 'ag-seg':'Seguranca',
+        'ag-doc':'Documentacao', 'ag-dep':'Dependencias e vulnerabilidades', 'ag-perf':'Performance e arquitetura', 'ag-test':'Testes e coverage' };
+      return map[id];
+    });
+    let p = `Analise o repositorio ${repo}.\n\nFoque em:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nNivel de profundidade: ${prof}\n`;
+    if (ctx) p += `\nContexto: ${ctx}\n`;
+    p += `\nEntregue:\n1. Resumo executivo\n2. Analise detalhada por aspecto\n3. Problemas encontrados (classificados por severidade)\n4. Recomendacoes prioritarias`;
+    return p;
+  },
+
+  'analise-especifica'() {
+    const repo = val('ae-caminho');
+    const area = val('ae-area');
+    const cena = sel('ae-cenario');
+    const ctx  = val('ae-contexto');
+    const entre = checkedItems(['ae-lista','ae-sugestoes','ae-codigo','ae-mapadep']).map(id => {
+      const map = { 'ae-lista':'Lista de problemas com severidade', 'ae-sugestoes':'Sugestoes de correcao',
+        'ae-codigo':'Codigo corrigido pronto', 'ae-mapadep':'Mapa de dependencias' };
+      return map[id];
+    });
+    let p = `Analise o repositorio ${repo} com foco especifico em:\n\nArea: ${area}\n`;
+    if (cena !== 'personalizado') p += `Cenario: ${cena}\n`;
+    if (ctx) p += `\nContexto:\n${ctx}\n`;
+    if (entre.length) {
+      p += `\nEntregaveis esperados:\n`;
+      entre.forEach((e, i) => p += `${i+1}. ${e}\n`);
+    }
+    p += `\nInstrucoes:\n- Leia os arquivos relevantes antes de analisar\n- Compare com outros arquivos do projeto para seguir padroes existentes\n- Seja especifico e pratico nas recomendacoes`;
+    return p;
+  },
+
+  'analise-comparativa'() {
+    const repo = val('ac-caminho');
+    const bA   = val('ac-branchA');
+    const bB   = val('ac-branchB');
+    const aspects = checkedItems(['ac-arq','ac-reg','ac-perf','ac-dep','ac-schema','ac-test','ac-api']).map(id => {
+      const map = { 'ac-arq':'Mudancas de arquitetura', 'ac-reg':'Regressoes potenciais', 'ac-perf':'Melhorias/pioresias de performance',
+        'ac-dep':'Novas dependencias', 'ac-schema':'Mudancas no schema do BD', 'ac-test':'Impacto nos testes', 'ac-api':'Impacto nas rotas/API' };
+      return map[id];
+    });
+    let p = `Compare o estado do repositorio ${repo} entre:\n`;
+    p += `- Branch/Pasta A: ${bA}\n- Branch/Pasta B: ${bB}\n\n`;
+    p += `Foque em:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nEntregue:\n1. Resumo das mudancas\n2. Analise de impacto para cada aspecto\n3. Riscos identificados\n4. Recomendacoes antes do merge`;
+    return p;
+  },
+
+  'refatoracao-orientada'() {
+    const repo = val('ro-caminho');
+    const area = val('ro-area');
+    const rest = val('ro-restricoes');
+    const pris = checkedItems(['ro-manut','ro-perf','ro-legi','ro-seg','ro-todos']).map(id => {
+      const map = { 'ro-manut':'Manutenibilidade', 'ro-perf':'Performance', 'ro-legi':'Legibilidade', 'ro-seg':'Seguranca', 'ro-todos':'Todas as anteriores' };
+      return map[id];
+    });
+    let p = `Analise o repositorio ${repo}`;
+    if (area) p += `, especificamente ${area}`;
+    p += ` e proponha refatoracoes.\n\n`;
+    p += `Priorize: ${pris.join(', ')}\n`;
+    if (rest) p += `\nRestricoes:\n${bulletList(rest)}\n`;
+    p += `\nPara cada problema encontrado, forneça:\n1. Descricao do problema\n2. Severidade (critica | alta | media | baixa)\n3. Codigo corrigido pronto para uso\n\nEntregue diffs completos prontos para aplicar.`;
+    return p;
+  },
+
+  'diff-arquivo'() {
+    const repo = val('da-repo');
+    const file = val('da-arquivo');
+    const obs  = val('da-obs');
+    const foco = checkedItems(['da-perf','da-legi','da-seg','da-padr','da-anti']).map(id => {
+      const map = { 'da-perf':'Performance', 'da-legi':'Legibilidade', 'da-seg':'Seguranca', 'da-padr':'Padronizacao', 'da-anti':'Anti-padroes' };
+      return map[id];
+    });
+    let p = `Analise detalhadamente o arquivo ${file} no repositorio ${repo}.\n\n`;
+    p += `TAREFA:\n1. Leia todo o arquivo e entenda seu proposito no contexto da arquitetura\n`;
+    p += `2. Identifique problemas de:\n   ${foco.map(f => '- ' + f).join('\n   ')}\n`;
+    p += `3. Gere o diff completo do arquivo corrigido\n\n`;
+    if (obs) p += `OBSERVACOES: ${obs}\n\n`;
+    p += `REGRAS:\n- Mantenha a mesma interface publica (exports, tipos, contratos)\n- Siga EXATAMENTE os padroes que ja existem no restante do projeto\n- Nao adicione dependencias que nao existem no projeto\n- Cada mudanca deve ter justificativa clara\n- O codigo gerado deve ser indistinguivel do estilo do restante da codebase\n\n`;
+    p += `FORMATO DE RESPOSTA:\n1. Resumo das mudancas (bullet points)\n2. Para cada mudanca: justificativa + trecho antes → depois\n3. Diff completo do arquivo (pronto para git apply)\n4. Arquivos adicionais que precisam ser modificados (se houver)`;
+    return p;
+  },
+
+  'diff-modulo'() {
+    const repo = val('dm-repo');
+    const dir  = val('dm-dir');
+    const ctx  = val('dm-contexto');
+    const lang = val('dm-ling');
+    const preoc = sel('dm-preoc');
+    let p = `Analise o diretorio ${dir} no repositorio ${repo}.\n\n`;
+    p += `CONTEXTO:\n- Esse modulo e responsavel por: ${ctx || '(a ser descoberto pela analise)'}\n`;
+    if (lang) p += `- Linguagem/Framework: ${lang}\n`;
+    if (preoc) p += `- Me preocupa: ${preoc}\n`;
+    p += `\nTAREFA:\n1. Explore TODOS os arquivos do diretorio e suas dependencias internas\n`;
+    p += `2. Identifique inconsistencias entre os arquivos do proprio modulo\n`;
+    p += `3. Compare os padroes usados aqui com o resto do projeto\n`;
+    p += `4. Gere diffs completos para CADA arquivo que precisar de mudanca\n\n`;
+    p += `REGRAS OBRIGATORIAS:\n- Preservar TODAS as interfaces publicas do modulo\n- Manter compatibilidade com os consumidores do modulo\n- Seguir as convencoes de estilo do restante da codebase\n- Nao introduzir breaking changes\n- Se precisar de nova dependencia, justificar e verificar conflitos\n\n`;
+    p += `FORMATO DE RESPOSTA:\n1. Visao geral: o que esta bom e o que precisa mudar\n2. Mapa de dependencias do modulo\n3. Para cada arquivo alterado: justificativa + diff completo\n4. Testes que precisam ser criados/atualizados (com codigo)\n5. Riscos da mudanca e como mitigar`;
+    return p;
+  },
+
+  'diff-react'() {
+    const repo = val('dr-repo');
+    const comp = val('dr-comp');
+    const fw   = sel('dr-framework');
+    const st   = sel('dr-estilo');
+    const est  = sel('dr-estado');
+    const foco = checkedItems(['dr-logica','dr-hooks','dr-tipo','dr-rend','dr-a11y','dr-error']).map(id => {
+      const map = { 'dr-logica':'Separar logica de apresentacao', 'dr-hooks':'Extrair hooks customizados',
+        'dr-tipo':'Melhorar tipagem TypeScript', 'dr-rend':'Otimizar re-renders', 'dr-a11y':'Acessibilidade (a11y)', 'dr-error':'Error boundaries' };
+      return map[id];
+    });
+    let p = `Analise e melhore o componente ${comp} no repositorio ${repo}.\n\n`;
+    p += `CONTEXTO DO PROJETO:\n- Framework: ${fw}\n- Estilo: ${st}\n- Gerenciamento de estado: ${est}\n\n`;
+    p += `TAREFA:\n1. Leia o componente e seus filhos/dependencias\n`;
+    p += `2. Compare com outros componentes do projeto para identificar padroes de estrutura, naming, styling e hooks\n`;
+    p += `3. Gere o diff completo refatorado\n\n`;
+    p += `FOCO ESPECIFICO:\n`;
+    foco.forEach(f => p += `[x] ${f}\n`);
+    p += `\nFORMATO DE RESPOSTA:\n1. Analise: problemas encontrados com severidade\n2. Diff completo do componente refatorado\n3. Diffs de arquivos auxiliares (hooks, tipos, utils) se criados\n4. Nota sobre impacto nos componentes pais/filhos`;
+    return p;
+  },
+
+  'diff-api'() {
+    const repo = val('di-repo');
+    const file = val('di-arquivo');
+    const fw   = sel('di-framework');
+    const db   = sel('di-db');
+    const auth = sel('di-auth');
+    const obs  = val('di-obs');
+    const foco = checkedItems(['di-val','di-err','di-sec','di-perf','di-log','di-contr']).map(id => {
+      const map = { 'di-val':'Validacao de input', 'di-err':'Tratamento de erros', 'di-sec':'Seguranca',
+        'di-perf':'Performance (N+1, paginacao)', 'di-log':'Logging e monitoramento', 'di-contr':'Contratos de resposta' };
+      return map[id];
+    });
+    let p = `Analise e melhore o endpoint/servico ${file} no repositorio ${repo}.\n\n`;
+    p += `CONTEXTO DO PROJETO:\n- Framework: ${fw}\n- Banco de dados: ${db}\n- Autenticacao: ${auth}\n\n`;
+    p += `TAREFA:\n1. Leia o arquivo e entenda o fluxo request → response\n`;
+    p += `2. Analise:\n   ${foco.map(f => '- ' + f).join('\n   ')}\n`;
+    p += `3. Compare com outros endpoints do projeto para seguir MESMO padrao\n\n`;
+    if (obs) p += `OBSERVACOES: ${obs}\n\n`;
+    p += `REGRAS:\n- Manter a mesma URL e metodo HTTP\n- Manter o mesmo formato de request/response (ou documentar a mudanca)\n- Seguir EXATAMENTE o padrao de error handling do projeto\n- Seguir EXATAMENTE o padrao de validacao do projeto\n\n`;
+    p += `FORMATO DE RESPOSTA:\n1. Diagnostico detalhado com severidade (critica | alta | media | baixa)\n2. Diff completo do arquivo corrigido\n3. Diffs de arquivos auxiliares se necessario\n4. Migration SQL se o schema mudar\n5. Testes atualizados/criados`;
+    return p;
+  },
+
+  'diff-testes'() {
+    const repo = val('dt-repo');
+    const file = val('dt-arquivo');
+    const fw   = sel('dt-framework');
+    const prob = val('dt-problemas');
+    let p = `Analise os testes em ${file} no repositorio ${repo}.\n\n`;
+    p += `TAREFA:\n1. Leia os testes E o codigo que eles testam\n`;
+    p += `2. Identifique:\n   - Testes que nao testam nada util (testes fracos)\n   - Caminhos felizes e tristes nao cobertos\n   - Mocks incorretos ou excessivos\n   - Testes faceis (quebram por mudancas irrelevantes)\n   - Inconsistencia com o padrao de testes do projeto\n`;
+    p += `3. Compare com outros testes do projeto para seguir o MESMO estilo\n\n`;
+    if (fw !== 'deixe descobrir') p += `Framework de testes: ${fw}\n\n`;
+    if (prob) p += `Problemas que percebo:\n${bulletList(prob)}\n\n`;
+    p += `FORMATO DE RESPOSTA:\n1. Coverage: o que esta coberto e o que falta\n2. Problemas nos testes atuais\n3. Diff completo dos testes melhorados\n4. Novos testes adicionados (com justificativa do que cobrem)`;
+    return p;
+  },
+
+  'diff-performance'() {
+    const repo   = val('dp-repo');
+    const file   = val('dp-arquivo');
+    const freq   = sel('dp-freq');
+    const vol    = val('dp-volume');
+    const garg   = val('dp-gargalo');
+    let p = `Analise o arquivo ${file} no repositorio ${repo} com FOCO EM PERFORMANCE.\n\n`;
+    p += `CONTEXTO:\n- Execucao: ${freq}\n`;
+    if (vol) p += `- Volume esperado: ${vol}\n`;
+    if (garg) p += `- Gargalo percebido: ${garg}\n`;
+    p += `\nTAREFA:\n1. Identifique gargalos de performance\n`;
+    p += `2. Para cada gargalo:\n   - Causa raiz\n   - Impacto estimado\n   - Solucao proposta\n   - Codigo antes → depois\n`;
+    p += `3. Gere diffs completos para aplicacao imediata\n\n`;
+    p += `REGRAS:\n- Nao sacrificar legibilidade por micro-otimizacoes\n- Manter compatibilidade com a interface existente\n- Priorizar mudancas com maior impacto/complexidade\n\n`;
+    p += `FORMATO DE RESPOSTA:\n1. Gargalos identificados (ranked por impacto)\n2. Para cada mudanca: causa raiz, solucao, estimativa de ganho, diff\n3. Mudancas que exigem mais investigacao`;
+    return p;
+  },
+
+  'diff-canivete'() {
+    const repo = val('dc-repo');
+    const esc  = val('dc-escopo');
+    const tipo = sel('dc-tipo');
+    const ctx  = val('dc-contexto');
+    let p = `Faça uma analise completa e gere diffs prontos para aplicar no repositorio ${repo}.\n\n`;
+    p += `ESCOPO:\n- Arquivos/Diretorios: ${esc || 'repo inteiro'}\n`;
+    p += `- Tipo de melhoria: ${tipo}\n`;
+    if (ctx) p += `\nCONTEXTO:\n${ctx}\n`;
+    p += `\nTAREFA:\n1. Analisar profundamente o codigo E a arquitetura ao redor\n`;
+    p += `2. Entender os padroes do projeto lendo arquivos vizinhos e configs\n`;
+    p += `3. Identificar TODOS os problemas na area solicitada\n`;
+    p += `4. Gerar diffs COMPLETOS para cada arquivo que precisa mudar\n`;
+    p += `5. Garantir que o codigo gerado seja COERENTE com o restante do projeto\n\n`;
+    p += `OBRIGATORIO NA RESPOSTA:\n[x] Resumo executivo das mudancas\n[x] Justificativa para CADA mudanca\n[x] Diff completo de CADA arquivo (pronto para git apply)\n[x] Novos arquivos que precisam ser criados (com conteudo completo)\n[x] Arquivos que precisam ser deletados (se houver)\n[x] Dependencias novas (se houver, com justificativa)\n[x] Riscos e cuidados ao aplicar\n[x] Comandos para aplicar as mudancas\n\n`;
+    p += `NAO FAZER:\n[ ] Mudancas sem justificativa\n[ ] Breaking changes sem aviso explicito\n[ ] Introduzir padroes diferentes do restante do projeto\n[ ] Adicionar dependencias desnecessarias`;
+    return p;
+  },
+
+  // ═══ DOMINIOS AVANCADOS ═══
+
+  'cloud-review'() {
+    const repo = val('cl-repo');
+    const arquivo = val('cl-arquivo');
+    const provider = sel('cl-provider');
+    const ctx = val('cl-contexto');
+    const aspects = checkedItems(['cl-sec','cl-model','cl-mig','cl-comp','cl-iac','cl-cont']).map(id => {
+      const map = { 'cl-sec':'Seguranca (IAM, criptografia, flags)', 'cl-model':'Modelo de servico (SaaS/PaaS/IaaS)',
+        'cl-mig':'Preparacao para migracao', 'cl-comp':'Compliance (LGPD, NIST, BACEN)',
+        'cl-iac':'Infra as Code (Terraform/CloudFormation)', 'cl-cont':'Containers (Docker/K8s)' };
+      return map[id];
+    });
+    let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arquivo}.\n\n`;
+    p += `CONTEXTO: ${ctx}\n`;
+    if (provider) p += `PROVEDOR DE NUVEM: ${provider}\n`;
+    p += `\nDOMINIO: Cloud Computing\n`;
+    p += `Verifique os seguintes aspectos:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nREGRAS OBRIGATORIAS:\n`;
+    p += `- Avalie o modelo de responsabilidade compartilhada da nuvem (Shared Responsibility Model)\n`;
+    p += `- Verifique configuracoes de seguranca (IAM policies, security groups, flags inseguras)\n`;
+    p += `- Verifique conformidade com LGPD, NIST CSF e BACEN 4.658 (se aplicavel)\n`;
+    p += `- Identifique se recursos estao provisionados de forma otimizada (cost optimization)\n`;
+    p += `- Verifique se ha hardcoding de secrets, chaves ou credenciais\n`;
+    p += `- Avalie a estrategia de backup e disaster recovery\n`;
+    p += `- Verifique se os logs e monitoramento estao configurados adequadamente\n`;
+    p += `- Para IaC: valide idempotencia, modularizacao e seguranca dos templates\n\n`;
+    p += `FORMATO DE RESPOSTA:\n`;
+    p += `1. Diagnostico com severidade (critica | alta | media | baixa)\n`;
+    p += `2. Recomendacoes por area (seguranca, custo, performance, compliance)\n`;
+    p += `3. Diff completo para cada correcao (se aplicavel)\n`;
+    p += `4. Riscos cloud-specific e mitigacoes\n`;
+    p += `5. Roadmap de melhorias priorizado por impacto`;
+    return p;
+  },
+
+  'requisitos-review'() {
+    const repo = val('rq-repo');
+    const arquivo = val('rq-arquivo');
+    const ctx = val('rq-contexto');
+    const aspects = checkedItems(['rq-inv','rq-nf','rq-back','rq-proto','rq-sla']).map(id => {
+      const map = { 'rq-inv':'Historias de Usuario (INVEST)', 'rq-nf':'Requisitos Nao Funcionais',
+        'rq-back':'Alinhamento com Backlog', 'rq-proto':'Prototipos e Especificacoes',
+        'rq-sla':'SLAs e Metricas de Aceite' };
+      return map[id];
+    });
+    let p = `Analise o repositorio ${repo}, com foco em ${arquivo}, verificando a implementacao de requisitos.\n\n`;
+    p += `REQUISITO ORIGINAL / CONTEXTO:\n${ctx}\n\n`;
+    p += `DOMINIO: Engenharia de Requisitos\n`;
+    p += `Verifique os seguintes aspectos:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nREGRAS OBRIGATORIAS:\n`;
+    p += `- Compare o requisito original com o codigo implementado linha a linha\n`;
+    p += `- Identifique gaps entre especificacao e implementacao\n`;
+    p += `- Verifique se historias de usuario seguem o criterio INVEST (Independent, Negotiable, Valuable, Estimable, Small, Testable)\n`;
+    p += `- Liste requisitos nao funcionais (performance, seguranca, usabilidade, disponibilidade) e se foram atendidos\n`;
+    p += `- Verifique se os criterios de aceite estao cobertos por testes\n`;
+    p += `- Identifique requisitos implicitos que nao foram especificados mas sao necessarios\n`;
+    p += `- Avalie a rastreabilidade: cada requisito deve ter codigo + teste correspondente\n\n`;
+    p += `FORMATO DE RESPOSTA:\n`;
+    p += `1. Matriz de rastreabilidade (requisito → codigo → teste)\n`;
+    p += `2. Gaps identificados com severidade\n`;
+    p += `3. Historias de usuario avaliadas pelo criterio INVEST\n`;
+    p += `4. Recomendacoes de melhoria na especificacao\n`;
+    p += `5. Diffs de correcao para gaps criticos`;
+    return p;
+  },
+
+  'agile-review'() {
+    const repo = val('agl-repo');
+    const arquivo = val('agl-arquivo');
+    const framework = sel('agl-framework');
+    const ctx = val('agl-contexto');
+    const aspects = checkedItems(['agl-bdd','agl-art','agl-fluxo','agl-wsjf','agl-dod']).map(id => {
+      const map = { 'agl-bdd':'BDD (Given-When-Then)', 'agl-art':'Artefatos Scrum (Burndown, DoD)',
+        'agl-fluxo':'Metricas de Fluxo (Lead Time)', 'agl-wsjf':'Priorizacao por Valor (WSJF)',
+        'agl-dod':'Definition of Done' };
+      return map[id];
+    });
+    let p = `Revise o repositorio ${repo} com foco em ${arquivo}, sob a perspectiva de metodos ageis.\n\n`;
+    p += `CONTEXTO DA SPRINT/PROJETO: ${ctx}\n`;
+    if (framework) p += `FRAMEWORK AGIL: ${framework}\n`;
+    p += `\nDOMINIO: Metodos Ageis\n`;
+    p += `Verifique os seguintes aspectos:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nREGRAS OBRIGATORIAS:\n`;
+    p += `- Verifique se testes seguem o padrao BDD (Given-When-Then) quando aplicavel\n`;
+    p += `- Avalie se os artefatos Scrum estao presentes e atualizados\n`;
+    p += `- Analise metricas de fluxo: Lead Time, Throughput, Cycle Time, WIP\n`;
+    p += `- Verifique se a priorizacao segue WSJF (Weighted Shortest Job First)\n`;
+    p += `- Confirme se a Definition of Done esta sendo respeitada\n`;
+    p += `- Identifique se ha deviation do framework agil escolhido\n`;
+    p += `- Avalie a qualidade dos commits e mensagens (conexao com historias de usuario)\n\n`;
+    p += `FORMATO DE RESPOSTA:\n`;
+    p += `1. Avaliacao da maturidade agil do repositorio\n`;
+    p += `2. Problemas identificados com severidade\n`;
+    p += `3. Metricas de fluxo calculaveis a partir do git history\n`;
+    p += `4. Recomendacoes de melhoria nos processos ageis\n`;
+    p += `5. Diffs para correcoes de testes/artefatos`;
+    return p;
+  },
+
+  'ia-ml-review'() {
+    const repo = val('ia-repo');
+    const arquivo = val('ia-arquivo');
+    const tipo = sel('ia-tipo');
+    const ctx = val('ia-contexto');
+    const aspects = checkedItems(['ia-vies','ia-qual','ia-over','ia-sec','ia-exp','ia-lgpd']).map(id => {
+      const map = { 'ia-vies':'Vies e Etica nos Dados', 'ia-qual':'Qualidade dos Dados',
+        'ia-over':'Overfitting / Generalizacao', 'ia-sec':'Seguranca Adversarial',
+        'ia-exp':'Explicabilidade (XAI)', 'ia-lgpd':'Conformidade LGPD' };
+      return map[id];
+    });
+    let p = `Revise o codigo do repositorio ${repo}, com foco em ${arquivo}, sob a perspectiva de IA/ML.\n\n`;
+    p += `CONTEXTO: ${ctx}\n`;
+    if (tipo) p += `TIPO DE MODELO: ${tipo}\n`;
+    p += `\nDOMINIO: Inteligencia Artificial / Machine Learning\n`;
+    p += `Verifique os seguintes aspectos:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nREGRAS OBRIGATORIAS:\n`;
+    p += `- Vies e Etica: analise representatividade dos dados, vies de selecao, vies de atributo\n`;
+    p += `- Qualidade dos Dados: integridade, completude, consistencia, atualizacao, duplicidade\n`;
+    p += `- Overfitting: verifique separacao treino/teste, cross-validation, regularizacao, early stopping\n`;
+    p += `- Generalizacao: avalie se o modelo generaliza para dados fora da distribuicao de treino\n`;
+    p += `- Seguranca Adversarial: testes de robustez contra perturbacoes, data poisoning, model inversion\n`;
+    p += `- Explicabilidade: verifique uso de SHAP, LIME, feature importance, decisoes auditaveis\n`;
+    p += `- LGPD: consentimento para uso de dados, direito ao esquecimento, portabilidade, anonimizacao\n`;
+    p += `- Pipeline de ML: validacao de etapas (coleta → preprocessamento → treino → avaliacao → deploy)\n`;
+    p += `- Monitoramento: drift detection, performance degradation, retraining triggers\n\n`;
+    p += `FORMATO DE RESPOSTA:\n`;
+    p += `1. Diagnostico completo do pipeline de ML com severidade\n`;
+    p += `2. Analise de vies e etica com metricas especificas\n`;
+    p += `3. Matriz de qualidade dos dados\n`;
+    p += `4. Recomendacoes de mitigacao para cada risco identificado\n`;
+    p += `5. Diffs de correcao para problemas criticos`;
+    return p;
+  },
+
+  'dados-pipeline'() {
+    const repo = val('dl-repo');
+    const arquivo = val('dl-arquivo');
+    const tech = sel('dl-tech');
+    const ctx = val('dl-contexto');
+    const aspects = checkedItems(['dl-5v','dl-etl','dl-ms','dl-ciclo','dl-ml']).map(id => {
+      const map = { 'dl-5v':'Big Data (5 Vs)', 'dl-etl':'Qualidade ETL',
+        'dl-ms':'Microsservicos de Dados', 'dl-ciclo':'Ciclo Analise Completo',
+        'dl-ml':'ML Aplicado' };
+      return map[id];
+    });
+    let p = `Revise o repositorio ${repo}, com foco em ${arquivo}, sob a perspectiva de dados intensivos.\n\n`;
+    p += `CONTEXTO: ${ctx}\n`;
+    if (tech) p += `TECNOLOGIA PRINCIPAL: ${tech}\n`;
+    p += `\nDOMINIO: Big Data e Analise de Dados\n`;
+    p += `Verifique os seguintes aspectos:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nREGRAS OBRIGATORIAS:\n`;
+    p += `- 5 Vs do Big Data: avalie Volume, Velocidade, Variedade, Veracidade e Valor\n`;
+    p += `- ETL Quality: valide extração (fontes), transformação (regras) e carga (destino)\n`;
+    p += `- Verifique tratamento de dados duplicados, nulos e outliers\n`;
+    p += `- Avalie idempotencia e reprocessabilidade dos pipelines\n`;
+    p += `- Microsservicos de Dados: verifique boundaries, contratos, versionamento de schemas\n`;
+    p += `- Ciclo SMART de Analise: Specular → Medir → Analisar → Refinar → Transformar\n`;
+    p += `- Verifique monitoramento de pipelines (alertas, SLAs, retry logic)\n`;
+    p += `- Governança: linhagem de dados, catalogo de dados, qualidade automatizada\n`;
+    p += `- Para ML aplicado: valide data splits, feature engineering, model drift\n\n`;
+    p += `FORMATO DE RESPOSTA:\n`;
+    p += `1. Arquitetura de dados atual (diagrama textual)\n`;
+    p += `2. Problemas identificados com severidade\n`;
+    p += `3. Avaliacao dos 5 Vs com gaps\n`;
+    p += `4. Recomendacoes de melhoria no pipeline\n`;
+    p += `5. Diffs de correcao para problemas criticos`;
+    return p;
+  },
+
+  'gestao-projeto'() {
+    const repo = val('gp-repo');
+    const modelo = sel('gp-modelo');
+    const ctx = val('gp-contexto');
+    const aspects = checkedItems(['gp-escopo','gp-risco','gp-stake','gp-charter','gp-aqui']).map(id => {
+      const map = { 'gp-escopo':'Escopo e EAP', 'gp-risco':'Gerenciamento de Riscos',
+        'gp-stake':'Stakeholders e Comunicacao', 'gp-charter':'Project Charter',
+        'gp-aqui':'Gestao de Aquisicoes' };
+      return map[id];
+    });
+    let p = `Analise o projeto no repositorio ${repo} sob a perspectiva de gestao de projetos.\n\n`;
+    p += `CONTEXTO DO PROJETO: ${ctx}\n`;
+    if (modelo) p += `MODELO DE GESTAO: ${modelo}\n`;
+    p += `\nDOMINIO: Gestao de Projetos (PMBOK / Hibrido)\n`;
+    p += `Verifique os seguintes aspectos:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nREGRAS OBRIGATORIAS:\n`;
+    p += `- Escopo: verifique se a EAP (Estrutura Analitica do Projeto) esta refletida na estrutura do repositorio\n`;
+    p += `- Riscos: identifique riscos tecnicos usando probabilidade x impacto, proponha mitigacoes\n`;
+    p += `- Stakeholders: mapeie usando matriz Poder/Interesse, identifique gaps de comunicacao\n`;
+    p += `- Project Charter: verifique se objetivos, escopo, entregas e restricoes estao documentados\n`;
+    p += `- Cronograma: analise git history para identificar cadencia real de entregas\n`;
+    p += `- Qualidade: verifique se ha processos de QA, code review e criterios de aceite\n`;
+    p += `- Governanca: identifique pontos de decisao, gates e aprovacoes necessarias\n`;
+    p += `- Comunicacao: avalie se a documentacao do repo suporta a comunicacao com stakeholders\n\n`;
+    p += `FORMATO DE RESPOSTA:\n`;
+    p += `1. Diagnostico de maturidade em gestao de projetos\n`;
+    p += `2. Matriz de riscos (probabilidade x impacto)\n`;
+    p += `3. Mapa de stakeholders com recomendacoes\n`;
+    p += `4. Plano de acao priorizado por urgencia\n`;
+    p += `5. Artefatos que devem ser criados/atualizados`;
+    return p;
+  },
+
+  'metricas-okr'() {
+    const repo = val('mo-repo');
+    const ctx = val('mo-contexto');
+    const aspects = checkedItems(['mo-okr','mo-fluxo','mo-eff','mo-prev','mo-little']).map(id => {
+      const map = { 'mo-okr':'OKR (Output vs Outcome)', 'mo-fluxo':'Fluxo (Lead Time, Throughput, WIP)',
+        'mo-eff':'Eficiencia vs Eficacia', 'mo-prev':'Previsibilidade (Monte Carlo)',
+        'mo-little':'Lei de Little' };
+      return map[id];
+    });
+    let p = `Analise o repositorio ${repo} sob a lente de metricas e OKRs.\n\n`;
+    p += `CONTEXTO / OKRs DO TIME: ${ctx}\n\n`;
+    p += `DOMINIO: Metricas e OKRs para Times de Tecnologia\n`;
+    p += `Verifique as seguintes metricas:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nREGRAS OBRIGATORIAS:\n`;
+    p += `- OKR: diferencie outputs (atividades) de outcomes (resultados de negocio)\n`;
+    p += `- Verifique se os Key Results sao mensuraveis e have um numero e prazo definido\n`;
+    p += `- Fluxo: calcule Lead Time, Throughput, Cycle Time e WIP a partir do git history\n`;
+    p += `- Eficiencia vs Eficacia: identifique se o time esta fazendo as coisas certas vs fazendo as coisas direito\n`;
+    p += `- Lei de Little: L = W x (WIP/LT), use para estimar tempo de entrega\n`;
+    p += `- Previsibilidade: analise se as estimativas historicas sao confiaveis (simulacao Monte Carlo)\n`;
+    p += `- Identifique gargalos e ineficiencias no fluxo de entrega\n`;
+    p += `- Avalie se ha metricas de qualidade de codigo associadas aos OKRs\n\n`;
+    p += `FORMATO DE RESPOSTA:\n`;
+    p += `1. Dashboard de metricas calculadas (a partir do repositorio)\n`;
+    p += `2. Avaliacao dos OKRs (estao bem definidos? mensuraveis? alinhados?)\n`;
+    p += `3. Analise de fluxo com identificacao de gargalos\n`;
+    p += `4. Recomendacoes de melhoria nas metricas e processos\n`;
+    p += `5. Sugestao de OKRs refinados baseados na realidade do repositorio`;
+    return p;
+  },
+
+  'squads-review'() {
+    const repo = val('sq-repo');
+    const tam = sel('sq-tam');
+    const ctx = val('sq-contexto');
+    const aspects = checkedItems(['sq-okr','sq-estrut','sq-comp','sq-tuck','sq-lider']).map(id => {
+      const map = { 'sq-okr':'OKRs do Time', 'sq-estrut':'Estrutura Multifuncional',
+        'sq-comp':'Competencias e Skills', 'sq-tuck':'Modelo de Tuckman',
+        'sq-lider':'Lideranca Positiva' };
+      return map[id];
+    });
+    let p = `Revise o repositorio ${repo} sob a perspectiva de dinamica de squads.\n\n`;
+    p += `CONTEXTO / PERFIL DO TIME: ${ctx}\n`;
+    if (tam) p += `TAMANHO DO SQUAD: ${tam}\n`;
+    p += `\nDOMINIO: Tech Squads e Dinamica de Times\n`;
+    p += `Verifique os seguintes aspectos:\n`;
+    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
+    p += `\nREGRAS OBRIGATORIAS:\n`;
+    p += `- Estrutura Multifuncional: verifique se o repo demonstra skills compativeis com um squad completo (frontend, backend, QA, design)\n`;
+    p += `- OKRs do Time: analise se as entregas no git estao alinhadas com OKRs tipicos de squads de produto\n`;
+    p += `- Competencias: mapeie as tecnologias e skills necessarias vs utilizadas no repositorio\n`;
+    p += `- Modelo de Tuckman: identifique a fase do time (Forming, Storming, Norming, Performing) baseado nos padroes de commit, PR reviews e documentacao\n`;
+    p += `- Lideranca Positiva: avalie se ha mentorias, documentacao compartilhada, code reviews construtivos e conhecimento distribuido\n`;
+    p += `- Identifique silos de conhecimento (concentracao de commits em poucas pessoas)\n`;
+    p += `- Verifique se ha onboarding documentation e conhecimento compartilhado\n`;
+    p += `- Analise a diversidade de contribuicoes (quem faz o que no repo)\n\n`;
+    p += `FORMATO DE RESPOSTA:\n`;
+    p += `1. Perfil do squad baseado na analise do repositorio\n`;
+    p += `2. Mapa de competencias (existentes vs necessarias)\n`;
+    p += `3. Diagnostico da fase do time (Tuckman)\n`;
+    p += `4. Riscos organizacionais identificados\n`;
+    p += `5. Recomendacoes para amadurecimento do squad`;
+    return p;
+  },
+};
+
+// ─── GENERATE ───
+function generatePrompt(id) {
+  const gen = generators[id];
+  if (!gen) return;
+  const prompt = gen();
+  const container = document.getElementById('output-' + id);
+  container.innerHTML = `
+    <div class="output-header">
+      <h3>&#x2705; Prompt Gerado</h3>
+      <div class="btn-row" style="margin-top:0;">
+        <button class="btn-copy" onclick="copyPrompt(this, '${id}')">&#x1f4cb; Copiar</button>
+        <button class="btn-clear" onclick="clearOutput('${id}')">&#x2716; Limpar</button>
+      </div>
+    </div>
+    <div class="output-box">
+      <div class="output-content" id="prompt-text-${id}"></div>
+    </div>
+  `;
+  document.getElementById('prompt-text-' + id).textContent = prompt;
+  container.classList.add('visible');
+  container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── COPY ───
+function copyPrompt(btn, id) {
+  const text = document.getElementById('prompt-text-' + id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '&#x2705; Copiado!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '&#x1f4cb; Copiar';
+    }, 2000);
+  }).catch(() => {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.classList.add('copied');
+    btn.innerHTML = '&#x2705; Copiado!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '&#x1f4cb; Copiar';
+    }, 2000);
+  });
+}
+
+function clearOutput(id) {
+  const container = document.getElementById('output-' + id);
+  container.classList.remove('visible');
+  container.innerHTML = '';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "Prompt Engineering Pro",
+  "short_name": "PromptPro",
+  "description": "Análise de domínios e gerador avançado de prompts de engenharia de software.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

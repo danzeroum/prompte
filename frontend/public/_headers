@@ -1,0 +1,11 @@
+# Cache-Control para deploy em hosting estático (Netlify / similares).
+# Assets com hash (gerados pelo Vite) podem ser cacheados para sempre.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML nunca deve ser cacheado agressivamente (sempre busca a versão nova).
+/*.html
+  Cache-Control: no-cache
+
+/manifest.json
+  Cache-Control: no-cache
