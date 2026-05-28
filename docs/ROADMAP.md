@@ -22,9 +22,17 @@ operação).
 - Verificado: insert válido como `anon` grava; insert inválido é bloqueado pela
   RLS; `anon` não lê.
 
-## Fase B — Cache de prompts
-- Tabela `prompt_cache` (`hash unique`, `response jsonb`, `expires_at`).
-- Lookup por hash antes de chamar a LLM.
+## Fase B — Cache de prompts ✅ (concluída)
+- Tabela `public.prompt_cache` (`hash` PK, `response jsonb`, `created_at`,
+  `expires_at`) + índice em `expires_at`.
+- RLS: `SELECT` para `anon`/`authenticated` apenas de entradas **não expiradas**
+  (`using (expires_at > now())`). **Sem** policy de `INSERT/UPDATE/DELETE` →
+  escrita só via `service_role` (Edge Function da Fase C), evitando cache poisoning.
+- `assets/js/promptCache.js`: `hashRequest()` (sha256 hex, JSON estável) e
+  `getCachedResponse()` (lookup por hash; miss = `null`). Apenas leitura no cliente.
+- Verificado: entrada fresca visível ao `anon`, expirada oculta, `anon` não escreve.
+- Fluxo (na Fase C): cliente calcula o hash e consulta o cache; se houver hit
+  fresco, retorna na hora; senão chama a Edge Function, que grava o cache.
 
 ## Fase C — Integração LLM
 - **Edge Function** como proxy do provedor LLM (DeepSeek ou outro).

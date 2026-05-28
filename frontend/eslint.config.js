@@ -13,6 +13,7 @@ export default [
         navigator: 'readonly',
         location: 'readonly',
         crypto: 'readonly',
+        TextEncoder: 'readonly',
         Blob: 'readonly',
         URL: 'readonly',
         setTimeout: 'readonly',
