@@ -5,8 +5,9 @@
 import { initTheme } from './theme.js';
 import { initI18n, t } from './i18n.js';
 import { enhanceNavigation, injectTopbarControls, copyText } from './common.js';
-import { track } from './telemetry.js';
+import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates } from './generators.js';
+import { askLLM } from './llmClient.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
@@ -55,8 +56,16 @@ function init() {
   injectTopbarControls();
   mountManualPlayground();
   track('pageview', { path: location.pathname });
+
+  // Envia a fila de telemetria: no load, periodicamente e ao sair da página.
+  flush();
+  setInterval(flush, 30000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') flush();
+  });
+
   // exposto para depuração/uso futuro por scripts inline das páginas
-  window.PE = { copyText, buildPrompt, track };
+  window.PE = { copyText, buildPrompt, track, flush, askLLM };
 }
 
 if (document.readyState === 'loading') {

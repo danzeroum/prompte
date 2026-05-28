@@ -55,7 +55,52 @@ A CI (`.github/workflows/validate.yml`) roda lint, testes e build a cada push.
 A aplicação é instalável (manifest em `frontend/public/manifest.json`) e funciona offline
 após o primeiro carregamento, via service worker gerado pelo `vite-plugin-pwa` no build.
 
-## Backend (futuro)
+## Telemetria (Supabase — Fase A ✅)
 
-O backend será construído sobre **Supabase**. Veja o plano de fases em
-[`docs/ROADMAP.md`](docs/ROADMAP.md).
+A telemetria envia eventos para a tabela `events` de um projeto Supabase
+(`prompt-engineering-pro`). É offline-first: eventos são enfileirados em
+`localStorage` e enviados em lote (`flush`) no load, a cada 30s e ao sair da página.
+
+Configuração (a chave anon é pública por design; a proteção é a RLS):
+
+```bash
+cd frontend
+cp .env.example .env   # já contém URL + chave anon do projeto
+```
+
+Variáveis lidas pelo Vite:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY` (chave anon **legacy/JWT** — exigida pela Edge Function
+  `prompt-llm`, que usa `verify_jwt`)
+
+Sem `.env`, a aplicação funciona normalmente — apenas não envia telemetria.
+
+## Cache de prompts (Supabase — Fase B ✅)
+
+Tabela `prompt_cache` (leitura pública só de entradas frescas; escrita só via
+`service_role`). O cliente lê via `assets/js/promptCache.js` antes de chamar a LLM.
+
+## Integração LLM (Supabase Edge Function — Fase C ✅)
+
+`supabase/functions/prompt-llm/index.ts` é um proxy seguro para o **DeepSeek**
+(`deepseek-chat`) com cache no Postgres. O cliente usa `assets/js/llmClient.js`
+(`askLLM(messages, temperature)`), que tenta o cache antes de invocar a função.
+
+**Falta um passo para funcionar de ponta a ponta:** definir o secret da API key.
+
+```bash
+# via CLI:
+supabase secrets set DEEPSEEK_API_KEY=sk-...   --project-ref tqohthmeneaweuozuref
+# ou pelo Dashboard: Project Settings → Edge Functions → Secrets
+```
+
+Sem o secret, a função responde `503 { error: "LLM não configurada..." }`.
+
+> ⚠️ A função usa `verify_jwt` (exige a chave anon), mas a chave anon é pública —
+> ou seja, **o endpoint está efetivamente acessível** a quem tiver o bundle. O
+> **rate limiting / auth por usuário** vem na **Fase D** para conter custo/abuso.
+
+## Próximas fases
+
+Auth + rate limiting (D) e deploy estático (E) em [`docs/ROADMAP.md`](docs/ROADMAP.md).
