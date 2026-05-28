@@ -24,6 +24,13 @@ describe('buildLlmEvent', () => {
       model: null,
       error: true,
     });
+    expect(buildLlmEvent({ durationMs: 7, error: true, rateLimited: true })).toEqual({
+      cache_hit: false,
+      duration_ms: 7,
+      model: null,
+      error: true,
+      rate_limited: true,
+    });
   });
 });
 
@@ -60,5 +67,21 @@ describe('askLLM', () => {
 
   it('rejeita messages vazio', async () => {
     await expect(askLLM([])).rejects.toThrow(/array/);
+  });
+
+  it('propaga 429 como erro com flag rateLimited', async () => {
+    getCachedResponse.mockResolvedValue(null);
+    const context = {
+      status: 429,
+      clone: () => ({ json: async () => ({ error: 'Limite atingido', reset_at: '2026-01-01T00:00:00Z' }) }),
+    };
+    const invoke = jest.fn().mockResolvedValue({ data: null, error: { context, message: 'http error' } });
+    getSupabase.mockResolvedValue({ functions: { invoke } });
+
+    const err = await askLLM([{ role: 'user', content: 'oi' }]).catch((e) => e);
+    expect(err.status).toBe(429);
+    expect(err.rateLimited).toBe(true);
+    expect(err.message).toMatch(/Limite/);
+    expect(track).toHaveBeenCalledWith('llm_request', expect.objectContaining({ rate_limited: true }));
   });
 });

@@ -97,10 +97,19 @@ supabase secrets set DEEPSEEK_API_KEY=sk-...   --project-ref tqohthmeneaweuozure
 
 Sem o secret, a função responde `503 { error: "LLM não configurada..." }`.
 
-> ⚠️ A função usa `verify_jwt` (exige a chave anon), mas a chave anon é pública —
-> ou seja, **o endpoint está efetivamente acessível** a quem tiver o bundle. O
-> **rate limiting / auth por usuário** vem na **Fase D** para conter custo/abuso.
+## Rate limiting (Supabase — Fase D ✅)
+
+A Edge Function aplica rate limiting por janela fixa de 10 min antes de chamar a
+LLM (cache hits não contam): **15 req** para anônimos e **60 req** para usuários
+autenticados (id por IP ou `sub` do JWT). Excedido o limite, responde `429` com
+`Retry-After`; o cliente expõe `error.status`/`error.rateLimited`/`error.resetAt`.
+
+Implementado via tabela `rate_limit_counters` + função atômica
+`consume_rate_limit()` (acesso só por `service_role`).
+
+> Login de usuário (magic link) para destravar o limite maior é opcional e ainda
+> não tem UI — a infraestrutura já é *auth-aware*. Ver `docs/ROADMAP.md`.
 
 ## Próximas fases
 
-Auth + rate limiting (D) e deploy estático (E) em [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Login opcional (Auth UI) e deploy estático (E) em [`docs/ROADMAP.md`](docs/ROADMAP.md).

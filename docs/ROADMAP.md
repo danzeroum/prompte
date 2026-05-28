@@ -51,10 +51,19 @@ operação).
 > ⚠️ Como a chave anon é pública, o endpoint está acessível a quem tiver o
 > bundle. O controle de abuso/custo (rate limiting) vem na Fase D.
 
-## Fase D — Autenticação e rate limiting
-- Supabase Auth + RLS por usuário.
-- Rate limiting na Edge Function (por usuário/IP).
-- `telemetry` passa a preencher `userId`.
+## Fase D — Rate limiting ✅ (auth-aware) / Auth login ⏳
+- Tabela `public.rate_limit_counters` (janela fixa) + função atômica
+  `consume_rate_limit(id, max, window)` (`security definer`; `execute` só para
+  `service_role`). RLS habilitada sem policies → acesso só via `service_role`.
+- Edge Function `prompt-llm` v2: após cache miss, consome o limite antes de
+  chamar a LLM. **Cache hits não contam** (sem custo). Limites por janela de
+  10 min: **anônimo 15**, **autenticado 60** (id por IP ou `sub` do JWT).
+  Excedeu → `429` com `Retry-After` e `reset_at`.
+- Cliente `llmClient.js`: trata `429` (erro com `status`/`rateLimited`/`resetAt`)
+  e registra telemetria `llm_request` com `rate_limited`.
+- Verificado no banco: 3ª chamada com limite 2 retorna `allowed=false`.
+- **Pendente (opcional):** login via magic link (Supabase Auth) para os limites
+  maiores de usuário autenticado já se aplicarem; a infra já está auth-aware.
 
 ## Fase E — Deploy
 - Publicar `frontend/dist` em hosting estático (Supabase Storage ou Netlify).
