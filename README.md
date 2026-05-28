@@ -118,6 +118,12 @@ Passo manual: conectar `danzeroum/prompte` no Netlify (Add new site → Import) 
 a config é detectada e o deploy roda a cada push na `main`. O `dist/_headers`
 cuida do cache. Alternativas: Vercel ou Supabase Storage.
 
-## Próxima fase (opcional)
+## Login via magic link (Fase D.2 ✅)
 
-Login via magic link (Auth UI) — ver [`docs/ROADMAP.md`](docs/ROADMAP.md).
+Usuários podem entrar com e-mail (magic link) pelo menu de preferências (seção
+**Conta**). Uma vez autenticados, o JWT é anexado às chamadas e o limite de rate
+limiting sobe (60 vs 15 por 10 min). Implementado em `assets/js/auth.js`.
+
+**Config manual no Supabase:** Authentication → URL Configuration → adicionar as
+Redirect URLs (ex.: `http://localhost:5173` e a URL do Netlify). O e-mail padrão
+do Supabase tem limite baixo; para produção, configure SMTP.

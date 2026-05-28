@@ -28,6 +28,11 @@ export async function getSupabase() {
   const { url, key } = supabaseConfig();
   if (!url || !key) return null;
   const { createClient } = await import('@supabase/supabase-js');
-  _client = createClient(url, key, { auth: { persistSession: false } });
+  // persistSession/autoRefresh ligados para suportar login (Fase D.2): a sessão
+  // do usuário fica no localStorage e o JWT é usado automaticamente nas chamadas
+  // (functions.invoke), destravando o limite maior de rate limiting.
+  _client = createClient(url, key, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+  });
   return _client;
 }

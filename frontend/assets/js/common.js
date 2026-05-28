@@ -13,6 +13,7 @@ import {
   importPreferences,
 } from './preferences.js';
 import { showToast } from './validation.js';
+import { onAuthChange, signInWithEmail, signOut, currentUser } from './auth.js';
 
 const NAV_SELECTOR = '.sb-item, .sidebar-item';
 
@@ -208,6 +209,26 @@ function buildPreferencesMenu() {
   importBtn.textContent = t('menu.import');
   importBtn.addEventListener('click', () => importInput.click());
 
+  // Conta (login via magic link — Fase D.2)
+  const accountLabel = document.createElement('div');
+  accountLabel.className = 'pe-menu-label';
+  accountLabel.textContent = t('menu.account');
+  const accountBtn = document.createElement('button');
+  accountBtn.type = 'button';
+  accountBtn.addEventListener('click', () => {
+    if (currentUser()) {
+      signOut().then(() => showToast(t('auth.signedOut'), '', 'info'));
+    } else {
+      openAuthModal();
+    }
+  });
+  // Reflete o estado de autenticação no rótulo do botão.
+  onAuthChange((user) => {
+    accountBtn.textContent = user
+      ? `${t('menu.signout')} (${user.email || 'conta'})`
+      : t('menu.signin');
+  });
+
   menu.append(
     appLabel,
     themeSelect,
@@ -217,6 +238,80 @@ function buildPreferencesMenu() {
     exportBtn,
     importBtn,
     importInput,
+    accountLabel,
+    accountBtn,
   );
   return menu;
+}
+
+// ---- Modal de login (magic link) ----
+let _authModal = null;
+function openAuthModal() {
+  if (!_authModal) _authModal = buildAuthModal();
+  _authModal.hidden = false;
+  const input = _authModal.querySelector('input');
+  if (input) input.focus();
+}
+
+function buildAuthModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'pe-modal-overlay';
+  overlay.hidden = true;
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+
+  const close = () => {
+    overlay.hidden = true;
+  };
+
+  const card = document.createElement('div');
+  card.className = 'pe-modal';
+
+  const title = document.createElement('h3');
+  title.textContent = t('auth.title');
+  const desc = document.createElement('p');
+  desc.textContent = t('auth.desc');
+
+  const input = document.createElement('input');
+  input.type = 'email';
+  input.autocomplete = 'email';
+  input.placeholder = t('auth.emailPlaceholder');
+  input.setAttribute('aria-label', t('auth.emailPlaceholder'));
+
+  const send = document.createElement('button');
+  send.type = 'button';
+  send.className = 'pe-btn';
+  send.textContent = t('auth.send');
+  send.addEventListener('click', async () => {
+    send.disabled = true;
+    const res = await signInWithEmail(input.value);
+    send.disabled = false;
+    if (res.ok) {
+      showToast(t('auth.sent'), '', 'success');
+      close();
+    } else {
+      showToast(t('auth.error'), res.error || '', 'error');
+    }
+  });
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'pe-btn-secondary';
+  closeBtn.textContent = t('auth.close');
+  closeBtn.addEventListener('click', close);
+
+  const actions = document.createElement('div');
+  actions.className = 'pe-modal-actions';
+  actions.append(send, closeBtn);
+
+  card.append(title, desc, input, actions);
+  overlay.append(card);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !overlay.hidden) close();
+  });
+  document.body.appendChild(overlay);
+  return overlay;
 }
