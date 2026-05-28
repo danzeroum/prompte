@@ -1,0 +1,18 @@
+# Configuração de deploy no Netlify (Fase E).
+# O app fica em frontend/, então o build roda nesse diretório e publica frontend/dist.
+# As variáveis VITE_* são PÚBLICAS por design (vão no bundle; a proteção é a RLS),
+# por isso podem ficar versionadas aqui para um deploy turnkey.
+
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  VITE_SUPABASE_URL = "https://tqohthmeneaweuozuref.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxb2h0aG1lbmVhd2V1b3p1cmVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5OTU4MjIsImV4cCI6MjA5NTU3MTgyMn0.auVy7V_YabrYkC0pb4pXVNj14R3_WuOvU0pstAAej84"
+
+# Cabeçalhos de cache: o frontend/public/_headers (copiado para dist) já define
+# Cache-Control imutável para /assets e no-cache para os HTML. O Netlify lê o
+# arquivo _headers automaticamente, então não duplicamos aqui.

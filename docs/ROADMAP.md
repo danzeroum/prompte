@@ -65,10 +65,14 @@ operação).
 - **Pendente (opcional):** login via magic link (Supabase Auth) para os limites
   maiores de usuário autenticado já se aplicarem; a infra já está auth-aware.
 
-## Fase E — Deploy
-- Publicar `frontend/dist` em hosting estático (Supabase Storage ou Netlify).
-- `public/_headers` já define o cache correto (assets imutáveis, HTML `no-cache`).
-- Dispensa nginx/Docker/Prometheus do plano original.
+## Fase E — Deploy estático ✅ (config pronta; conexão é manual)
+- `netlify.toml` na raiz: `base = frontend`, `command = npm run build`,
+  `publish = dist`, `NODE_VERSION = 20` e as `VITE_*` públicas (deploy turnkey).
+- `frontend/public/_headers` (copiado para `dist`) já define o cache correto —
+  o Netlify o lê automaticamente. Dispensa nginx/Docker do plano original.
+- **Passo manual:** conectar o repo no Netlify (Add new site → Import →
+  `danzeroum/prompte`); a config acima é detectada. Deploy automático a cada
+  push na `main`. Alternativas: Vercel ou Supabase Storage.
 
 ## Itens incrementais de frontend
 - Completar a marcação `data-i18n` no conteúdo das três páginas (hoje a "chrome" está

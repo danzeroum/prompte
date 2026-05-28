@@ -110,6 +110,14 @@ Implementado via tabela `rate_limit_counters` + função atômica
 > Login de usuário (magic link) para destravar o limite maior é opcional e ainda
 > não tem UI — a infraestrutura já é *auth-aware*. Ver `docs/ROADMAP.md`.
 
-## Próximas fases
+## Deploy (Fase E ✅ — config pronta)
 
-Login opcional (Auth UI) e deploy estático (E) em [`docs/ROADMAP.md`](docs/ROADMAP.md).
+O repositório está pronto para deploy estático no **Netlify** via `netlify.toml`
+(`base = frontend`, `npm run build`, `publish = dist`, env `VITE_*` públicas).
+Passo manual: conectar `danzeroum/prompte` no Netlify (Add new site → Import) —
+a config é detectada e o deploy roda a cada push na `main`. O `dist/_headers`
+cuida do cache. Alternativas: Vercel ou Supabase Storage.
+
+## Próxima fase (opcional)
+
+Login via magic link (Auth UI) — ver [`docs/ROADMAP.md`](docs/ROADMAP.md).
