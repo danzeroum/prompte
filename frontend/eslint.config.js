@@ -16,6 +16,7 @@ export default [
         Blob: 'readonly',
         URL: 'readonly',
         setTimeout: 'readonly',
+        setInterval: 'readonly',
         MutationObserver: 'readonly',
       },
     },

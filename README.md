@@ -55,7 +55,27 @@ A CI (`.github/workflows/validate.yml`) roda lint, testes e build a cada push.
 A aplicação é instalável (manifest em `frontend/public/manifest.json`) e funciona offline
 após o primeiro carregamento, via service worker gerado pelo `vite-plugin-pwa` no build.
 
-## Backend (futuro)
+## Telemetria (Supabase — Fase A ✅)
 
-O backend será construído sobre **Supabase**. Veja o plano de fases em
-[`docs/ROADMAP.md`](docs/ROADMAP.md).
+A telemetria envia eventos para a tabela `events` de um projeto Supabase
+(`prompt-engineering-pro`). É offline-first: eventos são enfileirados em
+`localStorage` e enviados em lote (`flush`) no load, a cada 30s e ao sair da página.
+
+Configuração (a chave publishable é pública por design; a proteção é a RLS):
+
+```bash
+cd frontend
+cp .env.example .env   # já contém URL + publishable key do projeto
+```
+
+Variáveis lidas pelo Vite:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+Sem `.env`, a aplicação funciona normalmente — apenas não envia telemetria.
+
+## Backend (próximas fases)
+
+As fases B–E (cache de prompts, integração LLM via Edge Function, auth, deploy)
+estão descritas em [`docs/ROADMAP.md`](docs/ROADMAP.md).

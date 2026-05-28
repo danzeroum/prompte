@@ -5,16 +5,22 @@ internacionalizável e coberto por testes/CI. As fases seguintes adicionam o bac
 sobre **Supabase** (reorientação do plano original de VPS/Docker, que exigia muito mais
 operação).
 
-> ⚠️ **Pré-requisito:** o único projeto Supabase conectado a este ambiente é
-> `familia-em-equilibrio` (ref `pdtmlzmtvngmgwhwivxf`, região sa-east-1) e está
-> **INACTIVE (pausado)**. O nome não corresponde a este app. Antes da Fase A, confirmar
-> se este é o projeto correto (ou criar um novo) e reativá-lo.
+> ℹ️ Projeto Supabase dedicado **`prompt-engineering-pro`**
+> (ref `tqohthmeneaweuozuref`, região sa-east-1) criado para este app.
 
-## Fase A — Telemetria
-- Tabela `events` (`type`, `session_id`, `user_id`, `payload jsonb`, `created_at`).
-- RLS permitindo apenas `insert` anônimo.
-- `assets/js/telemetry.js` passa a usar `supabase-js` (anon key) no `flush()`.
-- Substitui o antigo endpoint `POST /api/event`.
+## Fase A — Telemetria ✅ (concluída)
+- Tabela `public.events` (`id`, `type`, `session_id`, `user_id`, `payload jsonb`,
+  `created_at`) com índices em `created_at` e `type`.
+- RLS habilitada: apenas `INSERT` para `anon`/`authenticated`, com `WITH CHECK`
+  endurecido (tamanho de `type`/`session_id`, `payload < 10KB`, sem spoofing de
+  `user_id`). Sem policy de `SELECT` → write-only do lado do cliente; leitura só
+  via `service_role`.
+- `assets/js/supabaseClient.js` inicializa o `supabase-js` a partir de
+  `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` (import dinâmico, code-split).
+- `assets/js/telemetry.js` envia a fila no `flush()` (load, a cada 30s e em
+  `visibilitychange: hidden`), removendo só os eventos enviados.
+- Verificado: insert válido como `anon` grava; insert inválido é bloqueado pela
+  RLS; `anon` não lê.
 
 ## Fase B — Cache de prompts
 - Tabela `prompt_cache` (`hash unique`, `response jsonb`, `expires_at`).
