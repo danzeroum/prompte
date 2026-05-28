@@ -60,8 +60,10 @@ describe('askLLM', () => {
     const res = await askLLM([{ role: 'user', content: 'oi' }], 0.5);
     expect(invoke).toHaveBeenCalledWith('prompt-llm', {
       body: { messages: [{ role: 'user', content: 'oi' }], temperature: 0.5 },
+      headers: { 'x-request-id': expect.any(String) },
     });
     expect(res.content).toBe('resposta');
+    expect(track).toHaveBeenCalledWith('llm_request', expect.objectContaining({ request_id: expect.any(String) }));
     expect(track).toHaveBeenCalledWith('llm_request', expect.objectContaining({ cache_hit: false }));
   });
 
