@@ -62,8 +62,19 @@ operação).
 - Cliente `llmClient.js`: trata `429` (erro com `status`/`rateLimited`/`resetAt`)
   e registra telemetria `llm_request` com `rate_limited`.
 - Verificado no banco: 3ª chamada com limite 2 retorna `allowed=false`.
-- **Pendente (opcional):** login via magic link (Supabase Auth) para os limites
-  maiores de usuário autenticado já se aplicarem; a infra já está auth-aware.
+
+## Fase D.2 — Login via magic link ✅
+- `assets/js/auth.js`: `signInWithEmail()` (`supabase.auth.signInWithOtp`),
+  `signOut()`, `initAuth()`/`onAuthChange()`/`currentUser()`. Estado exposto em
+  `window.PE.user`.
+- `supabaseClient.js`: `persistSession`/`autoRefreshToken`/`detectSessionInUrl`
+  ligados — a sessão persiste e o JWT do usuário é anexado automaticamente às
+  chamadas (`functions.invoke`), destravando o limite maior (60 vs 15).
+- UI: seção **Conta** no menu de preferências (Entrar/Sair) + modal de magic link
+  (injetado pelo `common.js`, funciona nas três páginas).
+- **Passo manual no Supabase:** Authentication → URL Configuration → adicionar as
+  Redirect URLs (ex.: `http://localhost:5173` e a URL do Netlify). O provedor de
+  e-mail padrão do Supabase tem limite baixo; para produção, configurar SMTP.
 
 ## Fase E — Deploy estático ✅ (config pronta; conexão é manual)
 - `netlify.toml` na raiz: `base = frontend`, `command = npm run build`,

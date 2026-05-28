@@ -8,6 +8,7 @@ import { enhanceNavigation, injectTopbarControls, copyText } from './common.js';
 import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates } from './generators.js';
 import { askLLM } from './llmClient.js';
+import { initAuth } from './auth.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
@@ -54,6 +55,7 @@ function init() {
   initI18n();
   enhanceNavigation();
   injectTopbarControls();
+  initAuth();
   mountManualPlayground();
   track('pageview', { path: location.pathname });
 
