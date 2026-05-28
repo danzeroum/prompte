@@ -34,11 +34,22 @@ operação).
 - Fluxo (na Fase C): cliente calcula o hash e consulta o cache; se houver hit
   fresco, retorna na hora; senão chama a Edge Function, que grava o cache.
 
-## Fase C — Integração LLM
-- **Edge Function** como proxy do provedor LLM (DeepSeek ou outro).
-- API key guardada como **secret** do Supabase (nunca no cliente).
-- Cache via tabela da Fase B; retry + timeout.
-- Substitui o serviço Express `callDeepSeek` do plano original.
+## Fase C — Integração LLM ✅ (concluída; falta só o secret da key)
+- **Edge Function** `prompt-llm` (`supabase/functions/prompt-llm/index.ts`),
+  deploy v1 com `verify_jwt=true`, proxy do **DeepSeek** (`deepseek-chat`).
+- Fluxo: valida → hash (mesmo algoritmo do cliente) → consulta cache
+  (`service_role`) → miss? chama DeepSeek (timeout 20s) → upsert no cache
+  (`expires_at = now + 1h`) → responde `{ content, model, cache_hit }`.
+- API key como **secret** `DEEPSEEK_API_KEY` (nunca no cliente). **Pendente:**
+  definir o secret (`supabase secrets set DEEPSEEK_API_KEY=...`); sem ele a
+  função retorna `503`.
+- Cliente `assets/js/llmClient.js`: `askLLM()` tenta o cache (Fase B) antes de
+  invocar a função; registra telemetria `llm_request` (`cache_hit`, `duration_ms`,
+  `model`).
+- Chave do cliente trocada para a anon **legacy/JWT** (compatível com `verify_jwt`).
+
+> ⚠️ Como a chave anon é pública, o endpoint está acessível a quem tiver o
+> bundle. O controle de abuso/custo (rate limiting) vem na Fase D.
 
 ## Fase D — Autenticação e rate limiting
 - Supabase Auth + RLS por usuário.

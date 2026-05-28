@@ -7,6 +7,7 @@ import { initI18n, t } from './i18n.js';
 import { enhanceNavigation, injectTopbarControls, copyText } from './common.js';
 import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates } from './generators.js';
+import { askLLM } from './llmClient.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
@@ -64,7 +65,7 @@ function init() {
   });
 
   // exposto para depuração/uso futuro por scripts inline das páginas
-  window.PE = { copyText, buildPrompt, track, flush };
+  window.PE = { copyText, buildPrompt, track, flush, askLLM };
 }
 
 if (document.readyState === 'loading') {
