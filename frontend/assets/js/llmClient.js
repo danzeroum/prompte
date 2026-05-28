@@ -9,12 +9,13 @@ import { track } from './telemetry.js';
 const FUNCTION_NAME = 'prompt-llm';
 
 // Monta o evento de telemetria de um pedido à LLM (helper puro/testável).
-export function buildLlmEvent({ cacheHit, durationMs, model, error }) {
+export function buildLlmEvent({ cacheHit, durationMs, model, error, rateLimited }) {
   return {
     cache_hit: Boolean(cacheHit),
     duration_ms: durationMs,
     model: model ?? null,
     ...(error ? { error: true } : {}),
+    ...(rateLimited ? { rate_limited: true } : {}),
   };
 }
 
@@ -43,11 +44,29 @@ export async function askLLM(messages, temperature = 0.3) {
 
   const { data, error } = await client.functions.invoke(FUNCTION_NAME, { body: request });
   if (error) {
+    // supabase-js v2 expõe a resposta HTTP em error.context (FunctionsHttpError).
+    const status = error.context?.status;
+    let detail;
+    try {
+      detail = error.context ? await error.context.clone().json() : undefined;
+    } catch {
+      detail = undefined;
+    }
+    const rateLimited = status === 429;
     track(
       'llm_request',
-      buildLlmEvent({ cacheHit: false, durationMs: Date.now() - started, error: true }),
+      buildLlmEvent({
+        cacheHit: false,
+        durationMs: Date.now() - started,
+        error: true,
+        rateLimited,
+      }),
     );
-    throw error;
+    const thrown = new Error(detail?.error || error.message || 'Falha ao chamar a LLM');
+    thrown.status = status;
+    thrown.rateLimited = rateLimited;
+    if (detail?.reset_at) thrown.resetAt = detail.reset_at;
+    throw thrown;
   }
   track(
     'llm_request',
