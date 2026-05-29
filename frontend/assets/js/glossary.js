@@ -95,3 +95,13 @@ export function initGlossary(root = document) {
   }
   return count;
 }
+
+// Re-decora ao trocar de idioma: applyI18n() reescreve o textContent das
+// descrições (removendo os wrappers), então basta rodar de novo (#M-UX6).
+// O listener é anexado uma única vez.
+let _i18nBound = false;
+export function bindGlossaryToI18n(root = document) {
+  if (_i18nBound || typeof document === 'undefined') return;
+  _i18nBound = true;
+  document.addEventListener('pe:i18n', () => initGlossary(root));
+}

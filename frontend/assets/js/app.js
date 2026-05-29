@@ -12,7 +12,7 @@ import {
   initKeyboardShortcuts,
 } from './common.js';
 import { initCommandPalette } from './commandPalette.js';
-import { initGlossary } from './glossary.js';
+import { initGlossary, bindGlossaryToI18n } from './glossary.js';
 import { gateAdminLink } from './adminGate.js';
 import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates, collectFormData } from './generators.js';
@@ -84,8 +84,9 @@ function init() {
   initChat();
   mountManualPlayground();
   // Glossário inline (#M-UX6): roda após o i18n para não ser sobrescrito ao
-  // aplicar as traduções nas descrições dos templates.
+  // aplicar as traduções nas descrições dos templates; re-renderiza ao trocar idioma.
   initGlossary();
+  bindGlossaryToI18n();
 
   // Degradação graciosa (#M8): sem backend configurado, avisa o usuário. A
   // geração de prompts pelos templates segue funcionando (é 100% client-side).

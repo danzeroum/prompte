@@ -31,23 +31,23 @@
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <h1>Prompt Engineering Pro</h1>
-    <span>Gerador de Prompts</span>
+    <h1 data-i18n="cozj5fo">Prompt Engineering Pro</h1>
+    <span data-i18n="c1gt8z06">Gerador de Prompts</span>
   </div>
 
   <!-- Busca de templates (#M16) -->
   <div class="sidebar-search">
-    <input type="search" id="templateSearch" placeholder="Buscar template..."
-      aria-label="Buscar template" oninput="filterTemplates(this.value)">
+    <input type="search" id="templateSearch" placeholder="Buscar template..." data-i18n="t1k8log8" data-i18n-attr="placeholder"
+      aria-label="Buscar template" data-i18n="t1urmdnq" data-i18n-attr="aria-label" oninput="filterTemplates(this.value)">
   </div>
 
   <!-- Navegação entre páginas -->
   <div class="sidebar-section">
     <div class="sidebar-section-title" data-i18n="gen.section.nav">Navegação</div>
-    <a class="sidebar-item" href="/index.html"><span class="icon" aria-hidden="true">&#x1f4ca;</span> Análise &amp; Gerador</a>
-    <a class="sidebar-item active" href="/generator.html"><span class="icon" aria-hidden="true">&#x1f680;</span> Gerador de Prompts</a>
-    <a class="sidebar-item" href="/manual.html"><span class="icon" aria-hidden="true">&#x1f4d6;</span> Manual</a>
-    <a class="sidebar-item" href="/admin.html" hidden><span class="icon" aria-hidden="true">&#x1f4c8;</span> Admin / Métricas</a>
+    <a class="sidebar-item" href="/index.html" data-i18n-html="c807ejp"><span class="icon" aria-hidden="true">&#x1f4ca;</span> Análise &amp; Gerador</a>
+    <a class="sidebar-item active" href="/generator.html" data-i18n-html="c1b6n567"><span class="icon" aria-hidden="true">&#x1f680;</span> Gerador de Prompts</a>
+    <a class="sidebar-item" href="/manual.html" data-i18n-html="c1y5yzbb"><span class="icon" aria-hidden="true">&#x1f4d6;</span> Manual</a>
+    <a class="sidebar-item" href="/admin.html" hidden data-i18n-html="c2u2ohy"><span class="icon" aria-hidden="true">&#x1f4c8;</span> Admin / Métricas</a>
   </div>
 
   <!-- Código Direto -->
@@ -169,23 +169,23 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="rc-linguagem">Linguagem <span class="required">*</span></label>
-          <input type="text" id="rc-linguagem" placeholder="Ex: Python, TypeScript, JavaScript...">
+          <label for="rc-linguagem" data-i18n-html="t1nsmgv6">Linguagem <span class="required">*</span></label>
+          <input type="text" id="rc-linguagem" placeholder="Ex: Python, TypeScript, JavaScript..." data-i18n="tks63lr" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="rc-contexto">Contexto <span class="required">*</span></label>
-          <input type="text" id="rc-contexto" placeholder="O que o codigo deveria fazer">
+          <label for="rc-contexto" data-i18n-html="t1gqbjcl">Contexto <span class="required">*</span></label>
+          <input type="text" id="rc-contexto" placeholder="O que o codigo deveria fazer" data-i18n="tnj3sw" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-group">
-        <label for="rc-codigo">Codigo <span class="required">*</span></label>
-        <textarea class="code-area" id="rc-codigo" placeholder="Cole seu codigo aqui..."></textarea>
+        <label for="rc-codigo" data-i18n-html="txlence">Codigo <span class="required">*</span></label>
+        <textarea class="code-area" id="rc-codigo" placeholder="Cole seu codigo aqui..." data-i18n="t1muu323" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label for="rc-problemas">Problemas que voce percebe (opcional)</label>
-        <textarea id="rc-problemas" rows="3" placeholder="Descreva os problemas que notou, um por linha..."></textarea>
+        <label for="rc-problemas" data-i18n-html="ta62md">Problemas que voce percebe (opcional)</label>
+        <textarea id="rc-problemas" rows="3" placeholder="Descreva os problemas que notou, um por linha..." data-i18n="t6qtmqt" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('revisao-correcao')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('revisao-correcao')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-revisao-correcao"></div>
     </div>
@@ -197,32 +197,32 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="mr-linguagem">Linguagem <span class="required">*</span></label>
-          <input type="text" id="mr-linguagem" placeholder="Ex: Python, TypeScript, JavaScript...">
+          <label for="mr-linguagem" data-i18n-html="t1nsmgv6">Linguagem <span class="required">*</span></label>
+          <input type="text" id="mr-linguagem" placeholder="Ex: Python, TypeScript, JavaScript..." data-i18n="tks63lr" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="mr-funcionalidade">O que o codigo faz <span class="required">*</span></label>
-          <input type="text" id="mr-funcionalidade" placeholder="Descreva a funcionalidade">
+          <label for="mr-funcionalidade" data-i18n-html="t1hd6qdq">O que o codigo faz <span class="required">*</span></label>
+          <input type="text" id="mr-funcionalidade" placeholder="Descreva a funcionalidade" data-i18n="t1gs0i94" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-group">
-        <label>Prioridades</label>
+        <label data-i18n="tvpariu">Prioridades</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="mr-perf" checked> Performance</label>
-          <label class="checkbox-item"><input type="checkbox" id="mr-legi" checked> Legibilidade</label>
-          <label class="checkbox-item"><input type="checkbox" id="mr-boas" checked> Boas praticas</label>
-          <label class="checkbox-item"><input type="checkbox" id="mr-seg"> Seguranca</label>
+          <label class="checkbox-item"><input type="checkbox" id="mr-perf" checked> <span data-i18n="t33mck0">Performance</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="mr-legi" checked> <span data-i18n="tnprl6l">Legibilidade</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="mr-boas" checked> <span data-i18n="tdmx676">Boas praticas</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="mr-seg"> <span data-i18n="ta78ct9">Seguranca</span></label>
         </div>
       </div>
       <div class="form-group">
-        <label for="mr-preocupacao">Preocupacao especifica (opcional)</label>
-        <input type="text" id="mr-preocupacao" placeholder="Ex: uso de memoria, complexidade O(n2)...">
+        <label for="mr-preocupacao" data-i18n-html="ty63tpk">Preocupacao especifica (opcional)</label>
+        <input type="text" id="mr-preocupacao" placeholder="Ex: uso de memoria, complexidade O(n2)..." data-i18n="tntzgla" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="mr-codigo">Codigo <span class="required">*</span></label>
-        <textarea class="code-area" id="mr-codigo" placeholder="Cole seu codigo aqui..."></textarea>
+        <label for="mr-codigo" data-i18n-html="txlence">Codigo <span class="required">*</span></label>
+        <textarea class="code-area" id="mr-codigo" placeholder="Cole seu codigo aqui..." data-i18n="t1muu323" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('melhoria-refatoracao')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('melhoria-refatoracao')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-melhoria-refatoracao"></div>
     </div>
@@ -234,34 +234,34 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="tg-linguagem">Linguagem <span class="required">*</span></label>
-          <input type="text" id="tg-linguagem" placeholder="Ex: Python, TypeScript, JavaScript...">
+          <label for="tg-linguagem" data-i18n-html="t1nsmgv6">Linguagem <span class="required">*</span></label>
+          <input type="text" id="tg-linguagem" placeholder="Ex: Python, TypeScript, JavaScript..." data-i18n="tks63lr" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="tg-indent">Indentacao</label>
+          <label for="tg-indent" data-i18n-html="t14wg23g">Indentacao</label>
           <select id="tg-indent">
-            <option value="espacos">Espacos</option>
-            <option value="tabs">Tabs</option>
+            <option value="espacos" data-i18n="t3i8bfs">Espacos</option>
+            <option value="tabs" data-i18n="t1jp9a">Tabs</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="tg-indent-size">Tamanho da indentacao</label>
+        <label for="tg-indent-size" data-i18n-html="thseedv">Tamanho da indentacao</label>
         <select id="tg-indent-size">
-          <option value="2">2 espacos</option>
-          <option value="4" selected>4 espacos</option>
-          <option value="8">8 espacos</option>
+          <option value="2" data-i18n="t16zjl0a">2 espacos</option>
+          <option value="4" selected data-i18n="t1i8flek">4 espacos</option>
+          <option value="8" data-i18n="t5p3k80">8 espacos</option>
         </select>
       </div>
       <div class="form-group">
-        <label for="tg-codigo">Codigo copiado da tela <span class="required">*</span></label>
-        <textarea class="code-area" id="tg-codigo" placeholder="Cole o codigo que copiou da tela..." style="min-height:240px;"></textarea>
+        <label for="tg-codigo" data-i18n-html="tlf03r2">Codigo copiado da tela <span class="required">*</span></label>
+        <textarea class="code-area" id="tg-codigo" placeholder="Cole o codigo que copiou da tela..." data-i18n="tzisqps" data-i18n-attr="placeholder" style="min-height:240px;"></textarea>
       </div>
       <div class="form-group">
-        <label for="tg-convencao">Convenoes do projeto (opcional)</label>
-        <input type="text" id="tg-convencao" placeholder="Ex: ESLint + Prettier, PEP8, Gofmt...">
+        <label for="tg-convencao" data-i18n-html="t1wd5c2">Convenoes do projeto (opcional)</label>
+        <input type="text" id="tg-convencao" placeholder="Ex: ESLint + Prettier, PEP8, Gofmt..." data-i18n="tntbc8c" data-i18n-attr="placeholder">
       </div>
-      <button class="btn-generate" onclick="generatePrompt('tela-para-github')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('tela-para-github')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-tela-para-github"></div>
     </div>
@@ -272,22 +272,22 @@
         Diagnostique erros no codigo com base na mensagem de erro e no comportamento observado.
       </div>
       <div class="form-group">
-        <label for="db-codigo">Codigo <span class="required">*</span></label>
-        <textarea class="code-area" id="db-codigo" placeholder="Cole seu codigo aqui..."></textarea>
+        <label for="db-codigo" data-i18n-html="txlence">Codigo <span class="required">*</span></label>
+        <textarea class="code-area" id="db-codigo" placeholder="Cole seu codigo aqui..." data-i18n="t1muu323" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label for="db-erro">Mensagem de erro exata <span class="required">*</span></label>
-        <textarea id="db-erro" rows="4" placeholder="Cole a mensagem de erro completa aqui..." style="font-family:'SF Mono','Cascadia Code','Fira Code','Consolas',monospace;font-size:12px;"></textarea>
+        <label for="db-erro" data-i18n-html="t1ul8s10">Mensagem de erro exata <span class="required">*</span></label>
+        <textarea id="db-erro" rows="4" placeholder="Cole a mensagem de erro completa aqui..." data-i18n="t1s2lutt" data-i18n-attr="placeholder" style="font-family:'SF Mono','Cascadia Code','Fira Code','Consolas',monospace;font-size:12px;"></textarea>
       </div>
       <div class="form-group">
-        <label for="db-esperado">Comportamento esperado <span class="required">*</span></label>
-        <textarea id="db-esperado" rows="2" placeholder="O que deveria acontecer"></textarea>
+        <label for="db-esperado" data-i18n-html="t1ez9zb4">Comportamento esperado <span class="required">*</span></label>
+        <textarea id="db-esperado" rows="2" placeholder="O que deveria acontecer" data-i18n="thnwe20" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label for="db-atual">Comportamento atual <span class="required">*</span></label>
-        <textarea id="db-atual" rows="2" placeholder="O que esta acontecendo"></textarea>
+        <label for="db-atual" data-i18n-html="t1oq98yc">Comportamento atual <span class="required">*</span></label>
+        <textarea id="db-atual" rows="2" placeholder="O que esta acontecendo" data-i18n="ty206j4" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('debug-erros')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('debug-erros')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-debug-erros"></div>
     </div>
@@ -299,27 +299,27 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="cz-tipo">Tipo de componente/funcao <span class="required">*</span></label>
-          <input type="text" id="cz-tipo" placeholder="Ex: hook customizado, API REST, component React...">
+          <label for="cz-tipo" data-i18n-html="t3dwrwb">Tipo de componente/funcao <span class="required">*</span></label>
+          <input type="text" id="cz-tipo" placeholder="Ex: hook customizado, API REST, component React..." data-i18n="ttjs72y" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="cz-linguagem">Linguagem/Framework <span class="required">*</span></label>
-          <input type="text" id="cz-linguagem" placeholder="Ex: TypeScript + React, Python + FastAPI...">
+          <label for="cz-linguagem" data-i18n-html="t3zr48h">Linguagem/Framework <span class="required">*</span></label>
+          <input type="text" id="cz-linguagem" placeholder="Ex: TypeScript + React, Python + FastAPI..." data-i18n="t1dlbest" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-group">
-        <label for="cz-funcionalidades">Funcionalidades (uma por linha) <span class="required">*</span></label>
-        <textarea id="cz-funcionalidades" rows="5" placeholder="1. Validar input do usuario&#10;2. Enviar dados para API&#10;3. Exibir feedback de erro"></textarea>
+        <label for="cz-funcionalidades" data-i18n-html="tk93ngb">Funcionalidades (uma por linha) <span class="required">*</span></label>
+        <textarea id="cz-funcionalidades" rows="5" placeholder="1. Validar input do usuario&#10;2. Enviar dados para API&#10;3. Exibir feedback de erro" data-i18n="t1q81wt7" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label for="cz-restricoes">Restricoes (opcional)</label>
-        <textarea id="cz-restricoes" rows="3" placeholder="Uma por linha. Ex:&#10;- Nao usar biblioteca X&#10;- Deve ser compativel com Y&#10;- Sem efeitos colaterais"></textarea>
+        <label for="cz-restricoes" data-i18n-html="tidobyj">Restricoes (opcional)</label>
+        <textarea id="cz-restricoes" rows="3" placeholder="Uma por linha. Ex:&#10;- Nao usar biblioteca X&#10;- Deve ser compativel com Y&#10;- Sem efeitos colaterais" data-i18n="tw7kku1" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label for="cz-estilo">Estilo / Convenoes (opcional)</label>
-        <input type="text" id="cz-estilo" placeholder="Ex: seguir ESLint do projeto, PEP8, Clean Architecture...">
+        <label for="cz-estilo" data-i18n-html="t1p8j7mj">Estilo / Convenoes (opcional)</label>
+        <input type="text" id="cz-estilo" placeholder="Ex: seguir ESLint do projeto, PEP8, Clean Architecture..." data-i18n="t11m71pc" data-i18n-attr="placeholder">
       </div>
-      <button class="btn-generate" onclick="generatePrompt('criar-do-zero')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('criar-do-zero')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-criar-do-zero"></div>
     </div>
@@ -331,33 +331,33 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="ec-linguagem">Linguagem <span class="required">*</span></label>
-          <input type="text" id="ec-linguagem" placeholder="Ex: Python, TypeScript, Rust...">
+          <label for="ec-linguagem" data-i18n-html="t1nsmgv6">Linguagem <span class="required">*</span></label>
+          <input type="text" id="ec-linguagem" placeholder="Ex: Python, TypeScript, Rust..." data-i18n="ta9ia2w" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="ec-nivel">Nivel de detalhe</label>
+          <label for="ec-nivel" data-i18n-html="t1td3l96">Nivel de detalhe</label>
           <select id="ec-nivel">
-            <option value="iniciante">Iniciante</option>
-            <option value="intermediario" selected>Intermediario</option>
-            <option value="avancado">Avancado</option>
+            <option value="iniciante" data-i18n="tkz3mvc">Iniciante</option>
+            <option value="intermediario" selected data-i18n="t1xo0bqo">Intermediario</option>
+            <option value="avancado" data-i18n="tujbi5n">Avancado</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="ec-foco">Foco da explicacao</label>
+        <label for="ec-foco" data-i18n-html="tf3badt">Foco da explicacao</label>
         <select id="ec-foco">
-          <option value="logica geral">Logica geral (visao panoramica)</option>
-          <option value="algoritmo especifico">Algoritmo especifico</option>
-          <option value="padrao de design">Padrao de design</option>
-          <option value="fluxo de dados">Fluxo de dados</option>
-          <option value="performance">Performance e otimizacoes</option>
+          <option value="logica geral" data-i18n="txqb1si">Logica geral (visao panoramica)</option>
+          <option value="algoritmo especifico" data-i18n="t1j94u3w">Algoritmo especifico</option>
+          <option value="padrao de design" data-i18n="tdmncfe">Padrao de design</option>
+          <option value="fluxo de dados" data-i18n="t1n1izs6">Fluxo de dados</option>
+          <option value="performance" data-i18n="tzck5rq">Performance e otimizacoes</option>
         </select>
       </div>
       <div class="form-group">
-        <label for="ec-codigo">Codigo <span class="required">*</span></label>
-        <textarea class="code-area" id="ec-codigo" placeholder="Cole o codigo que deseja entender..."></textarea>
+        <label for="ec-codigo" data-i18n-html="txlence">Codigo <span class="required">*</span></label>
+        <textarea class="code-area" id="ec-codigo" placeholder="Cole o codigo que deseja entender..." data-i18n="t1bqpuhh" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('explicar-codigo')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('explicar-codigo')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-explicar-codigo"></div>
     </div>
@@ -371,35 +371,35 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="ag-caminho">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="ag-caminho" placeholder="Ex: /home/z/my-project/meu-app">
+          <label for="ag-caminho" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="ag-caminho" placeholder="Ex: /home/z/my-project/meu-app" data-i18n="tpty8x5" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="ag-profundidade">Nivel de profundidade</label>
+          <label for="ag-profundidade" data-i18n-html="tqr37a">Nivel de profundidade</label>
           <select id="ag-profundidade">
-            <option value="resumida">Resumida</option>
-            <option value="moderada" selected>Moderada</option>
-            <option value="completa">Completa</option>
+            <option value="resumida" data-i18n="t1ujovim">Resumida</option>
+            <option value="moderada" selected data-i18n="t1pv5c1b">Moderada</option>
+            <option value="completa" data-i18n="t1q6petx">Completa</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label>Aspectos para analisar</label>
+        <label data-i18n="t1d7tqpb">Aspectos para analisar</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="ag-est" checked> Estrutura e organizacao</label>
-          <label class="checkbox-item"><input type="checkbox" id="ag-qual" checked> Qualidade do codigo</label>
-          <label class="checkbox-item"><input type="checkbox" id="ag-seg" checked> Seguranca</label>
-          <label class="checkbox-item"><input type="checkbox" id="ag-doc"> Documentacao</label>
-          <label class="checkbox-item"><input type="checkbox" id="ag-dep" checked> Dependencias</label>
-          <label class="checkbox-item"><input type="checkbox" id="ag-perf"> Performance</label>
-          <label class="checkbox-item"><input type="checkbox" id="ag-test"> Testes</label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-est" checked> <span data-i18n="t1mi8lhs">Estrutura e organizacao</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-qual" checked> <span data-i18n="t197jr5y">Qualidade do codigo</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-seg" checked> <span data-i18n="ta78ct9">Seguranca</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-doc"> <span data-i18n="t1de24y3">Documentacao</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-dep" checked> <span data-i18n="tb1rl59">Dependencias</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-perf"> <span data-i18n="t33mck0">Performance</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ag-test"> <span data-i18n="t15dfd28">Testes</span></label>
         </div>
       </div>
       <div class="form-group">
-        <label for="ag-contexto">Contexto adicional (opcional)</label>
-        <textarea id="ag-contexto" rows="2" placeholder="Ex: Projeto que herdei, sem documentacao..."></textarea>
+        <label for="ag-contexto" data-i18n-html="tj7nnzu">Contexto adicional (opcional)</label>
+        <textarea id="ag-contexto" rows="2" placeholder="Ex: Projeto que herdei, sem documentacao..." data-i18n="t3rf8de" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('analise-geral')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('analise-geral')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-analise-geral"></div>
     </div>
@@ -410,36 +410,36 @@
         Investigue algo especifico no repositorio: um modulo, um bug recorrente, ou prepare-se para um PR.
       </div>
       <div class="form-group">
-        <label for="ae-caminho">Caminho do repositorio <span class="required">*</span></label>
-        <input type="text" id="ae-caminho" placeholder="Ex: /home/z/my-project/api-server">
+        <label for="ae-caminho" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="ae-caminho" placeholder="Ex: /home/z/my-project/api-server" data-i18n="tnnux9a" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="ae-area">Area de interesse <span class="required">*</span></label>
-        <input type="text" id="ae-area" placeholder="Ex: src/auth/, arquivo X, pasta de services...">
+        <label for="ae-area" data-i18n-html="tn4oa9x">Area de interesse <span class="required">*</span></label>
+        <input type="text" id="ae-area" placeholder="Ex: src/auth/, arquivo X, pasta de services..." data-i18n="t155mlgk" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="ae-cenario">Cenario</label>
+        <label for="ae-cenario" data-i18n-html="t12itt8j">Cenario</label>
         <select id="ae-cenario">
-          <option value="personalizado">Personalizado (descreva abaixo)</option>
-          <option value="pre-pr">Revisao antes de PR</option>
-          <option value="investigacao">Investigacao de bug incidente</option>
-          <option value="onboarding">Onboarding / entender modulo</option>
+          <option value="personalizado" data-i18n="tyn2ou3">Personalizado (descreva abaixo)</option>
+          <option value="pre-pr" data-i18n="tgibsh">Revisao antes de PR</option>
+          <option value="investigacao" data-i18n="t1lthdz9">Investigacao de bug incidente</option>
+          <option value="onboarding" data-i18n="te0g3oj">Onboarding / entender modulo</option>
         </select>
       </div>
       <div class="form-group">
-        <label for="ae-contexto">Contexto / Problema motivador</label>
-        <textarea id="ae-contexto" rows="4" placeholder="Descreva o problema que motivou esta analise...&#10;Ex: Tivemos 3 incidentes de login falhando na ultima semana."></textarea>
+        <label for="ae-contexto" data-i18n-html="t1ihkot4">Contexto / Problema motivador</label>
+        <textarea id="ae-contexto" rows="4" placeholder="Descreva o problema que motivou esta analise...&#10;Ex: Tivemos 3 incidentes de login falhando na ultima semana." data-i18n="t1pe7nqd" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Entregaveis esperados</label>
+        <label data-i18n="t51f3d3">Entregaveis esperados</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="ae-lista" checked> Lista de problemas com severidade</label>
-          <label class="checkbox-item"><input type="checkbox" id="ae-sugestoes" checked> Sugestoes de correcao</label>
-          <label class="checkbox-item"><input type="checkbox" id="ae-codigo"> Codigo corrigido pronto</label>
-          <label class="checkbox-item"><input type="checkbox" id="ae-mapadep"> Mapa de dependencias</label>
+          <label class="checkbox-item"><input type="checkbox" id="ae-lista" checked> <span data-i18n="t1p7z2xy">Lista de problemas com severidade</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ae-sugestoes" checked> <span data-i18n="t1nsxkib">Sugestoes de correcao</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ae-codigo"> <span data-i18n="tmwfiop">Codigo corrigido pronto</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ae-mapadep"> <span data-i18n="tzlakc1">Mapa de dependencias</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('analise-especifica')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('analise-especifica')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-analise-especifica"></div>
     </div>
@@ -450,32 +450,32 @@
         Compare duas versoes, branches ou estados de um repositorio para identificar mudancas significativas.
       </div>
       <div class="form-group">
-        <label for="ac-caminho">Caminho do repositorio <span class="required">*</span></label>
-        <input type="text" id="ac-caminho" placeholder="Ex: /home/z/my-project/ecommerce">
+        <label for="ac-caminho" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="ac-caminho" placeholder="Ex: /home/z/my-project/ecommerce" data-i18n="tgl8tko" data-i18n-attr="placeholder">
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="ac-branchA">Branch / Pasta A <span class="required">*</span></label>
-          <input type="text" id="ac-branchA" placeholder="Ex: main, src/v1/...">
+          <label for="ac-branchA" data-i18n-html="t13zeol2">Branch / Pasta A <span class="required">*</span></label>
+          <input type="text" id="ac-branchA" placeholder="Ex: main, src/v1/..." data-i18n="t3pgle3" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="ac-branchB">Branch / Pasta B <span class="required">*</span></label>
-          <input type="text" id="ac-branchB" placeholder="Ex: feature/payments, src/v2/...">
+          <label for="ac-branchB" data-i18n-html="t3vawon">Branch / Pasta B <span class="required">*</span></label>
+          <input type="text" id="ac-branchB" placeholder="Ex: feature/payments, src/v2/..." data-i18n="t15flpo9" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-group">
-        <label>Aspectos para comparar</label>
+        <label data-i18n="t1k8yfjh">Aspectos para comparar</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="ac-arq" checked> Mudancas de arquitetura</label>
-          <label class="checkbox-item"><input type="checkbox" id="ac-reg" checked> Regressoes potenciais</label>
-          <label class="checkbox-item"><input type="checkbox" id="ac-perf" checked> Performance</label>
-          <label class="checkbox-item"><input type="checkbox" id="ac-dep" checked> Novas dependencias</label>
-          <label class="checkbox-item"><input type="checkbox" id="ac-schema"> Mudancas no schema do BD</label>
-          <label class="checkbox-item"><input type="checkbox" id="ac-test"> Impacto nos testes</label>
-          <label class="checkbox-item"><input type="checkbox" id="ac-api"> Impacto nas rotas/API</label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-arq" checked> <span data-i18n="t1sfivl6">Mudancas de arquitetura</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-reg" checked> <span data-i18n="td8trkh">Regressoes potenciais</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-perf" checked> <span data-i18n="t33mck0">Performance</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-dep" checked> <span data-i18n="tk4auti">Novas dependencias</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-schema"> <span data-i18n="t1a158g3">Mudancas no schema do BD</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-test"> <span data-i18n="t1myq0ed">Impacto nos testes</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ac-api"> <span data-i18n="t1lekn4t">Impacto nas rotas/API</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('analise-comparativa')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('analise-comparativa')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-analise-comparativa"></div>
     </div>
@@ -486,28 +486,28 @@
         Proponha refatoracoes completas com codigo pronto, priorizando os criterios que voce definir.
       </div>
       <div class="form-group">
-        <label for="ro-caminho">Caminho do repositorio <span class="required">*</span></label>
-        <input type="text" id="ro-caminho" placeholder="Ex: /home/z/my-project/bot-service">
+        <label for="ro-caminho" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="ro-caminho" placeholder="Ex: /home/z/my-project/bot-service" data-i18n="tn3z9d3" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label>Prioridade</label>
+        <label data-i18n="t1d51xkt">Prioridade</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="ro-manut"> Manutenibilidade</label>
-          <label class="checkbox-item"><input type="checkbox" id="ro-perf"> Performance</label>
-          <label class="checkbox-item"><input type="checkbox" id="ro-legi"> Legibilidade</label>
-          <label class="checkbox-item"><input type="checkbox" id="ro-seg"> Seguranca</label>
-          <label class="checkbox-item"><input type="checkbox" id="ro-todos"> Todas as anteriores</label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-manut"> <span data-i18n="tc1txux">Manutenibilidade</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-perf"> <span data-i18n="t33mck0">Performance</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-legi"> <span data-i18n="tnprl6l">Legibilidade</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-seg"> <span data-i18n="ta78ct9">Seguranca</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ro-todos"> <span data-i18n="t1ft513j">Todas as anteriores</span></label>
         </div>
       </div>
       <div class="form-group">
-        <label for="ro-restricoes">Restricoes (uma por linha)</label>
-        <textarea id="ro-restricoes" rows="3" placeholder="Ex:&#10;- Nao alterar a interface publica das APIs&#10;- Manter compatibilidade com PostgreSQL 14+&#10;- Nao adicionar dependencias externas"></textarea>
+        <label for="ro-restricoes" data-i18n-html="tzu3500">Restricoes (uma por linha)</label>
+        <textarea id="ro-restricoes" rows="3" placeholder="Ex:&#10;- Nao alterar a interface publica das APIs&#10;- Manter compatibilidade com PostgreSQL 14+&#10;- Nao adicionar dependencias externas" data-i18n="t1aokd6l" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label for="ro-area">Area especifica (opcional)</label>
-        <input type="text" id="ro-area" placeholder="Deixe em branco para analisar o repo inteiro, ou especifique pasta/arquivo">
+        <label for="ro-area" data-i18n-html="thnh5qr">Area especifica (opcional)</label>
+        <input type="text" id="ro-area" placeholder="Deixe em branco para analisar o repo inteiro, ou especifique pasta/arquivo" data-i18n="t1ykzhty" data-i18n-attr="placeholder">
       </div>
-      <button class="btn-generate" onclick="generatePrompt('refatoracao-orientada')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('refatoracao-orientada')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-refatoracao-orientada"></div>
     </div>
@@ -521,29 +521,29 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="da-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="da-repo" placeholder="Ex: /home/z/my-project/frontend">
+          <label for="da-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="da-repo" placeholder="Ex: /home/z/my-project/frontend" data-i18n="t6nu93u" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="da-arquivo">Caminho do arquivo <span class="required">*</span></label>
-          <input type="text" id="da-arquivo" placeholder="Ex: src/services/auth.ts">
+          <label for="da-arquivo" data-i18n-html="tib47xu">Caminho do arquivo <span class="required">*</span></label>
+          <input type="text" id="da-arquivo" placeholder="Ex: src/services/auth.ts" data-i18n="tbgwvvc" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-group">
-        <label>Foco da analise</label>
+        <label data-i18n="t5goxwr">Foco da analise</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="da-perf" checked> Performance</label>
-          <label class="checkbox-item"><input type="checkbox" id="da-legi" checked> Legibilidade</label>
-          <label class="checkbox-item"><input type="checkbox" id="da-seg" checked> Seguranca</label>
-          <label class="checkbox-item"><input type="checkbox" id="da-padr" checked> Padronizacao</label>
-          <label class="checkbox-item"><input type="checkbox" id="da-anti" checked> Anti-padroes</label>
+          <label class="checkbox-item"><input type="checkbox" id="da-perf" checked> <span data-i18n="t33mck0">Performance</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="da-legi" checked> <span data-i18n="tnprl6l">Legibilidade</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="da-seg" checked> <span data-i18n="ta78ct9">Seguranca</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="da-padr" checked> <span data-i18n="t1inesfz">Padronizacao</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="da-anti" checked> <span data-i18n="t1056y5v">Anti-padroes</span></label>
         </div>
       </div>
       <div class="form-group">
-        <label for="da-obs">Observacoes adicionais (opcional)</label>
-        <textarea id="da-obs" rows="2" placeholder="Ex: Esse arquivo foi recentemente modificado por outro dev..."></textarea>
+        <label for="da-obs" data-i18n-html="t2hx142">Observacoes adicionais (opcional)</label>
+        <textarea id="da-obs" rows="2" placeholder="Ex: Esse arquivo foi recentemente modificado por outro dev..." data-i18n="t1gh1tnj" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('diff-arquivo')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('diff-arquivo')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-arquivo"></div>
     </div>
@@ -554,34 +554,34 @@
         Analise um diretorio inteiro, identifique inconsistencias e gere diffs completos para cada arquivo.
       </div>
       <div class="form-group">
-        <label for="dm-repo">Caminho do repositorio <span class="required">*</span></label>
-        <input type="text" id="dm-repo" placeholder="Ex: /home/z/my-project/api-server">
+        <label for="dm-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="dm-repo" placeholder="Ex: /home/z/my-project/api-server" data-i18n="tnnux9a" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="dm-dir">Caminho do diretorio <span class="required">*</span></label>
-        <input type="text" id="dm-dir" placeholder="Ex: src/services/ ou src/modules/auth/">
+        <label for="dm-dir" data-i18n-html="t847yru">Caminho do diretorio <span class="required">*</span></label>
+        <input type="text" id="dm-dir" placeholder="Ex: src/services/ ou src/modules/auth/" data-i18n="t2p45jh" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="dm-contexto">O que esse modulo faz (contexto)</label>
-        <textarea id="dm-contexto" rows="2" placeholder="Ex: Gerencia autenticacao JWT com refresh tokens..."></textarea>
+        <label for="dm-contexto" data-i18n-html="tbehyws">O que esse modulo faz (contexto)</label>
+        <textarea id="dm-contexto" rows="2" placeholder="Ex: Gerencia autenticacao JWT com refresh tokens..." data-i18n="t14tbnw5" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="dm-ling">Linguagem/Framework</label>
-          <input type="text" id="dm-ling" placeholder="Ex: TypeScript / Node.js">
+          <label for="dm-ling" data-i18n-html="t15n21x8">Linguagem/Framework</label>
+          <input type="text" id="dm-ling" placeholder="Ex: TypeScript / Node.js" data-i18n="t127he4i" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="dm-preoc">Preocupacao principal</label>
+          <label for="dm-preoc" data-i18n-html="tx14t00">Preocupacao principal</label>
           <select id="dm-preoc">
-            <option value="">Nenhuma especifica</option>
-            <option value="performance">Performance</option>
-            <option value="bugs">Bugs / erros recorrentes</option>
-            <option value="debito">Debito tecnico</option>
-            <option value="seguranca">Seguranca</option>
+            <option value="" data-i18n="tv5qd82">Nenhuma especifica</option>
+            <option value="performance" data-i18n="t33mck0">Performance</option>
+            <option value="bugs" data-i18n="t1bzvdzl">Bugs / erros recorrentes</option>
+            <option value="debito" data-i18n="t1go7hj0">Debito tecnico</option>
+            <option value="seguranca" data-i18n="ta78ct9">Seguranca</option>
           </select>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('diff-modulo')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('diff-modulo')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-modulo"></div>
     </div>
@@ -593,61 +593,61 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="dr-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="dr-repo" placeholder="Ex: /home/z/my-project/frontend">
+          <label for="dr-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="dr-repo" placeholder="Ex: /home/z/my-project/frontend" data-i18n="t6nu93u" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="dr-comp">Caminho do componente <span class="required">*</span></label>
-          <input type="text" id="dr-comp" placeholder="Ex: src/components/LoginForm.tsx">
+          <label for="dr-comp" data-i18n-html="t1muw2nh">Caminho do componente <span class="required">*</span></label>
+          <input type="text" id="dr-comp" placeholder="Ex: src/components/LoginForm.tsx" data-i18n="t4yt7qb" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="dr-framework">Framework</label>
+          <label for="dr-framework" data-i18n-html="t166adpa">Framework</label>
           <select id="dr-framework">
-            <option value="Next.js 14">Next.js 14</option>
-            <option value="Next.js 15">Next.js 15</option>
-            <option value="React 18">React 18</option>
-            <option value="React 19">React 19</option>
-            <option value="Remix">Remix</option>
-            <option value="Outro">Outro (especifique nas obs)</option>
+            <option value="Next.js 14" data-i18n="t1tf7pvj">Next.js 14</option>
+            <option value="Next.js 15" data-i18n="t1tf7pvk">Next.js 15</option>
+            <option value="React 18" data-i18n="t1lr2b9k">React 18</option>
+            <option value="React 19" data-i18n="t1lr2b9l">React 19</option>
+            <option value="Remix" data-i18n="t1axxrd">Remix</option>
+            <option value="Outro" data-i18n="t1tlsrl3">Outro (especifique nas obs)</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="dr-estilo">Estilo UI</label>
+          <label for="dr-estilo" data-i18n-html="tmthbam">Estilo UI</label>
           <select id="dr-estilo">
-            <option value="shadcn/ui + Tailwind">shadcn/ui + Tailwind</option>
-            <option value="Material UI">Material UI</option>
-            <option value="Chakra UI">Chakra UI</option>
-            <option value="CSS Modules">CSS Modules</option>
-            <option value="Styled Components">Styled Components</option>
-            <option value="Outro">Outro (especifique nas obs)</option>
+            <option value="shadcn/ui + Tailwind" data-i18n="t743k31">shadcn/ui + Tailwind</option>
+            <option value="Material UI" data-i18n="t1k8ojd9">Material UI</option>
+            <option value="Chakra UI" data-i18n="t1jyc9au">Chakra UI</option>
+            <option value="CSS Modules" data-i18n="t1rx7zu2">CSS Modules</option>
+            <option value="Styled Components" data-i18n="te83r7n">Styled Components</option>
+            <option value="Outro" data-i18n="t1tlsrl3">Outro (especifique nas obs)</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="dr-estado">Gerenciamento de estado</label>
+        <label for="dr-estado" data-i18n-html="th0uaxk">Gerenciamento de estado</label>
         <select id="dr-estado">
-          <option value="deixe descobrir">Deixe a LLM descobrir</option>
-          <option value="Zustand">Zustand</option>
-          <option value="React Context">React Context</option>
-          <option value="Redux">Redux</option>
-          <option value="Jotai">Jotai</option>
-          <option value="TanStack Query">TanStack Query</option>
+          <option value="deixe descobrir" data-i18n="tkq0hei">Deixe a LLM descobrir</option>
+          <option value="Zustand" data-i18n="tsm6s0r">Zustand</option>
+          <option value="React Context" data-i18n="t6zrm4u">React Context</option>
+          <option value="Redux" data-i18n="t1axrdg">Redux</option>
+          <option value="Jotai" data-i18n="t16q3vb">Jotai</option>
+          <option value="TanStack Query" data-i18n="tw3nrnz">TanStack Query</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Foco da refatoracao</label>
+        <label data-i18n="t8ek6pt">Foco da refatoracao</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="dr-logica"> Separar logica de apresentacao</label>
-          <label class="checkbox-item"><input type="checkbox" id="dr-hooks"> Extrair hooks customizados</label>
-          <label class="checkbox-item"><input type="checkbox" id="dr-tipo"> Melhorar tipagem TypeScript</label>
-          <label class="checkbox-item"><input type="checkbox" id="dr-rend"> Otimizar re-renders</label>
-          <label class="checkbox-item"><input type="checkbox" id="dr-a11y"> Acessibilidade (a11y)</label>
-          <label class="checkbox-item"><input type="checkbox" id="dr-error"> Error boundaries</label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-logica"> <span data-i18n="tdyijsc">Separar logica de apresentacao</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-hooks"> <span data-i18n="ts721z4">Extrair hooks customizados</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-tipo"> <span data-i18n="t1dssfhw">Melhorar tipagem TypeScript</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-rend"> <span data-i18n="tq1uvnc">Otimizar re-renders</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-a11y"> <span data-i18n="tmd82m9">Acessibilidade (a11y)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dr-error"> <span data-i18n="t12vjybk">Error boundaries</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('diff-react')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('diff-react')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-react"></div>
     </div>
@@ -659,66 +659,66 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="di-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="di-repo" placeholder="Ex: /home/z/my-project/api-server">
+          <label for="di-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="di-repo" placeholder="Ex: /home/z/my-project/api-server" data-i18n="tnnux9a" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="di-arquivo">Arquivo/Endpoint <span class="required">*</span></label>
-          <input type="text" id="di-arquivo" placeholder="Ex: src/routes/auth.ts ou src/controllers/UserController.ts">
+          <label for="di-arquivo" data-i18n-html="tgyzugc">Arquivo/Endpoint <span class="required">*</span></label>
+          <input type="text" id="di-arquivo" placeholder="Ex: src/routes/auth.ts ou src/controllers/UserController.ts" data-i18n="taagr1h" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="di-framework">Framework</label>
+          <label for="di-framework" data-i18n-html="t166adpa">Framework</label>
           <select id="di-framework">
-            <option value="Express">Express</option>
-            <option value="FastAPI">FastAPI</option>
-            <option value="NestJS">NestJS</option>
-            <option value="Django">Django</option>
-            <option value="Flask">Flask</option>
-            <option value="Spring Boot">Spring Boot</option>
-            <option value="Outro">Outro (especifique nas obs)</option>
+            <option value="Express" data-i18n="t5vrbrk">Express</option>
+            <option value="FastAPI" data-i18n="t9ps73y">FastAPI</option>
+            <option value="NestJS" data-i18n="t12j5m0x">NestJS</option>
+            <option value="Django" data-i18n="txv4rjv">Django</option>
+            <option value="Flask" data-i18n="t14gmvn">Flask</option>
+            <option value="Spring Boot" data-i18n="tem9fl1">Spring Boot</option>
+            <option value="Outro" data-i18n="t1tlsrl3">Outro (especifique nas obs)</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="di-db">Banco de dados</label>
+          <label for="di-db" data-i18n-html="t18oz6sx">Banco de dados</label>
           <select id="di-db">
-            <option value="PostgreSQL com Prisma">PostgreSQL + Prisma</option>
-            <option value="PostgreSQL com TypeORM">PostgreSQL + TypeORM</option>
-            <option value="MySQL">MySQL</option>
-            <option value="MongoDB">MongoDB</option>
-            <option value="SQLite">SQLite</option>
-            <option value="Outro">Outro (especifique nas obs)</option>
+            <option value="PostgreSQL com Prisma" data-i18n="t4l7ku9">PostgreSQL + Prisma</option>
+            <option value="PostgreSQL com TypeORM" data-i18n="t1qbsbjj">PostgreSQL + TypeORM</option>
+            <option value="MySQL" data-i18n="t18j6n6">MySQL</option>
+            <option value="MongoDB" data-i18n="t1bz4i8i">MongoDB</option>
+            <option value="SQLite" data-i18n="t14koqi4">SQLite</option>
+            <option value="Outro" data-i18n="t1tlsrl3">Outro (especifique nas obs)</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="di-auth">Autenticacao</label>
+        <label for="di-auth" data-i18n-html="t10udat1">Autenticacao</label>
         <select id="di-auth">
-          <option value="JWT">JWT</option>
-          <option value="OAuth2">OAuth2</option>
-          <option value="Session-based">Session-based</option>
-          <option value="API Key">API Key</option>
-          <option value="Nenhuma">Nenhuma</option>
-          <option value="Outro">Outro (especifique nas obs)</option>
+          <option value="JWT" data-i18n="t1l0n">JWT</option>
+          <option value="OAuth2" data-i18n="t12gfxq3">OAuth2</option>
+          <option value="Session-based" data-i18n="t1rmapi4">Session-based</option>
+          <option value="API Key" data-i18n="t1xnojdl">API Key</option>
+          <option value="Nenhuma" data-i18n="t1lx3cyg">Nenhuma</option>
+          <option value="Outro" data-i18n="t1tlsrl3">Outro (especifique nas obs)</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Foco da analise</label>
+        <label data-i18n="t5goxwr">Foco da analise</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="di-val" checked> Validacao de input</label>
-          <label class="checkbox-item"><input type="checkbox" id="di-err" checked> Tratamento de erros</label>
-          <label class="checkbox-item"><input type="checkbox" id="di-sec" checked> Seguranca</label>
-          <label class="checkbox-item"><input type="checkbox" id="di-perf"> Performance (N+1, paginacao)</label>
-          <label class="checkbox-item"><input type="checkbox" id="di-log"> Logging e monitoramento</label>
-          <label class="checkbox-item"><input type="checkbox" id="di-contr"> Contratos de resposta</label>
+          <label class="checkbox-item"><input type="checkbox" id="di-val" checked> <span data-i18n="t1hd0eov">Validacao de input</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="di-err" checked> <span data-i18n="t1p4xu1">Tratamento de erros</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="di-sec" checked> <span data-i18n="ta78ct9">Seguranca</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="di-perf"> <span data-i18n="t1profpq">Performance (N+1, paginacao)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="di-log"> <span data-i18n="tki0bri">Logging e monitoramento</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="di-contr"> <span data-i18n="tmdqnef">Contratos de resposta</span></label>
         </div>
       </div>
       <div class="form-group">
-        <label for="di-obs">Observacoes adicionais (opcional)</label>
-        <textarea id="di-obs" rows="2" placeholder="Ex: Esse endpoint tem SLA de 200ms..."></textarea>
+        <label for="di-obs" data-i18n-html="t2hx142">Observacoes adicionais (opcional)</label>
+        <textarea id="di-obs" rows="2" placeholder="Ex: Esse endpoint tem SLA de 200ms..." data-i18n="t18l5qqd" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('diff-api')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('diff-api')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-api"></div>
     </div>
@@ -730,31 +730,31 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="dt-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="dt-repo" placeholder="Ex: /home/z/my-project/api-server">
+          <label for="dt-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="dt-repo" placeholder="Ex: /home/z/my-project/api-server" data-i18n="tnnux9a" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="dt-arquivo">Arquivo de teste <span class="required">*</span></label>
-          <input type="text" id="dt-arquivo" placeholder="Ex: src/__tests__/auth.test.ts">
+          <label for="dt-arquivo" data-i18n-html="txm6lss">Arquivo de teste <span class="required">*</span></label>
+          <input type="text" id="dt-arquivo" placeholder="Ex: src/__tests__/auth.test.ts" data-i18n="t74dhqf" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-group">
-        <label for="dt-framework">Framework de testes</label>
+        <label for="dt-framework" data-i18n-html="t1gu9fnh">Framework de testes</label>
         <select id="dt-framework">
-          <option value="deixe descobrir">Deixe a LLM descobrir</option>
-          <option value="Jest">Jest</option>
-          <option value="Vitest">Vitest</option>
-          <option value="Pytest">Pytest</option>
-          <option value="Cypress">Cypress</option>
-          <option value="Playwright">Playwright</option>
-          <option value="Testing Library">Testing Library</option>
+          <option value="deixe descobrir" data-i18n="tkq0hei">Deixe a LLM descobrir</option>
+          <option value="Jest" data-i18n="t1derg">Jest</option>
+          <option value="Vitest" data-i18n="t16dq4f9">Vitest</option>
+          <option value="Pytest" data-i18n="t13s93jv">Pytest</option>
+          <option value="Cypress" data-i18n="t1c14fot">Cypress</option>
+          <option value="Playwright" data-i18n="t54qkwp">Playwright</option>
+          <option value="Testing Library" data-i18n="tnb96y3">Testing Library</option>
         </select>
       </div>
       <div class="form-group">
-        <label for="dt-problemas">Problemas que voce percebe (opcional)</label>
-        <textarea id="dt-problemas" rows="3" placeholder="Ex:&#10;- Testes quebram com frequencia&#10;- Nao testam casos de erro&#10;- Mocks excessivos"></textarea>
+        <label for="dt-problemas" data-i18n-html="ta62md">Problemas que voce percebe (opcional)</label>
+        <textarea id="dt-problemas" rows="3" placeholder="Ex:&#10;- Testes quebram com frequencia&#10;- Nao testam casos de erro&#10;- Mocks excessivos" data-i18n="t1490751" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('diff-testes')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('diff-testes')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-testes"></div>
     </div>
@@ -766,34 +766,34 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="dp-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="dp-repo" placeholder="Ex: /home/z/my-project/api-server">
+          <label for="dp-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="dp-repo" placeholder="Ex: /home/z/my-project/api-server" data-i18n="tnnux9a" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="dp-arquivo">Arquivo para analisar <span class="required">*</span></label>
-          <input type="text" id="dp-arquivo" placeholder="Ex: src/services/ReportGenerator.ts">
+          <label for="dp-arquivo" data-i18n-html="tv7qimt">Arquivo para analisar <span class="required">*</span></label>
+          <input type="text" id="dp-arquivo" placeholder="Ex: src/services/ReportGenerator.ts" data-i18n="t49ou9n" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="dp-freq">Frequencia de execucao</label>
+          <label for="dp-freq" data-i18n-html="tu2xhk1">Frequencia de execucao</label>
           <select id="dp-freq">
-            <option value="a cada request">A cada request</option>
-            <option value="em background">Em background / batch</option>
-            <option value="periodico">Periodico (cron/job)</option>
-            <option value="sob demanda">Sob demanda (trigger manual)</option>
+            <option value="a cada request" data-i18n="tsc1f0p">A cada request</option>
+            <option value="em background" data-i18n="t181ygkv">Em background / batch</option>
+            <option value="periodico" data-i18n="tn2qfdd">Periodico (cron/job)</option>
+            <option value="sob demanda" data-i18n="tm1obqv">Sob demanda (trigger manual)</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="dp-volume">Volume esperado</label>
-          <input type="text" id="dp-volume" placeholder="Ex: 10k requests/dia, 1M registros...">
+          <label for="dp-volume" data-i18n-html="t5xqchv">Volume esperado</label>
+          <input type="text" id="dp-volume" placeholder="Ex: 10k requests/dia, 1M registros..." data-i18n="twzffs0" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-group">
-        <label for="dp-gargalo">Gargalo percebido</label>
-        <textarea id="dp-gargalo" rows="2" placeholder="Ex: Resposta lenta acima de 2s, alto uso de CPU, timeout..."></textarea>
+        <label for="dp-gargalo" data-i18n-html="t122treu">Gargalo percebido</label>
+        <textarea id="dp-gargalo" rows="2" placeholder="Ex: Resposta lenta acima de 2s, alto uso de CPU, timeout..." data-i18n="tvsgsvc" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('diff-performance')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('diff-performance')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-performance"></div>
     </div>
@@ -804,30 +804,30 @@
         Analise completa e flexivel: gera diffs prontos para aplicar em qualquer escopo do repositorio.
       </div>
       <div class="form-group">
-        <label for="dc-repo">Caminho do repositorio <span class="required">*</span></label>
-        <input type="text" id="dc-repo" placeholder="Ex: /home/z/my-project/frontend">
+        <label for="dc-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="dc-repo" placeholder="Ex: /home/z/my-project/frontend" data-i18n="t6nu93u" data-i18n-attr="placeholder">
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="dc-escopo">Arquivos / Diretorios</label>
-          <input type="text" id="dc-escopo" placeholder="Ex: src/services/auth/* ou caminho especifico">
+          <label for="dc-escopo" data-i18n-html="t1t791ax">Arquivos / Diretorios</label>
+          <input type="text" id="dc-escopo" placeholder="Ex: src/services/auth/* ou caminho especifico" data-i18n="tdnpilj" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="dc-tipo">Tipo de melhoria</label>
+          <label for="dc-tipo" data-i18n-html="t1xu6xxe">Tipo de melhoria</label>
           <select id="dc-tipo">
-            <option value="tudo">Tudo (refatoracao + performance + seguranca)</option>
-            <option value="refatoracao">Refatoracao</option>
-            <option value="performance">Performance</option>
-            <option value="seguranca">Seguranca</option>
-            <option value="legibilidade">Legibilidade</option>
+            <option value="tudo" data-i18n="t1aihsyp">Tudo (refatoracao + performance + seguranca)</option>
+            <option value="refatoracao" data-i18n="th7dkex">Refatoracao</option>
+            <option value="performance" data-i18n="t33mck0">Performance</option>
+            <option value="seguranca" data-i18n="ta78ct9">Seguranca</option>
+            <option value="legibilidade" data-i18n="tnprl6l">Legibilidade</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="dc-contexto">Contexto adicional (opcional)</label>
-        <textarea id="dc-contexto" rows="3" placeholder="Ex:&#10;- Preparando para PR&#10;- Removendo debito tecnico antes da v2&#10;- Após incidente de seguranca"></textarea>
+        <label for="dc-contexto" data-i18n-html="tj7nnzu">Contexto adicional (opcional)</label>
+        <textarea id="dc-contexto" rows="3" placeholder="Ex:&#10;- Preparando para PR&#10;- Removendo debito tecnico antes da v2&#10;- Após incidente de seguranca" data-i18n="t1ua6lw" data-i18n-attr="placeholder"></textarea>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('diff-canivete')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('diff-canivete')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-canivete"></div>
     </div>
@@ -841,40 +841,40 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="cl-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="cl-repo" placeholder="Ex: /home/z/my-project/app">
+          <label for="cl-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="cl-repo" placeholder="Ex: /home/z/my-project/app" data-i18n="t3437vd" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="cl-provider">Provedor de Nuvem</label>
+          <label for="cl-provider" data-i18n-html="trp32y5">Provedor de Nuvem</label>
           <select id="cl-provider">
-            <option value="">Nao especificar</option>
-            <option value="AWS">AWS</option>
-            <option value="Azure">Azure</option>
-            <option value="GCP">Google Cloud</option>
-            <option value="Multi-cloud">Multi-cloud</option>
+            <option value="" data-i18n="t1ogrpic">Nao especificar</option>
+            <option value="AWS" data-i18n="t1ecd">AWS</option>
+            <option value="Azure" data-i18n="t11z0j3">Azure</option>
+            <option value="GCP" data-i18n="tdmr0jy">Google Cloud</option>
+            <option value="Multi-cloud" data-i18n="t511gu9">Multi-cloud</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="cl-arquivo">Arquivo ou diretorio <span class="required">*</span></label>
-        <input type="text" id="cl-arquivo" placeholder="Ex: src/ ou infra/terraform/">
+        <label for="cl-arquivo" data-i18n-html="t2v1nar">Arquivo ou diretorio <span class="required">*</span></label>
+        <input type="text" id="cl-arquivo" placeholder="Ex: src/ ou infra/terraform/" data-i18n="t177roig" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="cl-contexto">Contexto <span class="required">*</span></label>
-        <textarea id="cl-contexto" rows="3" placeholder="Ex: Migrando para nuvem, preciso garantir seguranca e compliance..."></textarea>
+        <label for="cl-contexto" data-i18n-html="t1gqbjcl">Contexto <span class="required">*</span></label>
+        <textarea id="cl-contexto" rows="3" placeholder="Ex: Migrando para nuvem, preciso garantir seguranca e compliance..." data-i18n="t17ul83f" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Aspectos para verificar</label>
+        <label data-i18n="tya2u33">Aspectos para verificar</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="cl-sec" checked> Seguranca (IAM, criptografia, flags)</label>
-          <label class="checkbox-item"><input type="checkbox" id="cl-model"> Modelo de servico (SaaS/PaaS/IaaS)</label>
-          <label class="checkbox-item"><input type="checkbox" id="cl-mig"> Preparacao para migracao</label>
-          <label class="checkbox-item"><input type="checkbox" id="cl-comp"> Compliance (LGPD, NIST, BACEN)</label>
-          <label class="checkbox-item"><input type="checkbox" id="cl-iac"> Infra as Code (Terraform/CloudFormation)</label>
-          <label class="checkbox-item"><input type="checkbox" id="cl-cont"> Containers (Docker/K8s)</label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-sec" checked> <span data-i18n="t1fe5jyr">Seguranca (IAM, criptografia, flags)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-model"> <span data-i18n="t1sh0w4g">Modelo de servico (SaaS/PaaS/IaaS)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-mig"> <span data-i18n="tqc6s1x">Preparacao para migracao</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-comp"> <span data-i18n="tvksmuq">Compliance (LGPD, NIST, BACEN)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-iac"> <span data-i18n="tv4dfgf">Infra as Code (Terraform/CloudFormation)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="cl-cont"> <span data-i18n="t1cqxwuw">Containers (Docker/K8s)</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('cloud-review')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('cloud-review')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-cloud-review"></div>
     </div>
@@ -886,29 +886,29 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="rq-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="rq-repo" placeholder="Ex: /home/z/my-project/app">
+          <label for="rq-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="rq-repo" placeholder="Ex: /home/z/my-project/app" data-i18n="t3437vd" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="rq-arquivo">Arquivo ou modulo <span class="required">*</span></label>
-          <input type="text" id="rq-arquivo" placeholder="Ex: src/features/auth/">
+          <label for="rq-arquivo" data-i18n-html="tein3ma">Arquivo ou modulo <span class="required">*</span></label>
+          <input type="text" id="rq-arquivo" placeholder="Ex: src/features/auth/" data-i18n="t11wuhtl" data-i18n-attr="placeholder">
         </div>
       </div>
       <div class="form-group">
-        <label for="rq-contexto">Contexto / Requisito original <span class="required">*</span></label>
-        <textarea id="rq-contexto" rows="3" placeholder="Descreva o requisito ou cole a historia de usuario..."></textarea>
+        <label for="rq-contexto" data-i18n-html="t1u9s6s4">Contexto / Requisito original <span class="required">*</span></label>
+        <textarea id="rq-contexto" rows="3" placeholder="Descreva o requisito ou cole a historia de usuario..." data-i18n="t1upada3" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Aspectos para verificar</label>
+        <label data-i18n="tya2u33">Aspectos para verificar</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="rq-inv" checked> Historias de Usuario (INVEST)</label>
-          <label class="checkbox-item"><input type="checkbox" id="rq-nf"> Requisitos Nao Funcionais</label>
-          <label class="checkbox-item"><input type="checkbox" id="rq-back"> Alinhamento com Backlog</label>
-          <label class="checkbox-item"><input type="checkbox" id="rq-proto"> Prototipos e Especificacoes</label>
-          <label class="checkbox-item"><input type="checkbox" id="rq-sla"> SLAs e Metricas de Aceite</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-inv" checked> <span data-i18n="tc8yysz">Historias de Usuario (INVEST)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-nf"> <span data-i18n="t1djypkr">Requisitos Nao Funcionais</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-back"> <span data-i18n="t1t2tw4m">Alinhamento com Backlog</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-proto"> <span data-i18n="t1nuf0nc">Prototipos e Especificacoes</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-sla"> <span data-i18n="t1wogk14">SLAs e Metricas de Aceite</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('requisitos-review')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('requisitos-review')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-requisitos-review"></div>
     </div>
@@ -920,39 +920,39 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="agl-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="agl-repo" placeholder="Ex: /home/z/my-project/app">
+          <label for="agl-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="agl-repo" placeholder="Ex: /home/z/my-project/app" data-i18n="t3437vd" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="agl-framework">Framework agil</label>
+          <label for="agl-framework" data-i18n-html="t1s4wzpn">Framework agil</label>
           <select id="agl-framework">
-            <option value="">Nao especificar</option>
-            <option value="Scrum">Scrum</option>
-            <option value="Kanban">Kanban</option>
-            <option value="SAFe">SAFe</option>
-            <option value="Hibrido">Hibrido</option>
+            <option value="" data-i18n="t1ogrpic">Nao especificar</option>
+            <option value="Scrum" data-i18n="t1bgkd6">Scrum</option>
+            <option value="Kanban" data-i18n="t111q0rb">Kanban</option>
+            <option value="SAFe" data-i18n="t1idv1">SAFe</option>
+            <option value="Hibrido" data-i18n="t16lkstf">Hibrido</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="agl-arquivo">Arquivo ou diretorio <span class="required">*</span></label>
-        <input type="text" id="agl-arquivo" placeholder="Ex: src/ ou tests/">
+        <label for="agl-arquivo" data-i18n-html="t2v1nar">Arquivo ou diretorio <span class="required">*</span></label>
+        <input type="text" id="agl-arquivo" placeholder="Ex: src/ ou tests/" data-i18n="t1mn2k98" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="agl-contexto">Contexto da sprint/projeto <span class="required">*</span></label>
-        <textarea id="agl-contexto" rows="3" placeholder="Ex: Sprint 12, foco em modulo de pagamentos..."></textarea>
+        <label for="agl-contexto" data-i18n-html="t1jyv7ba">Contexto da sprint/projeto <span class="required">*</span></label>
+        <textarea id="agl-contexto" rows="3" placeholder="Ex: Sprint 12, foco em modulo de pagamentos..." data-i18n="t18otrel" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Aspectos ageis</label>
+        <label data-i18n="tl0e17p">Aspectos ageis</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="agl-bdd" checked> BDD (Given-When-Then)</label>
-          <label class="checkbox-item"><input type="checkbox" id="agl-art"> Artefatos Scrum (Burndown, DoD)</label>
-          <label class="checkbox-item"><input type="checkbox" id="agl-fluxo"> Metricas de Fluxo (Lead Time)</label>
-          <label class="checkbox-item"><input type="checkbox" id="agl-wsjf"> Priorizacao por Valor (WSJF)</label>
-          <label class="checkbox-item"><input type="checkbox" id="agl-dod"> Definition of Done</label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-bdd" checked> <span data-i18n="t1wy52fn">BDD (Given-When-Then)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-art"> <span data-i18n="t11ek8r6">Artefatos Scrum (Burndown, DoD)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-fluxo"> <span data-i18n="tkykf2d">Metricas de Fluxo (Lead Time)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-wsjf"> <span data-i18n="t1hlqzc7">Priorizacao por Valor (WSJF)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="agl-dod"> <span data-i18n="tvgla5a">Definition of Done</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('agile-review')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('agile-review')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-agile-review"></div>
     </div>
@@ -964,42 +964,42 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="ia-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="ia-repo" placeholder="Ex: /home/z/my-project/ml-service">
+          <label for="ia-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="ia-repo" placeholder="Ex: /home/z/my-project/ml-service" data-i18n="tz5893j" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="ia-tipo">Tipo de modelo</label>
+          <label for="ia-tipo" data-i18n-html="t1b8ammx">Tipo de modelo</label>
           <select id="ia-tipo">
-            <option value="">Nao especificar</option>
-            <option value="Classificacao">Classificacao</option>
-            <option value="Regressao">Regressao</option>
-            <option value="NLP">NLP / Processamento de Linguagem</option>
-            <option value="Visao">Visao Computacional</option>
-            <option value="Recomendacao">Sistema de Recomendacao</option>
-            <option value="Outro">Outro</option>
+            <option value="" data-i18n="t1ogrpic">Nao especificar</option>
+            <option value="Classificacao" data-i18n="t1n8rixr">Classificacao</option>
+            <option value="Regressao" data-i18n="t12hds51">Regressao</option>
+            <option value="NLP" data-i18n="t1n1xte6">NLP / Processamento de Linguagem</option>
+            <option value="Visao" data-i18n="tenefip">Visao Computacional</option>
+            <option value="Recomendacao" data-i18n="tkr5su6">Sistema de Recomendacao</option>
+            <option value="Outro" data-i18n="t19kx63">Outro</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="ia-arquivo">Arquivo ou modulo <span class="required">*</span></label>
-        <input type="text" id="ia-arquivo" placeholder="Ex: src/models/ ou src/pipelines/">
+        <label for="ia-arquivo" data-i18n-html="tein3ma">Arquivo ou modulo <span class="required">*</span></label>
+        <input type="text" id="ia-arquivo" placeholder="Ex: src/models/ ou src/pipelines/" data-i18n="tfq0bqc" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="ia-contexto">Contexto <span class="required">*</span></label>
-        <textarea id="ia-contexto" rows="3" placeholder="Ex: Modelo de classificacao de risco de credito..."></textarea>
+        <label for="ia-contexto" data-i18n-html="t1gqbjcl">Contexto <span class="required">*</span></label>
+        <textarea id="ia-contexto" rows="3" placeholder="Ex: Modelo de classificacao de risco de credito..." data-i18n="t1dbljpb" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Aspectos de IA</label>
+        <label data-i18n="tl1yp1v">Aspectos de IA</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="ia-vies" checked> Vies e Etica nos Dados</label>
-          <label class="checkbox-item"><input type="checkbox" id="ia-qual" checked> Qualidade dos Dados</label>
-          <label class="checkbox-item"><input type="checkbox" id="ia-over" checked> Overfitting / Generalizacao</label>
-          <label class="checkbox-item"><input type="checkbox" id="ia-sec"> Seguranca Adversarial</label>
-          <label class="checkbox-item"><input type="checkbox" id="ia-exp"> Explicabilidade (XAI)</label>
-          <label class="checkbox-item"><input type="checkbox" id="ia-lgpd"> Conformidade LGPD</label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-vies" checked> <span data-i18n="t1jw4mu3">Vies e Etica nos Dados</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-qual" checked> <span data-i18n="tnjujor">Qualidade dos Dados</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-over" checked> <span data-i18n="tyoo4qr">Overfitting / Generalizacao</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-sec"> <span data-i18n="t19hhiul">Seguranca Adversarial</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-exp"> <span data-i18n="t8x9o97">Explicabilidade (XAI)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="ia-lgpd"> <span data-i18n="t152efqm">Conformidade LGPD</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('ia-ml-review')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('ia-ml-review')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-ia-ml-review"></div>
     </div>
@@ -1011,40 +1011,40 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="dl-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="dl-repo" placeholder="Ex: /home/z/my-project/data-platform">
+          <label for="dl-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="dl-repo" placeholder="Ex: /home/z/my-project/data-platform" data-i18n="tjpxw32" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="dl-tech">Tecnologia principal</label>
+          <label for="dl-tech" data-i18n-html="t8mthav">Tecnologia principal</label>
           <select id="dl-tech">
-            <option value="">Nao especificar</option>
-            <option value="Spark">Apache Spark</option>
-            <option value="Kafka">Apache Kafka</option>
-            <option value="Airflow">Apache Airflow</option>
-            <option value="dbt">dbt</option>
-            <option value="Python/Pandas">Python / Pandas</option>
+            <option value="" data-i18n="t1ogrpic">Nao especificar</option>
+            <option value="Spark" data-i18n="tl4knt7">Apache Spark</option>
+            <option value="Kafka" data-i18n="tkzwtsk">Apache Kafka</option>
+            <option value="Airflow" data-i18n="t54gm92">Apache Airflow</option>
+            <option value="dbt" data-i18n="t24l2">dbt</option>
+            <option value="Python/Pandas" data-i18n="tnyv9v2">Python / Pandas</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="dl-arquivo">Arquivo ou modulo <span class="required">*</span></label>
-        <input type="text" id="dl-arquivo" placeholder="Ex: src/etl/ ou src/analytics/">
+        <label for="dl-arquivo" data-i18n-html="tein3ma">Arquivo ou modulo <span class="required">*</span></label>
+        <input type="text" id="dl-arquivo" placeholder="Ex: src/etl/ ou src/analytics/" data-i18n="t1uymi9w" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="dl-contexto">Contexto <span class="required">*</span></label>
-        <textarea id="dl-contexto" rows="3" placeholder="Ex: Pipeline ETL que processa dados de vendas diarios..."></textarea>
+        <label for="dl-contexto" data-i18n-html="t1gqbjcl">Contexto <span class="required">*</span></label>
+        <textarea id="dl-contexto" rows="3" placeholder="Ex: Pipeline ETL que processa dados de vendas diarios..." data-i18n="t1gi8kvx" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Aspectos de dados</label>
+        <label data-i18n="txlphn4">Aspectos de dados</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="dl-5v" checked> Big Data (5 Vs)</label>
-          <label class="checkbox-item"><input type="checkbox" id="dl-etl" checked> Qualidade ETL</label>
-          <label class="checkbox-item"><input type="checkbox" id="dl-ms"> Microsservicos de Dados</label>
-          <label class="checkbox-item"><input type="checkbox" id="dl-ciclo"> Ciclo Analise Completo</label>
-          <label class="checkbox-item"><input type="checkbox" id="dl-ml"> ML Aplicado</label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-5v" checked> <span data-i18n="tjszfhr">Big Data (5 Vs)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-etl" checked> <span data-i18n="t15ag7at">Qualidade ETL</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-ms"> <span data-i18n="t1aiptxl">Microsservicos de Dados</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-ciclo"> <span data-i18n="t1vaykf4">Ciclo Analise Completo</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="dl-ml"> <span data-i18n="t7apnti">ML Aplicado</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('dados-pipeline')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('dados-pipeline')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-dados-pipeline"></div>
     </div>
@@ -1056,34 +1056,34 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="gp-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="gp-repo" placeholder="Ex: /home/z/my-project/enterprise-app">
+          <label for="gp-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="gp-repo" placeholder="Ex: /home/z/my-project/enterprise-app" data-i18n="t1ofdyd9" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="gp-modelo">Modelo de gestao</label>
+          <label for="gp-modelo" data-i18n-html="t1dt2kya">Modelo de gestao</label>
           <select id="gp-modelo">
-            <option value="">Nao especificar</option>
-            <option value="PMBOK">PMBOK (Tradicional)</option>
-            <option value="Agil">Agil (Scrum/Kanban)</option>
-            <option value="Hibrido">Hibrido</option>
+            <option value="" data-i18n="t1ogrpic">Nao especificar</option>
+            <option value="PMBOK" data-i18n="t1fbp7ga">PMBOK (Tradicional)</option>
+            <option value="Agil" data-i18n="t1e36o4s">Agil (Scrum/Kanban)</option>
+            <option value="Hibrido" data-i18n="t16lkstf">Hibrido</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="gp-contexto">Contexto do projeto <span class="required">*</span></label>
-        <textarea id="gp-contexto" rows="3" placeholder="Ex: Projeto enterprise em fase de migracao, 3 equipes envolvidas..."></textarea>
+        <label for="gp-contexto" data-i18n-html="tgb2jfn">Contexto do projeto <span class="required">*</span></label>
+        <textarea id="gp-contexto" rows="3" placeholder="Ex: Projeto enterprise em fase de migracao, 3 equipes envolvidas..." data-i18n="t1xlanr4" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Aspectos de gestao</label>
+        <label data-i18n="t1cqz4yw">Aspectos de gestao</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="gp-escopo" checked> Escopo e EAP</label>
-          <label class="checkbox-item"><input type="checkbox" id="gp-risco" checked> Gerenciamento de Riscos</label>
-          <label class="checkbox-item"><input type="checkbox" id="gp-stake"> Stakeholders e Comunicacao</label>
-          <label class="checkbox-item"><input type="checkbox" id="gp-charter"> Project Charter</label>
-          <label class="checkbox-item"><input type="checkbox" id="gp-aqui"> Gestao de Aquisicoes</label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-escopo" checked> <span data-i18n="tnxlt1u">Escopo e EAP</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-risco" checked> <span data-i18n="t7vgy9p">Gerenciamento de Riscos</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-stake"> <span data-i18n="t3obb92">Stakeholders e Comunicacao</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-charter"> <span data-i18n="ten00qs">Project Charter</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="gp-aqui"> <span data-i18n="tatiim8">Gestao de Aquisicoes</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('gestao-projeto')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('gestao-projeto')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gestao-projeto"></div>
     </div>
@@ -1094,24 +1094,24 @@
         Analise entregas e codigo sob a lente de metricas: OKR (output vs outcome), fluxo (Lead Time, Throughput, WIP), eficiencia vs eficacia, e previsibilidade (Monte Carlo).
       </div>
       <div class="form-group">
-        <label for="mo-repo">Caminho do repositorio <span class="required">*</span></label>
-        <input type="text" id="mo-repo" placeholder="Ex: /home/z/my-project/product-app">
+        <label for="mo-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+        <input type="text" id="mo-repo" placeholder="Ex: /home/z/my-project/product-app" data-i18n="tau7zcr" data-i18n-attr="placeholder">
       </div>
       <div class="form-group">
-        <label for="mo-contexto">Contexto / OKRs do time <span class="required">*</span></label>
-        <textarea id="mo-contexto" rows="3" placeholder="Ex: OKR Q3: Reduzir tempo de resposta em 40%. KR1: Lead Time < 3 dias..."></textarea>
+        <label for="mo-contexto" data-i18n-html="t17qu29x">Contexto / OKRs do time <span class="required">*</span></label>
+        <textarea id="mo-contexto" rows="3" placeholder="Ex: OKR Q3: Reduzir tempo de resposta em 40%. KR1: Lead Time < 3 dias..." data-i18n="tibd8jf" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Metricas para incluir</label>
+        <label data-i18n="t1fnv88e">Metricas para incluir</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="mo-okr" checked> OKR (Output vs Outcome)</label>
-          <label class="checkbox-item"><input type="checkbox" id="mo-fluxo" checked> Fluxo (Lead Time, Throughput, WIP)</label>
-          <label class="checkbox-item"><input type="checkbox" id="mo-eff"> Eficiencia vs Eficacia</label>
-          <label class="checkbox-item"><input type="checkbox" id="mo-prev"> Previsibilidade (Monte Carlo)</label>
-          <label class="checkbox-item"><input type="checkbox" id="mo-little"> Lei de Little</label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-okr" checked> <span data-i18n="t1c2we61">OKR (Output vs Outcome)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-fluxo" checked> <span data-i18n="tfavbvk">Fluxo (Lead Time, Throughput, WIP)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-eff"> <span data-i18n="t17qp398">Eficiencia vs Eficacia</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-prev"> <span data-i18n="t1egwuiz">Previsibilidade (Monte Carlo)</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="mo-little"> <span data-i18n="tyyk6sl">Lei de Little</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('metricas-okr')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('metricas-okr')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-metricas-okr"></div>
     </div>
@@ -1123,34 +1123,34 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="sq-repo">Caminho do repositorio <span class="required">*</span></label>
-          <input type="text" id="sq-repo" placeholder="Ex: /home/z/my-project/product-app">
+          <label for="sq-repo" data-i18n-html="t1lt9ibe">Caminho do repositorio <span class="required">*</span></label>
+          <input type="text" id="sq-repo" placeholder="Ex: /home/z/my-project/product-app" data-i18n="tau7zcr" data-i18n-attr="placeholder">
         </div>
         <div class="form-group">
-          <label for="sq-tam">Tamanho do squad</label>
+          <label for="sq-tam" data-i18n-html="t176q6j5">Tamanho do squad</label>
           <select id="sq-tam">
-            <option value="">Nao especificar</option>
-            <option value="pequeno">Pequeno (3-5 pessoas)</option>
-            <option value="medio">Medio (5-10 pessoas)</option>
-            <option value="grande">Grande (10+ pessoas)</option>
+            <option value="" data-i18n="t1ogrpic">Nao especificar</option>
+            <option value="pequeno" data-i18n="t5k2dpz">Pequeno (3-5 pessoas)</option>
+            <option value="medio" data-i18n="t1cykt2k">Medio (5-10 pessoas)</option>
+            <option value="grande" data-i18n="t74auia">Grande (10+ pessoas)</option>
           </select>
         </div>
       </div>
       <div class="form-group">
-        <label for="sq-contexto">Contexto / Perfil do time <span class="required">*</span></label>
-        <textarea id="sq-contexto" rows="3" placeholder="Ex: Squad de produto, backend + frontend + QA, ciclo Scrum de 2 semanas..."></textarea>
+        <label for="sq-contexto" data-i18n-html="t152ppbo">Contexto / Perfil do time <span class="required">*</span></label>
+        <textarea id="sq-contexto" rows="3" placeholder="Ex: Squad de produto, backend + frontend + QA, ciclo Scrum de 2 semanas..." data-i18n="tl96a3m" data-i18n-attr="placeholder"></textarea>
       </div>
       <div class="form-group">
-        <label>Aspectos de squad</label>
+        <label data-i18n="txu8ylb">Aspectos de squad</label>
         <div class="checkbox-group">
-          <label class="checkbox-item"><input type="checkbox" id="sq-okr" checked> OKRs do Time</label>
-          <label class="checkbox-item"><input type="checkbox" id="sq-estrut"> Estrutura Multifuncional</label>
-          <label class="checkbox-item"><input type="checkbox" id="sq-comp"> Competencias e Skills</label>
-          <label class="checkbox-item"><input type="checkbox" id="sq-tuck"> Modelo de Tuckman</label>
-          <label class="checkbox-item"><input type="checkbox" id="sq-lider"> Lideranca Positiva</label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-okr" checked> <span data-i18n="thcah6n">OKRs do Time</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-estrut"> <span data-i18n="tasn93x">Estrutura Multifuncional</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-comp"> <span data-i18n="t6jxme6">Competencias e Skills</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-tuck"> <span data-i18n="t1syjga4">Modelo de Tuckman</span></label>
+          <label class="checkbox-item"><input type="checkbox" id="sq-lider"> <span data-i18n="t9atc3a">Lideranca Positiva</span></label>
         </div>
       </div>
-      <button class="btn-generate" onclick="generatePrompt('squads-review')">&#x1f680; Gerar Prompt</button>
+      <button class="btn-generate" onclick="generatePrompt('squads-review')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
       <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-squads-review"></div>
     </div>
