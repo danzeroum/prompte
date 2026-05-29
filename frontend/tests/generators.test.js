@@ -1,4 +1,4 @@
-import { buildPrompt, generatorTemplates } from '../assets/js/generators.js';
+import { buildPrompt, generatorTemplates, templatesForMode } from '../assets/js/generators.js';
 import { originalGenerators } from './fixtures/generators-original.js';
 
 describe('generators', () => {
@@ -14,6 +14,25 @@ describe('generators', () => {
     const out = buildPrompt('review', {});
     expect(out).toContain('<repo>');
     expect(out).toContain('<arquivo>');
+  });
+
+  it('templatesForMode separa Direto (6) de Avançado (19) e exclui playground', () => {
+    const direto = templatesForMode('direto');
+    const avancado = templatesForMode('avancado');
+    expect(direto).toEqual([
+      'revisao-correcao',
+      'melhoria-refatoracao',
+      'tela-para-github',
+      'debug-erros',
+      'criar-do-zero',
+      'explicar-codigo',
+    ]);
+    expect(avancado).toHaveLength(19);
+    // Playground (review/api) e os gen-* não têm `mode` → fora dos dois modos.
+    expect(direto).not.toContain('review');
+    expect(avancado).not.toContain('gen-review');
+    // Ordem de declaração preservada: análise de repo vem antes dos diffs.
+    expect(avancado.indexOf('analise-geral')).toBeLessThan(avancado.indexOf('diff-arquivo'));
   });
 
   it('expõe os 35 templates migrados + os exemplos do playground', () => {

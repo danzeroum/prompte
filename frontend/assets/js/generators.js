@@ -53,6 +53,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
 
   // ═══ CÓDIGO DIRETO ═══
   'revisao-correcao': {
+    mode: 'direto',
     name: 'Revisao e Correcao',
     fields: [
       { id: 'rc-linguagem', type: 'text' },
@@ -75,6 +76,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'melhoria-refatoracao': {
+    mode: 'direto',
     name: 'Melhoria / Refatoracao',
     fields: [
       { id: 'mr-linguagem', type: 'text' },
@@ -107,6 +109,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'tela-para-github': {
+    mode: 'direto',
     name: 'Tela para GitHub',
     fields: [
       { id: 'tg-linguagem', type: 'text' },
@@ -134,6 +137,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'debug-erros': {
+    mode: 'direto',
     name: 'Debug de Erros',
     fields: [
       { id: 'db-codigo', type: 'textarea' },
@@ -157,6 +161,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'criar-do-zero': {
+    mode: 'direto',
     name: 'Criar do Zero',
     fields: [
       { id: 'cz-tipo', type: 'text' },
@@ -181,6 +186,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'explicar-codigo': {
+    mode: 'direto',
     name: 'Explicar Codigo',
     fields: [
       { id: 'ec-linguagem', type: 'text' },
@@ -203,6 +209,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
 
   // ═══ ANALISE DE REPOSITORIO ═══
   'analise-geral': {
+    mode: 'avancado',
     name: 'Analise Geral do Repo',
     fields: [
       { id: 'ag-caminho', type: 'text' },
@@ -239,6 +246,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'analise-especifica': {
+    mode: 'avancado',
     name: 'Analise Especifica',
     fields: [
       { id: 'ae-caminho', type: 'text' },
@@ -274,6 +282,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'analise-comparativa': {
+    mode: 'avancado',
     name: 'Analise Comparativa',
     fields: [
       { id: 'ac-caminho', type: 'text' },
@@ -310,6 +319,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'refatoracao-orientada': {
+    mode: 'avancado',
     name: 'Refatoracao Orientada',
     fields: [
       { id: 'ro-caminho', type: 'text' },
@@ -344,6 +354,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
 
   // ═══ MELHORIA COM DIFF ═══
   'diff-arquivo': {
+    mode: 'avancado',
     name: 'Melhoria de Arquivo (Diff)',
     fields: [
       { id: 'da-repo', type: 'text' },
@@ -378,6 +389,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'diff-modulo': {
+    mode: 'avancado',
     name: 'Melhoria de Modulo (Diff)',
     fields: [
       { id: 'dm-repo', type: 'text' },
@@ -407,6 +419,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'diff-react': {
+    mode: 'avancado',
     name: 'Refatoracao React (Diff)',
     fields: [
       { id: 'dr-repo', type: 'text' },
@@ -448,6 +461,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'diff-api': {
+    mode: 'avancado',
     name: 'Refatoracao API (Diff)',
     fields: [
       { id: 'di-repo', type: 'text' },
@@ -491,6 +505,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'diff-testes': {
+    mode: 'avancado',
     name: 'Revisao de Testes (Diff)',
     fields: [
       { id: 'dt-repo', type: 'text' },
@@ -515,6 +530,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'diff-performance': {
+    mode: 'avancado',
     name: 'Foco em Performance (Diff)',
     fields: [
       { id: 'dp-repo', type: 'text' },
@@ -543,6 +559,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'diff-canivete': {
+    mode: 'avancado',
     name: 'Canivete Suico (Diff)',
     fields: [
       { id: 'dc-repo', type: 'text' },
@@ -572,6 +589,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
 
   // ═══ DOMINIOS AVANCADOS ═══
   'cloud-review': {
+    mode: 'avancado',
     name: 'Cloud / Infra Review',
     fields: [
       { id: 'cl-repo', type: 'text' },
@@ -624,6 +642,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'requisitos-review': {
+    mode: 'avancado',
     name: 'Eng. Requisitos Review',
     fields: [
       { id: 'rq-repo', type: 'text' },
@@ -670,6 +689,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'agile-review': {
+    mode: 'avancado',
     name: 'Metodos Ageis Review',
     fields: [
       { id: 'agl-repo', type: 'text' },
@@ -719,6 +739,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'ia-ml-review': {
+    mode: 'avancado',
     name: 'IA / Machine Learning Review',
     fields: [
       { id: 'ia-repo', type: 'text' },
@@ -772,6 +793,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'dados-pipeline': {
+    mode: 'avancado',
     name: 'Dados Intensivos Review',
     fields: [
       { id: 'dl-repo', type: 'text' },
@@ -823,6 +845,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'gestao-projeto': {
+    mode: 'avancado',
     name: 'Gestao de Projetos Review',
     fields: [
       { id: 'gp-repo', type: 'text' },
@@ -871,6 +894,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'metricas-okr': {
+    mode: 'avancado',
     name: 'Metricas / OKR Review',
     fields: [
       { id: 'mo-repo', type: 'text' },
@@ -916,6 +940,7 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   },
 
   'squads-review': {
+    mode: 'avancado',
     name: 'Tech Squads Review',
     fields: [
       { id: 'sq-repo', type: 'text' },
@@ -1663,4 +1688,14 @@ export function collectFormData(templateKey, root = document) {
     data[id] = el.type === 'checkbox' ? el.checked : el.value;
   }
   return data;
+}
+
+// Retorna as chaves dos templates de um dado modo ('direto' | 'avancado'),
+// preservando a ordem de declaração no registro. Filtra explicitamente por
+// `t.mode === mode`, então os playground (review/api) e quaisquer templates sem
+// `mode` ficam de fora. Usado pela home (4 portas) e pela paleta ⌘K.
+export function templatesForMode(mode) {
+  return Object.entries(generatorTemplates)
+    .filter(([, t]) => t.mode === mode)
+    .map(([key]) => key);
 }
