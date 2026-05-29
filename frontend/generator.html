@@ -181,6 +181,15 @@
     <div class="sidebar-item" data-template="gen-review" onclick="showTemplate(this)">
       <span class="icon" aria-hidden="true">&#x1f504;</span> Revisão + Qualidade
     </div>
+    <div class="sidebar-item" data-template="gen-api" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x1f310;</span> Design de API
+    </div>
+    <div class="sidebar-item" data-template="gen-arch" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x1f3d7;</span> Refatoração Arquitetural
+    </div>
+    <div class="sidebar-item" data-template="gen-security" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x1f6e1;</span> Segurança + LGPD
+    </div>
   </div>
 </nav>
 
@@ -1234,6 +1243,123 @@
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-review"></div>
     </div>
 
+    <!-- Geradores Avancados: gen-api (lote 1 da fusao) -->
+    <div class="template-panel" id="panel-gen-api">
+      <p class="template-description">
+        Gera prompts para design e revisão de APIs seguindo princípios REST,
+        versionamento, observabilidade e segurança.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Recurso / Entidade <span class="required">*</span></label>
+          <input type="text" id="gak-recurso" placeholder="Ex: Pedidos, Usuarios, Pagamentos">
+        </div>
+        <div class="form-group">
+          <label>Rota base <span class="required">*</span></label>
+          <input type="text" id="gak-rota" placeholder="Ex: /api/v1/pedidos">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Métodos HTTP <span class="required">*</span></label>
+        <input type="text" id="gak-metodos" placeholder="Ex: GET, POST, PUT, DELETE">
+      </div>
+      <div class="form-group">
+        <label>Contexto / Objetivo <span class="required">*</span></label>
+        <textarea id="gak-ctx" placeholder="Ex: API publica para integracao com parceiros..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos a cobrir</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="gak-rest" checked> Padrões REST / RESTful</label>
+          <label class="checkbox-item"><input type="checkbox" id="gak-versao" checked> Versionamento de API</label>
+          <label class="checkbox-item"><input type="checkbox" id="gak-rate" checked> Rate Limiting</label>
+          <label class="checkbox-item"><input type="checkbox" id="gak-obs" checked> Observabilidade (logs/métricas/traces)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gak-doc" checked> Documentação (OpenAPI/Swagger)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gak-erros"> Tratamento de Erros</label>
+          <label class="checkbox-item"><input type="checkbox" id="gak-anti"> Anti-patterns de API</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-api')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-api"></div>
+    </div>
+
+    <!-- Geradores Avancados: gen-arch (lote 1 da fusao) -->
+    <div class="template-panel" id="panel-gen-arch">
+      <p class="template-description">
+        Gera prompts para refatoração arquitetural com C4, SOLID, Clean
+        Architecture, DDD e design patterns.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositório <span class="required">*</span></label>
+          <input type="text" id="garq-repo" placeholder="/home/eu/meu-app">
+        </div>
+        <div class="form-group">
+          <label>Módulo / Camada <span class="required">*</span></label>
+          <input type="text" id="garq-modulo" placeholder="Ex: camada de dominio, modulo de pagamentos">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Motivação <span class="required">*</span></label>
+        <textarea id="garq-ctx" placeholder="Ex: Monolito acoplado, migrar para arquitetura modular..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Frameworks arquiteturais</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="garq-c4" checked> Modelo C4</label>
+          <label class="checkbox-item"><input type="checkbox" id="garq-solid" checked> SOLID</label>
+          <label class="checkbox-item"><input type="checkbox" id="garq-clean" checked> Clean Architecture</label>
+          <label class="checkbox-item"><input type="checkbox" id="garq-ddd" checked> Domain-Driven Design</label>
+          <label class="checkbox-item"><input type="checkbox" id="garq-patterns" checked> Design Patterns</label>
+          <label class="checkbox-item"><input type="checkbox" id="garq-micro"> Microsserviços</label>
+          <label class="checkbox-item"><input type="checkbox" id="garq-event"> Event-Driven</label>
+          <label class="checkbox-item"><input type="checkbox" id="garq-perf"> Performance</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-arch')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-arch"></div>
+    </div>
+
+    <!-- Geradores Avancados: gen-security (lote 1 da fusao) -->
+    <div class="template-panel" id="panel-gen-security">
+      <p class="template-description">
+        Gera prompts para auditoria de segurança cobrindo OWASP, LGPD,
+        autenticação, criptografia e gestão de secrets.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositório <span class="required">*</span></label>
+          <input type="text" id="gsec-repo" placeholder="/home/eu/meu-app">
+        </div>
+        <div class="form-group">
+          <label>Área / Componente <span class="required">*</span></label>
+          <input type="text" id="gsec-area" placeholder="Ex: modulo de autenticacao, API de pagamentos">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Motivação <span class="required">*</span></label>
+        <textarea id="gsec-ctx" placeholder="Ex: Auditoria pre-lancamento, conformidade LGPD..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos de segurança</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="gsec-owasp" checked> OWASP Top 10</label>
+          <label class="checkbox-item"><input type="checkbox" id="gsec-lgpd" checked> LGPD / GDPR</label>
+          <label class="checkbox-item"><input type="checkbox" id="gsec-authz" checked> Autenticação / Autorização</label>
+          <label class="checkbox-item"><input type="checkbox" id="gsec-crypto" checked> Criptografia</label>
+          <label class="checkbox-item"><input type="checkbox" id="gsec-secrets" checked> Gestão de Secrets</label>
+          <label class="checkbox-item"><input type="checkbox" id="gsec-audit"> Auditoria / Logs</label>
+          <label class="checkbox-item"><input type="checkbox" id="gsec-deps"> Dependências (SCA)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gsec-input"> Validação de Input</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-security')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-security"></div>
+    </div>
+
   </div><!-- /content -->
 </main>
 
@@ -1266,6 +1392,9 @@ const templateMeta = {
   'metricas-okr':        { title: 'Metricas / OKR Review',        badge: 'Avancado',   badgeClass: 'badge-avancado' },
   'squads-review':       { title: 'Tech Squads Review',           badge: 'Avancado',   badgeClass: 'badge-avancado' },
   'gen-review':          { title: 'Revisão + Qualidade',          badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-api':             { title: 'Design de API',                badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-arch':            { title: 'Refatoração Arquitetural',     badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-security':        { title: 'Segurança + LGPD',             badge: 'Gerador',    badgeClass: 'badge-avancado' },
 };
 
 // ─── PRESERVAÇÃO DE FORMULÁRIO POR TEMPLATE (Fase 2) ───

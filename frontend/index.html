@@ -70,9 +70,6 @@
   </div>
   <div class="sb-sec">
     <div class="sb-sec-title" data-i18n="cjuk77x">Gerador Avançado</div>
-    <div class="sb-item" data-t="gen-api" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f310;</span> Design de API</div>
-    <div class="sb-item" data-t="gen-arch" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f3d7;</span> Refatoração Arquitetural</div>
-    <div class="sb-item" data-t="gen-security" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f6e1;</span> Segurança + LGPD</div>
     <div class="sb-item" data-t="gen-ux" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f3a8;</span> UX + Usabilidade</div>
     <div class="sb-item" data-t="gen-canivete" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f91d;</span> Canivete Suico Pro</div>
     <div class="sb-item" data-t="gen-cloud" onclick="show(this)"><span class="icon" aria-hidden="true">&#x2601;</span> Cloud / Infra</div>
@@ -242,9 +239,6 @@
     <div class="panel" id="p-e-gestao"></div>
 
     <!-- ENHANCED GENERATORS -->
-    <div class="panel" id="p-gen-api"></div>
-    <div class="panel" id="p-gen-arch"></div>
-    <div class="panel" id="p-gen-security"></div>
     <div class="panel" id="p-gen-ux"></div>
     <div class="panel" id="p-gen-canivete"></div>
     <div class="panel" id="p-gen-cloud"></div>
@@ -280,9 +274,6 @@ const meta = {
   'e-arq2':{title:'Arq. Software II',badge:'Ebook',badgeClass:'b-analysis'},
   'e-metricas':{title:'Metricas / OKR',badge:'Ebook',badgeClass:'b-analysis'},
   'e-gestao':{title:'Gestao de Projetos',badge:'Ebook',badgeClass:'b-analysis'},
-  'gen-api':{title:'Design de API',badge:'Gerador',badgeClass:'b-gen'},
-  'gen-arch':{title:'Refatoracao Arquitetural',badge:'Gerador',badgeClass:'b-gen'},
-  'gen-security':{title:'Seguranca + LGPD',badge:'Gerador',badgeClass:'b-gen'},
   'gen-ux':{title:'UX + Usabilidade',badge:'Gerador',badgeClass:'b-gen'},
   'gen-canivete':{title:'Canivete Suico Pro',badge:'Gerador',badgeClass:'b-gen'},
   'gen-cloud':{title:'Cloud / Infra',badge:'Gerador',badgeClass:'b-gen'},
@@ -513,95 +504,6 @@ function buildEbookPanels(){
 function buildGenerators(){
   // gen-review foi migrado para o generator.html (piloto da fusão dos dois
   // geradores). Os demais gen-* seguem aqui até a migração completa.
-
-  // API Design
-  document.getElementById('p-gen-api').innerHTML=`
-    <div class="enh-section" style="border-color:var(--green)">
-      <h3><span class="emoji">&#x1f310;</span> Domínios Ativos: API Design + Observabilidade + Anti-Patterns</h3>
-      <p>Inclui automaticamente verificacao de design RESTful, checagem de anti-patterns, requisitos de observabilidade e principios de API bem projetada.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="ap-repo" placeholder="/home/z/my-project/api-server"></div>
-      <div class="fg"><label>Arquivo(s) de API <span class="req">*</span></label><input type="text" id="ap-arq" placeholder="src/routes/users.ts ou src/routes/*"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto <span class="req">*</span></label>
-      <textarea id="ap-ctx" placeholder="Ex: Refatorar endpoints para producao, seguir boas praticas REST..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Framework/Linguagem</label>
-      <select id="ap-fw"><option value="">Deixe descobrir</option><option value="Express">Express</option><option value="FastAPI">FastAPI</option><option value="NestJS">NestJS</option><option value="Spring Boot">Spring Boot</option><option value="Django">Django</option><option value="Flask">Flask</option><option value="Outro">Outro</option></select>
-    </div>
-    <div class="fg">
-      <label>Tipos de analise</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="ap-design" checked> Design RESTful (URLs, metodos, headers)</label>
-        <label class="cb-item"><input type="checkbox" id="ap-anti" checked> Anti-Patterns de API</label>
-        <label class="cb-item"><input type="checkbox" id="ap-obs" checked> Observabilidade (logs/metricas/traces)</label>
-        <label class="cb-item"><input type="checkbox" id="ap-sec" checked> Seguranca (autenticacao, validacao, rate limit)</label>
-        <label class="cb-item"><input type="checkbox" id="ap-doc"> Documentacao e exemplos de resposta</label>
-        <label class="cb-item"><input type="checkbox" id="ap-perf"> Performance e escalabilidade</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('api')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-api"></div>
-  `;
-
-  // Architecture Refactoring
-  document.getElementById('p-gen-arch').innerHTML=`
-    <div class="enh-section" style="border-color:var(--purple)">
-      <h3><span class="emoji">&#x1f3d7;</span> Domínios Ativos: Arquitetura + Qualidade + DevOps</h3>
-      <p>Combina principios de arquitetura, atributos de qualidade e praticas DevOps para gerar diffs que respeitam a visao arquitetural do projeto.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="ar-repo" placeholder="/home/z/my-project/frontend"></div>
-      <div class="fg"><label>Arquivo(s) ou diretorio <span class="req">*</span></label><input type="text" id="ar-arq" placeholder="src/modules/auth/ ou src/components/"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto <span class="req">*</span></label>
-      <textarea id="ar-ctx" placeholder="Ex: Preparando monolito para migracao para microservicos..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Dimensoes da analise</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="ar-4pil" checked> 4 Pilares da Arquitetura</label>
-        <label class="cb-item"><input type="checkbox" id="ar-qual" checked> Atributos de Qualidade (-ilities)</label>
-        <label class="cb-item"><input type="checkbox" id="ar-leis"> Leis do Trabalho Arquitetural</label>
-        <label class="cb-item"><input type="checkbox" id="ar-c4" checked> Documentacao C4</label>
-        <label class="cb-item"><input type="checkbox" id="ar-refat"> Refatoracao e Evolucao</label>
-        <label class="cb-item"><input type="checkbox" id="ar-cloud"> Arq. de Nuvem / Cloud</label>
-        <label class="cb-item"><input type="checkbox" id="ar-devops" checked> DevOps / CI-CD</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('arch')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-arch"></div>
-  `;
-
-  // Security + LGPD
-  document.getElementById('p-gen-security').innerHTML=`
-    <div class="enh-section" style="border-color:var(--red)">
-      <h3><span class="emoji">&#x1f6e1;</span> Domínios Ativos: Privacy by Design + LGPD + OWASP</h3>
-      <p>Gera prompts que incluem automaticamente verificacao de conformidade com LGPD, principios de Privacy by Design, checagem OWASP e cadeia de evidencias.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="se-repo" placeholder="/home/z/my-project/app"></div>
-      <div class="fg"><label>Arquivo(s) <span class="req">*</span></label><input type="text" id="se-arq" placeholder="src/middleware/auth.ts ou src/controllers/*"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto <span class="req">*</span></label>
-      <textarea id="se-ctx" placeholder="Ex: Revisar endpoints que tratam dados pessoais para conformidade LGPD..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Nivel de conformidade</label>
-      <select id="se-nivel"><option value="lgpd-completa">LGPD Completa (todos os 10 principios)</option><option value="lgpd-essenciais">LGPD Essenciais (5 principios)</option><option value="owasp-top10">OWASP Top 10 + LGPD</option><option value="pbd-7principios">Privacy by Design (7 principios)</option><option value="completo">Tudo (LGPD + OWASP + PbD)</option></select>
-    </div>
-    <div class="fg">
-      <label>Tipo de dado predominante</label>
-      <select id="se-dado"><option value="geral">Dados pessoais gerais</option><option value="sensivel">Dados pessoais sensiveis</option><option value="critico">Dados criticos (saude, financeiro)</option><option value="crianca">Dados de criancas e adolescentes</option></select>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('security')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-security"></div>
-  `;
 
   // UX + Usability
   document.getElementById('p-gen-ux').innerHTML=`
