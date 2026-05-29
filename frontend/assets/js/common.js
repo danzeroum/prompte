@@ -280,6 +280,9 @@ function buildPreferencesMenu() {
 // ---- Modal de login (magic link) ----
 let _authModal = null;
 function openAuthModal() {
+  // #M12: inicializa a auth sob demanda (carrega o SDK só agora) e detecta
+  // sessão persistida de quem volta logado.
+  if (typeof window !== 'undefined' && window.PE && window.PE.ensureAuth) window.PE.ensureAuth();
   if (!_authModal) _authModal = buildAuthModal();
   _authModal.hidden = false;
   const input = _authModal.querySelector('input');

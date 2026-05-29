@@ -21,4 +21,7 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
-HEALTHCHECK CMD wget -qO- http://localhost/index.html >/dev/null 2>&1 || exit 1
+# Healthcheck usando o wget do busybox (presente no nginx:alpine; curl não é).
+# Tuning explícito de intervalo/timeout/retries (#M22).
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -q --spider http://localhost/index.html || exit 1

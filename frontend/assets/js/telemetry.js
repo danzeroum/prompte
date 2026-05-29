@@ -33,11 +33,23 @@ function readQueue() {
 }
 
 // type: string (ex.: 'pageview', 'generate', 'copy'); payload: objeto livre.
+// Id do usuário logado, se houver. auth.js publica o usuário em window.PE.user
+// (sem acoplar telemetry a auth/SDK). Retorna null quando anônimo.
+function currentUserId() {
+  try {
+    return (
+      (typeof window !== 'undefined' && window.PE && window.PE.user && window.PE.user.id) || null
+    );
+  } catch {
+    return null;
+  }
+}
+
 export function track(type, payload = {}) {
   const event = {
     type,
     sessionId: getSessionId(),
-    userId: null, // preenchido quando houver auth (Fase D)
+    userId: currentUserId(), // #M20: preenchido quando há sessão autenticada
     payload,
     ts: new Date().toISOString(),
   };
@@ -89,7 +101,10 @@ export async function flush() {
 
   _flushing = true;
   try {
-    const batch = queue.slice();
+    // #M20: eventos enfileirados antes do login ficam com userId null; ao enviar,
+    // preenche com o usuário atual (a sessão já foi resolvida nesse ponto).
+    const uid = currentUserId();
+    const batch = queue.map((e) => (e.userId == null && uid ? { ...e, userId: uid } : e));
     const { error } = await client.from('events').insert(batch.map(toRow));
     if (error) return { sent: 0, pending: queue.length, error: error.message };
     // Remove apenas os que foram enviados; mantém eventos novos.

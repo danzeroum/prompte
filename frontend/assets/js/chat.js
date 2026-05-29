@@ -132,6 +132,10 @@ export function initChat(root = document) {
     panel.hidden = !open;
     fab.setAttribute('aria-expanded', String(open));
     if (open) {
+      // #M12: inicializa a auth sob demanda ao abrir o chat (usuário logado
+      // ganha o limite maior de rate limiting).
+      if (typeof window !== 'undefined' && window.PE && window.PE.ensureAuth)
+        window.PE.ensureAuth();
       // Na primeira abertura, restaura o histórico salvo (#M5) ou saúda.
       if (firstOpen) {
         firstOpen = false;
