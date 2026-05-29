@@ -30,7 +30,7 @@ export const DICT = {
     cf6v0zn: 'Análise',
     cj82qql: 'Métricas de Telemetria',
     cjuk77x: 'Gerador Avançado',
-    cm7f1k0: 'Pratico',
+    cm7f1k0: 'Prático',
     cohtjds: 'A Ferramenta',
     cozj5fo: 'Prompt Engineering Pro',
     cv7d04e: 'Fundamentos',
