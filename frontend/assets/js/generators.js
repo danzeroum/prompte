@@ -987,3 +987,19 @@ export function buildPrompt(templateKey, data = {}) {
   if (!tpl) throw new Error(`Template desconhecido: ${templateKey}`);
   return tpl.build(normalizeData(tpl.fields, data));
 }
+
+// Lê os valores brutos dos campos do template a partir do DOM (por id),
+// retornando um objeto pronto para buildPrompt(). Usado pelo generator.html
+// para coletar o formulário e mantido aqui para ser unitariamente testável.
+export function collectFormData(templateKey, root = document) {
+  const tpl = generatorTemplates[templateKey];
+  const data = {};
+  if (!tpl) return data;
+  for (const f of tpl.fields) {
+    const id = typeof f === 'string' ? f : f.id;
+    const el = root.getElementById ? root.getElementById(id) : root.querySelector('#' + id);
+    if (!el) continue;
+    data[id] = el.type === 'checkbox' ? el.checked : el.value;
+  }
+  return data;
+}

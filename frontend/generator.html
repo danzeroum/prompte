@@ -1177,25 +1177,12 @@ function toggleSidebar() {
 // window.PE). Aqui apenas coletamos os valores brutos dos campos declarados e
 // delegamos a construção do prompt a buildPrompt(), mantendo uma única fonte
 // de verdade (sem duplicar os 25 builders neste HTML).
-function collectData(id) {
-  const tpl =
-    window.PE && window.PE.generatorTemplates && window.PE.generatorTemplates[id];
-  const data = {};
-  if (!tpl) return data;
-  for (const f of tpl.fields) {
-    const fid = typeof f === 'string' ? f : f.id;
-    const el = document.getElementById(fid);
-    if (!el) continue;
-    data[fid] = el.type === 'checkbox' ? el.checked : el.value;
-  }
-  return data;
-}
-
 function generatePrompt(id) {
   if (!window.PE || typeof window.PE.buildPrompt !== 'function') return;
   let prompt;
   try {
-    prompt = window.PE.buildPrompt(id, collectData(id));
+    const data = window.PE.collectFormData ? window.PE.collectFormData(id) : {};
+    prompt = window.PE.buildPrompt(id, data);
   } catch (e) {
     return;
   }

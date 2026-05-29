@@ -11,7 +11,7 @@ import {
   injectOfflineBanner,
 } from './common.js';
 import { track, flush } from './telemetry.js';
-import { buildPrompt, generatorTemplates } from './generators.js';
+import { buildPrompt, generatorTemplates, collectFormData } from './generators.js';
 import { askLLM } from './llmClient.js';
 import { initAuth } from './auth.js';
 import { initChat } from './chat.js';
@@ -83,7 +83,7 @@ function init() {
 
   // exposto para depuração/uso futuro por scripts inline das páginas
   // (generator.html usa buildPrompt + generatorTemplates para o dispatch).
-  window.PE = { copyText, buildPrompt, generatorTemplates, track, flush, askLLM };
+  window.PE = { copyText, buildPrompt, generatorTemplates, collectFormData, track, flush, askLLM };
 }
 
 if (document.readyState === 'loading') {
