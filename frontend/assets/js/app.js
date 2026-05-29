@@ -15,7 +15,9 @@ function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
   if (!host) return;
 
-  const keys = Object.keys(generatorTemplates);
+  // Apenas os exemplos marcados como playground entram no seletor do manual;
+  // os 25 templates do gerador têm campos próprios e não se aplicam aqui.
+  const keys = Object.keys(generatorTemplates).filter((k) => generatorTemplates[k].playground);
   const options = keys
     .map((k) => `<option value="${k}">${generatorTemplates[k].name}</option>`)
     .join('');
@@ -69,7 +71,8 @@ function init() {
   });
 
   // exposto para depuração/uso futuro por scripts inline das páginas
-  window.PE = { copyText, buildPrompt, track, flush, askLLM };
+  // (generator.html usa buildPrompt + generatorTemplates para o dispatch).
+  window.PE = { copyText, buildPrompt, generatorTemplates, track, flush, askLLM };
 }
 
 if (document.readyState === 'loading') {

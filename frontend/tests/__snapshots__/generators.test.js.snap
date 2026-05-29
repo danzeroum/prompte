@@ -1,0 +1,700 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generators — snapshots agile-review snapshot 1`] = `
+"Revise o repositorio linha-um agl-repo
+  linha-dois agl-repo com foco em linha-um agl-arquivo
+  linha-dois agl-arquivo, sob a perspectiva de metodos ageis.
+
+CONTEXTO DA SPRINT/PROJETO: linha-um agl-contexto
+  linha-dois agl-contexto
+FRAMEWORK AGIL: valor-agl-framework
+
+DOMINIO: Metodos Ageis
+Verifique os seguintes aspectos:
+1. BDD (Given-When-Then)
+2. Metricas de Fluxo (Lead Time)
+3. Definition of Done
+
+REGRAS OBRIGATORIAS:
+- Verifique se testes seguem o padrao BDD (Given-When-Then) quando aplicavel
+- Avalie se os artefatos Scrum estao presentes e atualizados
+- Analise metricas de fluxo: Lead Time, Throughput, Cycle Time, WIP
+- Verifique se a priorizacao segue WSJF (Weighted Shortest Job First)
+- Confirme se a Definition of Done esta sendo respeitada
+- Identifique se ha deviation do framework agil escolhido
+- Avalie a qualidade dos commits e mensagens (conexao com historias de usuario)
+
+FORMATO DE RESPOSTA:
+1. Avaliacao da maturidade agil do repositorio
+2. Problemas identificados com severidade
+3. Metricas de fluxo calculaveis a partir do git history
+4. Recomendacoes de melhoria nos processos ageis
+5. Diffs para correcoes de testes/artefatos"
+`;
+
+exports[`generators — snapshots analise-comparativa snapshot 1`] = `
+"Compare o estado do repositorio linha-um ac-caminho
+  linha-dois ac-caminho entre:
+- Branch/Pasta A: linha-um ac-branchA
+  linha-dois ac-branchA
+- Branch/Pasta B: linha-um ac-branchB
+  linha-dois ac-branchB
+
+Foque em:
+1. Mudancas de arquitetura
+2. Melhorias/pioresias de performance
+3. Mudancas no schema do BD
+4. Impacto nas rotas/API
+
+Entregue:
+1. Resumo das mudancas
+2. Analise de impacto para cada aspecto
+3. Riscos identificados
+4. Recomendacoes antes do merge"
+`;
+
+exports[`generators — snapshots analise-especifica snapshot 1`] = `
+"Analise o repositorio linha-um ae-caminho
+  linha-dois ae-caminho com foco especifico em:
+
+Area: linha-um ae-area
+  linha-dois ae-area
+Cenario: valor-ae-cenario
+
+Contexto:
+linha-um ae-contexto
+  linha-dois ae-contexto
+
+Entregaveis esperados:
+1. Lista de problemas com severidade
+2. Codigo corrigido pronto
+
+Instrucoes:
+- Leia os arquivos relevantes antes de analisar
+- Compare com outros arquivos do projeto para seguir padroes existentes
+- Seja especifico e pratico nas recomendacoes"
+`;
+
+exports[`generators — snapshots analise-geral snapshot 1`] = `
+"Analise o repositorio linha-um ag-caminho
+  linha-dois ag-caminho.
+
+Foque em:
+1. Estrutura e organizacao
+2. Seguranca
+3. Dependencias e vulnerabilidades
+4. Testes e coverage
+
+Nivel de profundidade: valor-ag-profundidade
+
+Contexto: linha-um ag-contexto
+  linha-dois ag-contexto
+
+Entregue:
+1. Resumo executivo
+2. Analise detalhada por aspecto
+3. Problemas encontrados (classificados por severidade)
+4. Recomendacoes prioritarias"
+`;
+
+exports[`generators — snapshots cloud-review snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um cl-repo
+  linha-dois cl-repo, com foco em linha-um cl-arquivo
+  linha-dois cl-arquivo.
+
+CONTEXTO: linha-um cl-contexto
+  linha-dois cl-contexto
+PROVEDOR DE NUVEM: valor-cl-provider
+
+DOMINIO: Cloud Computing
+Verifique os seguintes aspectos:
+1. Seguranca (IAM, criptografia, flags)
+2. Preparacao para migracao
+3. Infra as Code (Terraform/CloudFormation)
+
+REGRAS OBRIGATORIAS:
+- Avalie o modelo de responsabilidade compartilhada da nuvem (Shared Responsibility Model)
+- Verifique configuracoes de seguranca (IAM policies, security groups, flags inseguras)
+- Verifique conformidade com LGPD, NIST CSF e BACEN 4.658 (se aplicavel)
+- Identifique se recursos estao provisionados de forma otimizada (cost optimization)
+- Verifique se ha hardcoding de secrets, chaves ou credenciais
+- Avalie a estrategia de backup e disaster recovery
+- Verifique se os logs e monitoramento estao configurados adequadamente
+- Para IaC: valide idempotencia, modularizacao e seguranca dos templates
+
+FORMATO DE RESPOSTA:
+1. Diagnostico com severidade (critica | alta | media | baixa)
+2. Recomendacoes por area (seguranca, custo, performance, compliance)
+3. Diff completo para cada correcao (se aplicavel)
+4. Riscos cloud-specific e mitigacoes
+5. Roadmap de melhorias priorizado por impacto"
+`;
+
+exports[`generators — snapshots criar-do-zero snapshot 1`] = `
+"Crie linha-um cz-tipo
+  linha-dois cz-tipo em linha-um cz-linguagem
+  linha-dois cz-linguagem com os seguintes requisitos:
+
+Funcionalidades:
+- linha-um cz-funcionalidades
+- linha-dois cz-funcionalidades
+
+Restricoes:
+- linha-um cz-restricoes
+- linha-dois cz-restricoes
+
+Estilo: linha-um cz-estilo
+  linha-dois cz-estilo
+
+Entregue:
+1. Explicacao da solucao escolhida
+2. Codigo completo pronto para uso
+3. Instrucoes de integracao com o projeto
+4. Testes basicos se aplicavel"
+`;
+
+exports[`generators — snapshots dados-pipeline snapshot 1`] = `
+"Revise o repositorio linha-um dl-repo
+  linha-dois dl-repo, com foco em linha-um dl-arquivo
+  linha-dois dl-arquivo, sob a perspectiva de dados intensivos.
+
+CONTEXTO: linha-um dl-contexto
+  linha-dois dl-contexto
+TECNOLOGIA PRINCIPAL: valor-dl-tech
+
+DOMINIO: Big Data e Analise de Dados
+Verifique os seguintes aspectos:
+1. Big Data (5 Vs)
+2. Microsservicos de Dados
+3. ML Aplicado
+
+REGRAS OBRIGATORIAS:
+- 5 Vs do Big Data: avalie Volume, Velocidade, Variedade, Veracidade e Valor
+- ETL Quality: valide extração (fontes), transformação (regras) e carga (destino)
+- Verifique tratamento de dados duplicados, nulos e outliers
+- Avalie idempotencia e reprocessabilidade dos pipelines
+- Microsservicos de Dados: verifique boundaries, contratos, versionamento de schemas
+- Ciclo SMART de Analise: Specular → Medir → Analisar → Refinar → Transformar
+- Verifique monitoramento de pipelines (alertas, SLAs, retry logic)
+- Governança: linhagem de dados, catalogo de dados, qualidade automatizada
+- Para ML aplicado: valide data splits, feature engineering, model drift
+
+FORMATO DE RESPOSTA:
+1. Arquitetura de dados atual (diagrama textual)
+2. Problemas identificados com severidade
+3. Avaliacao dos 5 Vs com gaps
+4. Recomendacoes de melhoria no pipeline
+5. Diffs de correcao para problemas criticos"
+`;
+
+exports[`generators — snapshots debug-erros snapshot 1`] = `
+"Este codigo esta gerando o seguinte erro:
+
+\`\`\`
+linha-um db-codigo
+  linha-dois db-codigo
+\`\`\`
+
+Erro/mensagem:
+\`\`\`
+linha-um db-erro
+  linha-dois db-erro
+\`\`\`
+
+O que eu esperava: linha-um db-esperado
+  linha-dois db-esperado
+O que acontece: linha-um db-atual
+  linha-dois db-atual
+
+Faca:
+1. Identifique a causa raiz
+2. Explique o erro em linguagem clara
+3. Forneça o codigo corrigido completo
+4. Sugira como prevenir o problema no futuro"
+`;
+
+exports[`generators — snapshots diff-api snapshot 1`] = `
+"Analise e melhore o endpoint/servico linha-um di-arquivo
+  linha-dois di-arquivo no repositorio linha-um di-repo
+  linha-dois di-repo.
+
+CONTEXTO DO PROJETO:
+- Framework: valor-di-framework
+- Banco de dados: valor-di-db
+- Autenticacao: valor-di-auth
+
+TAREFA:
+1. Leia o arquivo e entenda o fluxo request → response
+2. Analise:
+   - Validacao de input
+   - Seguranca
+   - Logging e monitoramento
+3. Compare com outros endpoints do projeto para seguir MESMO padrao
+
+OBSERVACOES: linha-um di-obs
+  linha-dois di-obs
+
+REGRAS:
+- Manter a mesma URL e metodo HTTP
+- Manter o mesmo formato de request/response (ou documentar a mudanca)
+- Seguir EXATAMENTE o padrao de error handling do projeto
+- Seguir EXATAMENTE o padrao de validacao do projeto
+
+FORMATO DE RESPOSTA:
+1. Diagnostico detalhado com severidade (critica | alta | media | baixa)
+2. Diff completo do arquivo corrigido
+3. Diffs de arquivos auxiliares se necessario
+4. Migration SQL se o schema mudar
+5. Testes atualizados/criados"
+`;
+
+exports[`generators — snapshots diff-arquivo snapshot 1`] = `
+"Analise detalhadamente o arquivo linha-um da-arquivo
+  linha-dois da-arquivo no repositorio linha-um da-repo
+  linha-dois da-repo.
+
+TAREFA:
+1. Leia todo o arquivo e entenda seu proposito no contexto da arquitetura
+2. Identifique problemas de:
+   - Performance
+   - Seguranca
+   - Anti-padroes
+3. Gere o diff completo do arquivo corrigido
+
+OBSERVACOES: linha-um da-obs
+  linha-dois da-obs
+
+REGRAS:
+- Mantenha a mesma interface publica (exports, tipos, contratos)
+- Siga EXATAMENTE os padroes que ja existem no restante do projeto
+- Nao adicione dependencias que nao existem no projeto
+- Cada mudanca deve ter justificativa clara
+- O codigo gerado deve ser indistinguivel do estilo do restante da codebase
+
+FORMATO DE RESPOSTA:
+1. Resumo das mudancas (bullet points)
+2. Para cada mudanca: justificativa + trecho antes → depois
+3. Diff completo do arquivo (pronto para git apply)
+4. Arquivos adicionais que precisam ser modificados (se houver)"
+`;
+
+exports[`generators — snapshots diff-canivete snapshot 1`] = `
+"Faça uma analise completa e gere diffs prontos para aplicar no repositorio linha-um dc-repo
+  linha-dois dc-repo.
+
+ESCOPO:
+- Arquivos/Diretorios: linha-um dc-escopo
+  linha-dois dc-escopo
+- Tipo de melhoria: valor-dc-tipo
+
+CONTEXTO:
+linha-um dc-contexto
+  linha-dois dc-contexto
+
+TAREFA:
+1. Analisar profundamente o codigo E a arquitetura ao redor
+2. Entender os padroes do projeto lendo arquivos vizinhos e configs
+3. Identificar TODOS os problemas na area solicitada
+4. Gerar diffs COMPLETOS para cada arquivo que precisa mudar
+5. Garantir que o codigo gerado seja COERENTE com o restante do projeto
+
+OBRIGATORIO NA RESPOSTA:
+[x] Resumo executivo das mudancas
+[x] Justificativa para CADA mudanca
+[x] Diff completo de CADA arquivo (pronto para git apply)
+[x] Novos arquivos que precisam ser criados (com conteudo completo)
+[x] Arquivos que precisam ser deletados (se houver)
+[x] Dependencias novas (se houver, com justificativa)
+[x] Riscos e cuidados ao aplicar
+[x] Comandos para aplicar as mudancas
+
+NAO FAZER:
+[ ] Mudancas sem justificativa
+[ ] Breaking changes sem aviso explicito
+[ ] Introduzir padroes diferentes do restante do projeto
+[ ] Adicionar dependencias desnecessarias"
+`;
+
+exports[`generators — snapshots diff-modulo snapshot 1`] = `
+"Analise o diretorio linha-um dm-dir
+  linha-dois dm-dir no repositorio linha-um dm-repo
+  linha-dois dm-repo.
+
+CONTEXTO:
+- Esse modulo e responsavel por: linha-um dm-contexto
+  linha-dois dm-contexto
+- Linguagem/Framework: linha-um dm-ling
+  linha-dois dm-ling
+- Me preocupa: valor-dm-preoc
+
+TAREFA:
+1. Explore TODOS os arquivos do diretorio e suas dependencias internas
+2. Identifique inconsistencias entre os arquivos do proprio modulo
+3. Compare os padroes usados aqui com o resto do projeto
+4. Gere diffs completos para CADA arquivo que precisar de mudanca
+
+REGRAS OBRIGATORIAS:
+- Preservar TODAS as interfaces publicas do modulo
+- Manter compatibilidade com os consumidores do modulo
+- Seguir as convencoes de estilo do restante da codebase
+- Nao introduzir breaking changes
+- Se precisar de nova dependencia, justificar e verificar conflitos
+
+FORMATO DE RESPOSTA:
+1. Visao geral: o que esta bom e o que precisa mudar
+2. Mapa de dependencias do modulo
+3. Para cada arquivo alterado: justificativa + diff completo
+4. Testes que precisam ser criados/atualizados (com codigo)
+5. Riscos da mudanca e como mitigar"
+`;
+
+exports[`generators — snapshots diff-performance snapshot 1`] = `
+"Analise o arquivo linha-um dp-arquivo
+  linha-dois dp-arquivo no repositorio linha-um dp-repo
+  linha-dois dp-repo com FOCO EM PERFORMANCE.
+
+CONTEXTO:
+- Execucao: valor-dp-freq
+- Volume esperado: linha-um dp-volume
+  linha-dois dp-volume
+- Gargalo percebido: linha-um dp-gargalo
+  linha-dois dp-gargalo
+
+TAREFA:
+1. Identifique gargalos de performance
+2. Para cada gargalo:
+   - Causa raiz
+   - Impacto estimado
+   - Solucao proposta
+   - Codigo antes → depois
+3. Gere diffs completos para aplicacao imediata
+
+REGRAS:
+- Nao sacrificar legibilidade por micro-otimizacoes
+- Manter compatibilidade com a interface existente
+- Priorizar mudancas com maior impacto/complexidade
+
+FORMATO DE RESPOSTA:
+1. Gargalos identificados (ranked por impacto)
+2. Para cada mudanca: causa raiz, solucao, estimativa de ganho, diff
+3. Mudancas que exigem mais investigacao"
+`;
+
+exports[`generators — snapshots diff-react snapshot 1`] = `
+"Analise e melhore o componente linha-um dr-comp
+  linha-dois dr-comp no repositorio linha-um dr-repo
+  linha-dois dr-repo.
+
+CONTEXTO DO PROJETO:
+- Framework: valor-dr-framework
+- Estilo: valor-dr-estilo
+- Gerenciamento de estado: valor-dr-estado
+
+TAREFA:
+1. Leia o componente e seus filhos/dependencias
+2. Compare com outros componentes do projeto para identificar padroes de estrutura, naming, styling e hooks
+3. Gere o diff completo refatorado
+
+FOCO ESPECIFICO:
+[x] Separar logica de apresentacao
+[x] Melhorar tipagem TypeScript
+[x] Acessibilidade (a11y)
+
+FORMATO DE RESPOSTA:
+1. Analise: problemas encontrados com severidade
+2. Diff completo do componente refatorado
+3. Diffs de arquivos auxiliares (hooks, tipos, utils) se criados
+4. Nota sobre impacto nos componentes pais/filhos"
+`;
+
+exports[`generators — snapshots diff-testes snapshot 1`] = `
+"Analise os testes em linha-um dt-arquivo
+  linha-dois dt-arquivo no repositorio linha-um dt-repo
+  linha-dois dt-repo.
+
+TAREFA:
+1. Leia os testes E o codigo que eles testam
+2. Identifique:
+   - Testes que nao testam nada util (testes fracos)
+   - Caminhos felizes e tristes nao cobertos
+   - Mocks incorretos ou excessivos
+   - Testes faceis (quebram por mudancas irrelevantes)
+   - Inconsistencia com o padrao de testes do projeto
+3. Compare com outros testes do projeto para seguir o MESMO estilo
+
+Framework de testes: valor-dt-framework
+
+Problemas que percebo:
+- linha-um dt-problemas
+- linha-dois dt-problemas
+
+FORMATO DE RESPOSTA:
+1. Coverage: o que esta coberto e o que falta
+2. Problemas nos testes atuais
+3. Diff completo dos testes melhorados
+4. Novos testes adicionados (com justificativa do que cobrem)"
+`;
+
+exports[`generators — snapshots explicar-codigo snapshot 1`] = `
+"Explique detalhadamente este codigo linha-um ec-linguagem
+  linha-dois ec-linguagem:
+
+\`\`\`
+linha-um ec-codigo
+  linha-dois ec-codigo
+\`\`\`
+
+Nivel de detalhe: valor-ec-nivel
+Foco em: valor-ec-foco
+
+Faca:
+1. Visao geral do que o codigo faz
+2. Explicacao linha a linha (ou bloco a bloco)
+3. Conceitos usados (padroes, algoritmos, tecnicas)
+4. Pontos de atencao e possiveis armadilhas"
+`;
+
+exports[`generators — snapshots gestao-projeto snapshot 1`] = `
+"Analise o projeto no repositorio linha-um gp-repo
+  linha-dois gp-repo sob a perspectiva de gestao de projetos.
+
+CONTEXTO DO PROJETO: linha-um gp-contexto
+  linha-dois gp-contexto
+MODELO DE GESTAO: valor-gp-modelo
+
+DOMINIO: Gestao de Projetos (PMBOK / Hibrido)
+Verifique os seguintes aspectos:
+1. Escopo e EAP
+2. Stakeholders e Comunicacao
+3. Gestao de Aquisicoes
+
+REGRAS OBRIGATORIAS:
+- Escopo: verifique se a EAP (Estrutura Analitica do Projeto) esta refletida na estrutura do repositorio
+- Riscos: identifique riscos tecnicos usando probabilidade x impacto, proponha mitigacoes
+- Stakeholders: mapeie usando matriz Poder/Interesse, identifique gaps de comunicacao
+- Project Charter: verifique se objetivos, escopo, entregas e restricoes estao documentados
+- Cronograma: analise git history para identificar cadencia real de entregas
+- Qualidade: verifique se ha processos de QA, code review e criterios de aceite
+- Governanca: identifique pontos de decisao, gates e aprovacoes necessarias
+- Comunicacao: avalie se a documentacao do repo suporta a comunicacao com stakeholders
+
+FORMATO DE RESPOSTA:
+1. Diagnostico de maturidade em gestao de projetos
+2. Matriz de riscos (probabilidade x impacto)
+3. Mapa de stakeholders com recomendacoes
+4. Plano de acao priorizado por urgencia
+5. Artefatos que devem ser criados/atualizados"
+`;
+
+exports[`generators — snapshots ia-ml-review snapshot 1`] = `
+"Revise o codigo do repositorio linha-um ia-repo
+  linha-dois ia-repo, com foco em linha-um ia-arquivo
+  linha-dois ia-arquivo, sob a perspectiva de IA/ML.
+
+CONTEXTO: linha-um ia-contexto
+  linha-dois ia-contexto
+TIPO DE MODELO: valor-ia-tipo
+
+DOMINIO: Inteligencia Artificial / Machine Learning
+Verifique os seguintes aspectos:
+1. Vies e Etica nos Dados
+2. Overfitting / Generalizacao
+3. Explicabilidade (XAI)
+
+REGRAS OBRIGATORIAS:
+- Vies e Etica: analise representatividade dos dados, vies de selecao, vies de atributo
+- Qualidade dos Dados: integridade, completude, consistencia, atualizacao, duplicidade
+- Overfitting: verifique separacao treino/teste, cross-validation, regularizacao, early stopping
+- Generalizacao: avalie se o modelo generaliza para dados fora da distribuicao de treino
+- Seguranca Adversarial: testes de robustez contra perturbacoes, data poisoning, model inversion
+- Explicabilidade: verifique uso de SHAP, LIME, feature importance, decisoes auditaveis
+- LGPD: consentimento para uso de dados, direito ao esquecimento, portabilidade, anonimizacao
+- Pipeline de ML: validacao de etapas (coleta → preprocessamento → treino → avaliacao → deploy)
+- Monitoramento: drift detection, performance degradation, retraining triggers
+
+FORMATO DE RESPOSTA:
+1. Diagnostico completo do pipeline de ML com severidade
+2. Analise de vies e etica com metricas especificas
+3. Matriz de qualidade dos dados
+4. Recomendacoes de mitigacao para cada risco identificado
+5. Diffs de correcao para problemas criticos"
+`;
+
+exports[`generators — snapshots melhoria-refatoracao snapshot 1`] = `
+"Melhore este codigo linha-um mr-linguagem
+  linha-dois mr-linguagem, priorizando:
+- Performance
+- Boas praticas
+
+\`\`\`
+linha-um mr-codigo
+  linha-dois mr-codigo
+\`\`\`
+
+Este codigo faz: linha-um mr-funcionalidade
+  linha-dois mr-funcionalidade
+Preocupo-me especialmente com: linha-um mr-preocupacao
+  linha-dois mr-preocupacao
+
+Entregue:
+1. Analise dos problemas encontrados
+2. Para cada melhoria: justificativa + trecho antes/depois
+3. Codigo completo melhorado ao final"
+`;
+
+exports[`generators — snapshots metricas-okr snapshot 1`] = `
+"Analise o repositorio linha-um mo-repo
+  linha-dois mo-repo sob a lente de metricas e OKRs.
+
+CONTEXTO / OKRs DO TIME: linha-um mo-contexto
+  linha-dois mo-contexto
+
+DOMINIO: Metricas e OKRs para Times de Tecnologia
+Verifique as seguintes metricas:
+1. OKR (Output vs Outcome)
+2. Eficiencia vs Eficacia
+3. Lei de Little
+
+REGRAS OBRIGATORIAS:
+- OKR: diferencie outputs (atividades) de outcomes (resultados de negocio)
+- Verifique se os Key Results sao mensuraveis e have um numero e prazo definido
+- Fluxo: calcule Lead Time, Throughput, Cycle Time e WIP a partir do git history
+- Eficiencia vs Eficacia: identifique se o time esta fazendo as coisas certas vs fazendo as coisas direito
+- Lei de Little: L = W x (WIP/LT), use para estimar tempo de entrega
+- Previsibilidade: analise se as estimativas historicas sao confiaveis (simulacao Monte Carlo)
+- Identifique gargalos e ineficiencias no fluxo de entrega
+- Avalie se ha metricas de qualidade de codigo associadas aos OKRs
+
+FORMATO DE RESPOSTA:
+1. Dashboard de metricas calculadas (a partir do repositorio)
+2. Avaliacao dos OKRs (estao bem definidos? mensuraveis? alinhados?)
+3. Analise de fluxo com identificacao de gargalos
+4. Recomendacoes de melhoria nas metricas e processos
+5. Sugestao de OKRs refinados baseados na realidade do repositorio"
+`;
+
+exports[`generators — snapshots refatoracao-orientada snapshot 1`] = `
+"Analise o repositorio linha-um ro-caminho
+  linha-dois ro-caminho, especificamente linha-um ro-area
+  linha-dois ro-area e proponha refatoracoes.
+
+Priorize: Manutenibilidade, Legibilidade, Todas as anteriores
+
+Restricoes:
+- linha-um ro-restricoes
+- linha-dois ro-restricoes
+
+Para cada problema encontrado, forneça:
+1. Descricao do problema
+2. Severidade (critica | alta | media | baixa)
+3. Codigo corrigido pronto para uso
+
+Entregue diffs completos prontos para aplicar."
+`;
+
+exports[`generators — snapshots requisitos-review snapshot 1`] = `
+"Analise o repositorio linha-um rq-repo
+  linha-dois rq-repo, com foco em linha-um rq-arquivo
+  linha-dois rq-arquivo, verificando a implementacao de requisitos.
+
+REQUISITO ORIGINAL / CONTEXTO:
+linha-um rq-contexto
+  linha-dois rq-contexto
+
+DOMINIO: Engenharia de Requisitos
+Verifique os seguintes aspectos:
+1. Historias de Usuario (INVEST)
+2. Alinhamento com Backlog
+3. SLAs e Metricas de Aceite
+
+REGRAS OBRIGATORIAS:
+- Compare o requisito original com o codigo implementado linha a linha
+- Identifique gaps entre especificacao e implementacao
+- Verifique se historias de usuario seguem o criterio INVEST (Independent, Negotiable, Valuable, Estimable, Small, Testable)
+- Liste requisitos nao funcionais (performance, seguranca, usabilidade, disponibilidade) e se foram atendidos
+- Verifique se os criterios de aceite estao cobertos por testes
+- Identifique requisitos implicitos que nao foram especificados mas sao necessarios
+- Avalie a rastreabilidade: cada requisito deve ter codigo + teste correspondente
+
+FORMATO DE RESPOSTA:
+1. Matriz de rastreabilidade (requisito → codigo → teste)
+2. Gaps identificados com severidade
+3. Historias de usuario avaliadas pelo criterio INVEST
+4. Recomendacoes de melhoria na especificacao
+5. Diffs de correcao para gaps criticos"
+`;
+
+exports[`generators — snapshots revisao-correcao snapshot 1`] = `
+"Revise e corrija o seguinte codigo linha-um rc-linguagem
+  linha-dois rc-linguagem:
+
+\`\`\`
+linha-um rc-codigo
+  linha-dois rc-codigo
+\`\`\`
+
+Contexto: linha-um rc-contexto
+  linha-dois rc-contexto
+
+Problemas que percebo:
+- linha-um rc-problemas
+- linha-dois rc-problemas
+
+Para cada correcao:
+1. Descreva o problema
+2. Justifique a solucao
+3. Forneça o trecho corrigido
+4. Codigo completo corrigido ao final"
+`;
+
+exports[`generators — snapshots squads-review snapshot 1`] = `
+"Revise o repositorio linha-um sq-repo
+  linha-dois sq-repo sob a perspectiva de dinamica de squads.
+
+CONTEXTO / PERFIL DO TIME: linha-um sq-contexto
+  linha-dois sq-contexto
+TAMANHO DO SQUAD: valor-sq-tam
+
+DOMINIO: Tech Squads e Dinamica de Times
+Verifique os seguintes aspectos:
+1. OKRs do Time
+2. Competencias e Skills
+3. Lideranca Positiva
+
+REGRAS OBRIGATORIAS:
+- Estrutura Multifuncional: verifique se o repo demonstra skills compativeis com um squad completo (frontend, backend, QA, design)
+- OKRs do Time: analise se as entregas no git estao alinhadas com OKRs tipicos de squads de produto
+- Competencias: mapeie as tecnologias e skills necessarias vs utilizadas no repositorio
+- Modelo de Tuckman: identifique a fase do time (Forming, Storming, Norming, Performing) baseado nos padroes de commit, PR reviews e documentacao
+- Lideranca Positiva: avalie se ha mentorias, documentacao compartilhada, code reviews construtivos e conhecimento distribuido
+- Identifique silos de conhecimento (concentracao de commits em poucas pessoas)
+- Verifique se ha onboarding documentation e conhecimento compartilhado
+- Analise a diversidade de contribuicoes (quem faz o que no repo)
+
+FORMATO DE RESPOSTA:
+1. Perfil do squad baseado na analise do repositorio
+2. Mapa de competencias (existentes vs necessarias)
+3. Diagnostico da fase do time (Tuckman)
+4. Riscos organizacionais identificados
+5. Recomendacoes para amadurecimento do squad"
+`;
+
+exports[`generators — snapshots tela-para-github snapshot 1`] = `
+"Analise este codigo linha-um tg-linguagem
+  linha-dois tg-linguagem que copiei da tela e prepare-o para commit no GitHub:
+
+\`\`\`
+linha-um tg-codigo
+  linha-dois tg-codigo
+\`\`\`
+
+Fazer:
+1. Corrigir possiveis problemas de formatacao da copia
+2. Identificar e corrigir caracteres corrompidos
+3. Garantir indentacao correta em valor-tg-indent (valor-tg-indent-size)
+4. Verificar se ha trechos cortados ou incompletos
+5. Seguir as convencoes: linha-um tg-convencao
+  linha-dois tg-convencao
+
+Entregue o codigo corrigido completo, pronto para colar no arquivo e commitar."
+`;
