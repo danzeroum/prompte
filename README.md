@@ -9,6 +9,12 @@ engenharia de software, composta por três páginas:
 | Gerador de Prompts | `frontend/generator.html` | 25 templates práticos em 4 categorias |
 | Manual | `frontend/manual.html` | Guia completo de uso + playground interativo |
 
+## 📚 Documentação detalhada
+- [`docs/SCRIPTS.md`](docs/SCRIPTS.md) — referência clicável de **todos os scripts** (cada função com link para a definição).
+- [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md) — **interligação** entre os scripts (grafo de dependências + fluxos).
+- [`docs/EXPLICACAO-CODIGO.md`](docs/EXPLICACAO-CODIGO.md) — explicação didática **ligada ao código**.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — fases e decisões de backend.
+
 ## Arquitetura do frontend
 
 As três páginas compartilham um **design system** (`frontend/assets/css/theme.css`) e um
