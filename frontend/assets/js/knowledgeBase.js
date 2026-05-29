@@ -209,6 +209,16 @@ export const EBOOKS = [
       {
         domain: 'SOLID',
         text: 'Exija verificacao de todos os 5 principios: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation e Dependency Inversion.',
+        // `levels` (opcional): texto sob medida por profundidade. Quando ausente,
+        // appendKnowledge usa `text` + o sufixo do nivel. Exemplo de referencia.
+        levels: {
+          pratico:
+            'Liste as violacoes de cada um dos 5 principios SOLID (SRP, OCP, LSP, ISP, DIP) e entregue o diff de correcao de cada uma.',
+          intermediario:
+            'Avalie os 5 principios SOLID (SRP, OCP, LSP, ISP, DIP), justificando cada violacao pelo impacto em acoplamento e coesao, com o trecho antes/depois.',
+          academico:
+            'Avalie os 5 principios SOLID com fundamentacao (Martin/Meyer): para cada violacao, explique o principio, o exemplo canonico, a consequencia de design e o refactoring recomendado.',
+        },
       },
       {
         domain: 'Design Patterns',
@@ -489,20 +499,29 @@ function slug(text) {
     .replace(/^-+|-+$/g, '');
 }
 
-// Niveis de profundidade: nao reescrevem o texto de cada dominio (a fonte tem um
-// unico texto por insight), apenas ajustam a instrucao de como aplica-los.
+// Niveis de profundidade. `instruction` abre o bloco; `suffix` fecha-o com uma
+// diretiva aplicada a CADA dominio listado. Quando um dominio declara `levels`,
+// seu texto sob medida substitui o `text` base (ver dominio SOLID como exemplo);
+// caso contrario, usa-se o `text` base + o `suffix` do nivel — assim os tres
+// niveis produzem saidas visivelmente distintas para todos os ~80 dominios.
 export const LEVELS = {
   pratico: {
     label: 'Pratico',
-    instruction: 'Aplique de forma objetiva: checklist acionavel + diffs prontos.',
+    instruction: 'Aplique de forma objetiva, priorizando acionabilidade imediata.',
+    suffix:
+      'Para cada item acima, entregue um checklist objetivo e os diffs/trechos prontos para aplicar.',
   },
   intermediario: {
     label: 'Intermediario',
-    instruction: 'Aplique com justificativa tecnica para cada ponto avaliado.',
+    instruction: 'Equilibre pratica e fundamentacao em cada ponto avaliado.',
+    suffix:
+      'Para cada item acima, justifique tecnicamente a recomendacao e aponte os trade-offs envolvidos.',
   },
   academico: {
     label: 'Academico',
-    instruction: 'Aplique com fundamentacao conceitual e referencias dos frameworks citados.',
+    instruction: 'Aprofunde a fundamentacao conceitual de cada ponto.',
+    suffix:
+      'Para cada item acima, fundamente com os conceitos do tema e cite o framework ou autor de referencia.',
   },
 };
 
@@ -522,6 +541,7 @@ for (const ebook of EBOOKS) {
       ebookId: ebook.id,
       ebookTitle: ebook.title,
       rule: insight.text,
+      levels: insight.levels || null, // override sob medida por nivel (opcional)
     };
     domainKeys.push(key);
   }
@@ -554,18 +574,110 @@ export function appendKnowledge(prompt, { domains = [], level = 'pratico', extra
   const extraText = (extra || '').trim();
   if (selected.length === 0 && !extraText) return base;
 
-  const lvl = LEVELS[level] || LEVELS.pratico;
+  const levelKey = LEVELS[level] ? level : 'pratico';
+  const lvl = LEVELS[levelKey];
   let block = base;
   if (selected.length > 0) {
     block += `\n\nBASE DE CONHECIMENTO (ebooks):\n`;
     block += `Nivel: ${lvl.label} — ${lvl.instruction}\n`;
     selected.forEach((key, i) => {
       const d = knowledgeDomains[key];
-      block += `${i + 1}. [${d.ebookTitle}] ${d.label}: ${d.rule}\n`;
+      // Texto sob medida do nivel quando o dominio o declara; senao, o texto base.
+      const text = (d.levels && d.levels[levelKey]) || d.rule;
+      block += `${i + 1}. [${d.ebookTitle}] ${d.label}: ${text}\n`;
     });
+    block += `${lvl.suffix}\n`;
   }
   if (extraText) {
     block += `\nCONTEXTO ADICIONAL:\n${extraText}\n`;
   }
   return block;
+}
+
+// ─── #KB Fase 5: detecção de termos para o chat ───
+// Mapeia termos técnicos (gatilhos) → chave do domínio mais relevante. Usado por
+// chat.js para sugerir, sob demanda, enriquecer a conversa com a regra do ebook
+// quando o usuário menciona um conceito. Termos de uma palavra casam por token
+// (evita falsos positivos como "api" dentro de "rapido"); termos com espaço/barra
+// casam por substring. Chaves inválidas são filtradas em runtime.
+export const TRIGGERS = {
+  solid: 'e-algo/solid',
+  'design pattern': 'e-algo/design-patterns',
+  'padroes de projeto': 'e-algo/design-patterns',
+  'big-o': 'e-algo/complexidade-big-o',
+  complexidade: 'e-algo/complexidade-big-o',
+  'clean code': 'e-algo/clean-code-12-factor',
+  '12-factor': 'e-algo/clean-code-12-factor',
+  owasp: 'e-qual/analise-estatica-e-sast',
+  sast: 'e-qual/analise-estatica-e-sast',
+  tdd: 'e-qual/tdd-bdd',
+  bdd: 'e-qual/tdd-bdd',
+  observabilidade: 'e-devops/observabilidade',
+  'ci/cd': 'e-devops/ci-cd-pipeline',
+  cicd: 'e-devops/ci-cd-pipeline',
+  pipeline: 'e-devops/ci-cd-pipeline',
+  microservico: 'e-devops/microservicos',
+  microsservico: 'e-devops/microservicos',
+  lgpd: 'e-priv/bases-legais-lgpd',
+  gdpr: 'e-priv/bases-legais-lgpd',
+  privacidade: 'e-priv/7-principios-pbd',
+  privacy: 'e-priv/7-principios-pbd',
+  bpmn: 'e-proc/modelagem-bpmn',
+  dmn: 'e-proc/dmn-decision-tables',
+  api: 'e-api/api-design-principles',
+  rest: 'e-api/api-design-principles',
+  c4: 'e-arch/documentacao-c4-4-1',
+  arquitetura: 'e-arch/atributos-de-qualidade-ilities',
+  usabilidade: 'e-ux/usabilidade-heuristica',
+  nielsen: 'e-ux/usabilidade-heuristica',
+  ux: 'e-ux/usabilidade-heuristica',
+  cloud: 'e-cloud/seguranca-na-nuvem',
+  nuvem: 'e-cloud/seguranca-na-nuvem',
+  iam: 'e-cloud/seguranca-na-nuvem',
+  overfitting: 'e-ia/overfitting-e-generalizacao',
+  vies: 'e-ia/vies-e-etica',
+  bias: 'e-ia/vies-e-etica',
+  okr: 'e-squads/okr-e-resultados',
+  wsjf: 'e-agile/valor-e-priorizacao',
+  scrum: 'e-agile/artefatos-ageis',
+  sprint: 'e-agile/artefatos-ageis',
+  throughput: 'e-metricas/fluxo-e-entrega-little',
+  wip: 'e-metricas/fluxo-e-entrega-little',
+  'lead time': 'e-metricas/fluxo-e-entrega-little',
+  'monte carlo': 'e-metricas/previsibilidade-monte-carlo',
+  'big data': 'e-dados/big-data-5-vs',
+  etl: 'e-dados/qualidade-dos-dados-etl',
+  invest: 'e-requisitos/historias-de-usuario',
+  moscow: 'e-requisitos/gestao-do-backlog',
+  pmbok: 'e-gestao/modelo-de-gestao-pmbok',
+  eap: 'e-gestao/escopo-e-eap',
+  kotter: 'e-lideranca/gestao-de-mudancas-kotter',
+};
+
+function norm(s) {
+  return String(s)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+// Detecta termos técnicos no texto e devolve as chaves de domínio relevantes
+// (únicas, sem duplicar, filtradas às que existem no registro). Função pura.
+export function matchDomains(text) {
+  if (!text) return [];
+  const n = norm(text);
+  const tokens = new Set(n.split(/[^a-z0-9]+/).filter(Boolean));
+  const out = [];
+  const seen = new Set();
+  for (const [term, key] of Object.entries(TRIGGERS)) {
+    if (!knowledgeDomains[key]) continue;
+    const t = norm(term);
+    const isPhrase = /[^a-z0-9]/.test(t);
+    const hit = isPhrase ? n.includes(t) : tokens.has(t);
+    if (hit && !seen.has(key)) {
+      seen.add(key);
+      out.push(key);
+    }
+  }
+  return out;
 }

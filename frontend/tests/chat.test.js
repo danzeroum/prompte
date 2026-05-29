@@ -58,6 +58,16 @@ describe('initChat', () => {
     expect(panel.hidden).toBe(true);
   });
 
+  it('inclui a barra de sugestão de ebooks (#KB), oculta por padrão', () => {
+    initChat();
+    const suggest = document.querySelector('.pe-chat-suggest');
+    expect(suggest).not.toBeNull();
+    expect(suggest.hidden).toBe(true);
+    // fica entre o log e o formulário, dentro do painel.
+    const panel = document.querySelector('.pe-chat-panel');
+    expect(panel.contains(suggest)).toBe(true);
+  });
+
   it('abre o painel ao clicar no FAB e mostra a saudação', () => {
     initChat();
     document.querySelector('.pe-chat-fab').click();

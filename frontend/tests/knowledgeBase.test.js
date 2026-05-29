@@ -3,8 +3,10 @@ import {
   knowledgeDomains,
   themes,
   LEVELS,
+  TRIGGERS,
   domainsForTemplate,
   appendKnowledge,
+  matchDomains,
 } from '../assets/js/knowledgeBase.js';
 import { buildPrompt } from '../assets/js/generators.js';
 
@@ -86,6 +88,31 @@ describe('knowledgeBase — appendKnowledge', () => {
     expect(out).toContain(LEVELS.academico.instruction);
   });
 
+  it('fecha o bloco com o sufixo do nível (diretiva por domínio)', () => {
+    const key = Object.keys(knowledgeDomains)[0];
+    for (const lvl of ['pratico', 'intermediario', 'academico']) {
+      const out = appendKnowledge(base, { domains: [key], level: lvl });
+      expect(out).toContain(LEVELS[lvl].suffix);
+    }
+  });
+
+  it('os três níveis produzem saídas distintas para o mesmo domínio', () => {
+    const key = Object.keys(knowledgeDomains)[0];
+    const p = appendKnowledge(base, { domains: [key], level: 'pratico' });
+    const i = appendKnowledge(base, { domains: [key], level: 'intermediario' });
+    const a = appendKnowledge(base, { domains: [key], level: 'academico' });
+    expect(new Set([p, i, a]).size).toBe(3);
+  });
+
+  it('usa o texto sob medida (levels) quando o domínio o declara (SOLID)', () => {
+    const key = 'e-algo/solid';
+    expect(knowledgeDomains[key].levels).toBeTruthy();
+    const out = appendKnowledge(base, { domains: [key], level: 'academico' });
+    expect(out).toContain(knowledgeDomains[key].levels.academico);
+    // o texto base não deve aparecer quando há override para o nível
+    expect(out).not.toContain(knowledgeDomains[key].rule);
+  });
+
   it('usa o nível prático como padrão para nível inválido', () => {
     const key = Object.keys(knowledgeDomains)[0];
     const out = appendKnowledge(base, { domains: [key], level: 'xyz' });
@@ -97,6 +124,42 @@ describe('knowledgeBase — appendKnowledge', () => {
     expect(out).toContain('CONTEXTO ADICIONAL:');
     expect(out).toContain('veja o ADR-12');
     expect(out).not.toContain('  veja o ADR-12  ');
+  });
+});
+
+describe('knowledgeBase — matchDomains (Fase 5: chat)', () => {
+  it('todo gatilho em TRIGGERS aponta para um domínio existente', () => {
+    for (const key of Object.values(TRIGGERS)) {
+      expect(knowledgeDomains[key]).toBeDefined();
+    }
+  });
+
+  it('detecta termos de uma palavra por token (case/acento-insensível)', () => {
+    expect(matchDomains('preciso revisar SOLID neste código')).toContain('e-algo/solid');
+    expect(matchDomains('cuidar de LGPD e privacidade')).toEqual(
+      expect.arrayContaining(['e-priv/bases-legais-lgpd', 'e-priv/7-principios-pbd']),
+    );
+  });
+
+  it('detecta termos compostos por substring (ex.: "monte carlo")', () => {
+    expect(matchDomains('rodar uma simulação de Monte Carlo')).toContain(
+      'e-metricas/previsibilidade-monte-carlo',
+    );
+  });
+
+  it('não gera falso positivo (token "api" dentro de "rapido")', () => {
+    expect(matchDomains('quero algo rapido')).not.toContain('e-api/api-design-principles');
+    expect(matchDomains('desenhar uma API REST')).toContain('e-api/api-design-principles');
+  });
+
+  it('retorna [] para texto vazio ou sem termos', () => {
+    expect(matchDomains('')).toEqual([]);
+    expect(matchDomains('apenas um texto qualquer sem jargao')).toEqual([]);
+  });
+
+  it('não duplica domínios quando vários gatilhos apontam para o mesmo', () => {
+    const out = matchDomains('TDD e BDD juntos'); // ambos → e-qual/tdd-bdd
+    expect(out.filter((k) => k === 'e-qual/tdd-bdd')).toHaveLength(1);
   });
 });
 
