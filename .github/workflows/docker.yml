@@ -7,11 +7,13 @@ on:
     paths:
       - 'frontend/**'
       - 'docker/**'
+      - 'ops/**'
       - '.github/workflows/docker.yml'
   pull_request:
     paths:
       - 'frontend/**'
       - 'docker/**'
+      - 'ops/**'
       - '.github/workflows/docker.yml'
 
 jobs:
@@ -42,3 +44,10 @@ jobs:
           tags: supabase-cli:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  validate-vps-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate ops/docker-compose.vps.yml
+        run: DOMAIN=example.com ACME_EMAIL=ci@example.com docker compose -f ops/docker-compose.vps.yml config >/dev/null
