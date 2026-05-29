@@ -9,6 +9,7 @@ import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates } from './generators.js';
 import { askLLM } from './llmClient.js';
 import { initAuth } from './auth.js';
+import { initChat } from './chat.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
@@ -56,6 +57,7 @@ function init() {
   enhanceNavigation();
   injectTopbarControls();
   initAuth();
+  initChat();
   mountManualPlayground();
   track('pageview', { path: location.pathname });
 
