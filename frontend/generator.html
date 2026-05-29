@@ -186,7 +186,8 @@
         <textarea id="rc-problemas" rows="3" placeholder="Descreva os problemas que notou, um por linha..."></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('revisao-correcao')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-revisao-correcao"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-revisao-correcao"></div>
     </div>
 
     <!-- 2. MELHORIA / REFAÇÃO -->
@@ -222,7 +223,8 @@
         <textarea class="code-area" id="mr-codigo" placeholder="Cole seu codigo aqui..."></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('melhoria-refatoracao')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-melhoria-refatoracao"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-melhoria-refatoracao"></div>
     </div>
 
     <!-- 3. TELA PARA GITHUB -->
@@ -260,7 +262,8 @@
         <input type="text" id="tg-convencao" placeholder="Ex: ESLint + Prettier, PEP8, Gofmt...">
       </div>
       <button class="btn-generate" onclick="generatePrompt('tela-para-github')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-tela-para-github"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-tela-para-github"></div>
     </div>
 
     <!-- 4. DEBUG DE ERROS -->
@@ -285,7 +288,8 @@
         <textarea id="db-atual" rows="2" placeholder="O que esta acontecendo"></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('debug-erros')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-debug-erros"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-debug-erros"></div>
     </div>
 
     <!-- 5. CRIAR DO ZERO -->
@@ -316,7 +320,8 @@
         <input type="text" id="cz-estilo" placeholder="Ex: seguir ESLint do projeto, PEP8, Clean Architecture...">
       </div>
       <button class="btn-generate" onclick="generatePrompt('criar-do-zero')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-criar-do-zero"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-criar-do-zero"></div>
     </div>
 
     <!-- 6. EXPLICAR CÓDIGO -->
@@ -353,7 +358,8 @@
         <textarea class="code-area" id="ec-codigo" placeholder="Cole o codigo que deseja entender..."></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('explicar-codigo')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-explicar-codigo"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-explicar-codigo"></div>
     </div>
 
     <!-- ═══ ANALISE DE REPOSITORIO ═══ -->
@@ -394,7 +400,8 @@
         <textarea id="ag-contexto" rows="2" placeholder="Ex: Projeto que herdei, sem documentacao..."></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('analise-geral')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-analise-geral"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-analise-geral"></div>
     </div>
 
     <!-- 8. ANÁLISE ESPECÍFICA -->
@@ -433,7 +440,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('analise-especifica')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-analise-especifica"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-analise-especifica"></div>
     </div>
 
     <!-- 9. ANÁLISE COMPARATIVA -->
@@ -468,7 +476,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('analise-comparativa')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-analise-comparativa"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-analise-comparativa"></div>
     </div>
 
     <!-- 10. REFAÇÃO ORIENTADA -->
@@ -499,7 +508,8 @@
         <input type="text" id="ro-area" placeholder="Deixe em branco para analisar o repo inteiro, ou especifique pasta/arquivo">
       </div>
       <button class="btn-generate" onclick="generatePrompt('refatoracao-orientada')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-refatoracao-orientada"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-refatoracao-orientada"></div>
     </div>
 
     <!-- ═══ MELHORIA COM DIFF ═══ -->
@@ -534,7 +544,8 @@
         <textarea id="da-obs" rows="2" placeholder="Ex: Esse arquivo foi recentemente modificado por outro dev..."></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('diff-arquivo')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-diff-arquivo"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-arquivo"></div>
     </div>
 
     <!-- 12. DIFF - MÓDULO -->
@@ -571,7 +582,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('diff-modulo')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-diff-modulo"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-modulo"></div>
     </div>
 
     <!-- 13. DIFF - REACT -->
@@ -636,7 +648,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('diff-react')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-diff-react"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-react"></div>
     </div>
 
     <!-- 14. DIFF - API -->
@@ -706,7 +719,8 @@
         <textarea id="di-obs" rows="2" placeholder="Ex: Esse endpoint tem SLA de 200ms..."></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('diff-api')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-diff-api"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-api"></div>
     </div>
 
     <!-- 15. DIFF - TESTES -->
@@ -741,7 +755,8 @@
         <textarea id="dt-problemas" rows="3" placeholder="Ex:&#10;- Testes quebram com frequencia&#10;- Nao testam casos de erro&#10;- Mocks excessivos"></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('diff-testes')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-diff-testes"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-testes"></div>
     </div>
 
     <!-- 16. DIFF - PERFORMANCE -->
@@ -779,7 +794,8 @@
         <textarea id="dp-gargalo" rows="2" placeholder="Ex: Resposta lenta acima de 2s, alto uso de CPU, timeout..."></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('diff-performance')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-diff-performance"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-performance"></div>
     </div>
 
     <!-- 17. DIFF - CANIVETE SUÍÇO -->
@@ -812,7 +828,8 @@
         <textarea id="dc-contexto" rows="3" placeholder="Ex:&#10;- Preparando para PR&#10;- Removendo debito tecnico antes da v2&#10;- Após incidente de seguranca"></textarea>
       </div>
       <button class="btn-generate" onclick="generatePrompt('diff-canivete')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-diff-canivete"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-diff-canivete"></div>
     </div>
 
     <!-- ═══ DOMINIOS AVANCADOS ═══ -->
@@ -858,7 +875,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('cloud-review')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-cloud-review"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-cloud-review"></div>
     </div>
 
     <!-- 19. ENGENHARIA DE REQUISITOS -->
@@ -891,7 +909,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('requisitos-review')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-requisitos-review"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-requisitos-review"></div>
     </div>
 
     <!-- 20. METODOS AGEIS -->
@@ -934,7 +953,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('agile-review')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-agile-review"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-agile-review"></div>
     </div>
 
     <!-- 21. IA / MACHINE LEARNING -->
@@ -980,7 +1000,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('ia-ml-review')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-ia-ml-review"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-ia-ml-review"></div>
     </div>
 
     <!-- 22. DADOS INTENSIVOS -->
@@ -1024,7 +1045,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('dados-pipeline')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-dados-pipeline"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-dados-pipeline"></div>
     </div>
 
     <!-- 23. GESTAO DE PROJETOS -->
@@ -1062,7 +1084,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('gestao-projeto')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-gestao-projeto"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gestao-projeto"></div>
     </div>
 
     <!-- 24. METRICAS / OKR -->
@@ -1089,7 +1112,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('metricas-okr')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-metricas-okr"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-metricas-okr"></div>
     </div>
 
     <!-- 25. TECH SQUADS -->
@@ -1127,7 +1151,8 @@
         </div>
       </div>
       <button class="btn-generate" onclick="generatePrompt('squads-review')">&#x1f680; Gerar Prompt</button>
-      <div class="output-container" id="output-squads-review"></div>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-squads-review"></div>
     </div>
 
   </div><!-- /content -->
@@ -1220,6 +1245,8 @@ function generatePrompt(id) {
   document.getElementById('prompt-text-' + id).textContent = prompt;
   container.classList.add('visible');
   container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Rec 5: leva o foco ao resultado (região aria-live) para teclado/leitor de tela.
+  container.focus();
   if (window.PE.track) window.PE.track('generate', { template: id });
   if (window.PE.addPromptToHistory) window.PE.addPromptToHistory(id, prompt); // #M14
 }
