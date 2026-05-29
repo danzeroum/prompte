@@ -17,18 +17,19 @@ services:
         VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
         VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
     image: prompt-engineering-pro
+    container_name: prompte-frontend  # nome fixo para o gateway nginx resolver por DNS interno
     restart: unless-stopped
     expose:
       - "80" # acessível só dentro da rede do compose; quem expõe é o Caddy
-    networks: [web]
+    networks: [web, btv-prod-net]
 
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
     depends_on: [frontend]
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
+      - "8443:443"
     environment:
       DOMAIN: ${DOMAIN:?defina DOMAIN no ops/.env}
       ACME_EMAIL: ${ACME_EMAIL:?defina ACME_EMAIL no ops/.env}
@@ -40,6 +41,9 @@ services:
 
 networks:
   web:
+  btv-prod-net:
+    external: true
+    name: ops_btv-prod-net  # rede do gateway nginx do buildtovalue (proxy_pass http://prompte-frontend)
 
 volumes:
   caddy_data: # certificados TLS persistidos (não perder entre deploys)
