@@ -124,6 +124,23 @@ Passo manual: conectar `danzeroum/prompte` no Netlify (Add new site → Import) 
 a config é detectada e o deploy roda a cada push na `main`. O `dist/_headers`
 cuida do cache. Alternativas: Vercel ou Supabase Storage.
 
+## Rodar via Docker (alternativa ao Netlify)
+
+Servir o frontend estático com nginx na sua VPS:
+
+```bash
+cd frontend
+docker build -t prompt-engineering-pro .
+docker run --rm -p 8080:80 prompt-engineering-pro   # http://localhost:8080
+```
+
+O build usa as `VITE_*` públicas de `.env.example`; para customizar:
+`docker build --build-arg VITE_SUPABASE_URL=... --build-arg VITE_SUPABASE_ANON_KEY=... -t prompt-engineering-pro .`.
+O cache (assets imutáveis, HTML/SW `no-cache`) é tratado em [`frontend/nginx.conf`](frontend/nginx.conf).
+
+Para gerenciar **secrets do Supabase via Docker** (sem instalar o CLI global),
+veja [`docker/supabase-cli/README.md`](docker/supabase-cli/README.md).
+
 ## Dashboard administrativo (#5 ✅)
 
 `admin.html` mostra métricas de telemetria (eventos, chamadas LLM, cache hit rate,
