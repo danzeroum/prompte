@@ -635,6 +635,10 @@ a.sb-item::after {
   .fr {
     grid-template-columns: 1fr;
   }
+  /* 4 portas: 2×2 → coluna única no mobile (Fase 5). */
+  .pe-portas-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .ebook-card {
   background: var(--bg2);
