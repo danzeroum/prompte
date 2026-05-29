@@ -42,6 +42,16 @@ export const DICT = {
     'auth.close': 'Fechar',
     'auth.signedInAs': 'Conectado como',
     'auth.signedOut': 'Você saiu da conta.',
+    'chat.open': 'Abrir o assistente',
+    'chat.close': 'Fechar',
+    'chat.title': 'Assistente de Prompts',
+    'chat.placeholder': 'Descreva o que você precisa…',
+    'chat.send': 'Enviar',
+    'chat.greeting':
+      'Olá! Conte o que você quer fazer (ex.: revisar o arquivo auth.js do meu repositório) e eu monto o prompt ideal.',
+    'chat.thinking': 'Pensando…',
+    'chat.error': 'Não foi possível responder agora.',
+    'chat.rateLimited': 'Limite de requisições atingido. Tente novamente em alguns minutos.',
   },
   en: {
     'topbar.settings': 'Preferences',
@@ -78,6 +88,16 @@ export const DICT = {
     'auth.close': 'Close',
     'auth.signedInAs': 'Signed in as',
     'auth.signedOut': 'You have signed out.',
+    'chat.open': 'Open the assistant',
+    'chat.close': 'Close',
+    'chat.title': 'Prompt Assistant',
+    'chat.placeholder': 'Describe what you need…',
+    'chat.send': 'Send',
+    'chat.greeting':
+      "Hi! Tell me what you want to do (e.g. review auth.js in my repo) and I'll craft the ideal prompt.",
+    'chat.thinking': 'Thinking…',
+    'chat.error': 'Could not respond right now.',
+    'chat.rateLimited': 'Rate limit reached. Try again in a few minutes.',
   },
 };
 
