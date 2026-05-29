@@ -70,9 +70,6 @@
   </div>
   <div class="sb-sec">
     <div class="sb-sec-title" data-i18n="cjuk77x">Gerador Avançado</div>
-    <div class="sb-item" data-t="gen-ux" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f3a8;</span> UX + Usabilidade</div>
-    <div class="sb-item" data-t="gen-canivete" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f91d;</span> Canivete Suico Pro</div>
-    <div class="sb-item" data-t="gen-cloud" onclick="show(this)"><span class="icon" aria-hidden="true">&#x2601;</span> Cloud / Infra</div>
     <div class="sb-item" data-t="gen-ia" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f9e0;</span> IA / Machine Learning</div>
     <div class="sb-item" data-t="gen-dados" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f4ca;</span> Dados / Analytics</div>
     <div class="sb-item" data-t="gen-gestao" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f4c5;</span> Gestão / Métricas</div>
@@ -239,9 +236,6 @@
     <div class="panel" id="p-e-gestao"></div>
 
     <!-- ENHANCED GENERATORS -->
-    <div class="panel" id="p-gen-ux"></div>
-    <div class="panel" id="p-gen-canivete"></div>
-    <div class="panel" id="p-gen-cloud"></div>
     <div class="panel" id="p-gen-ia"></div>
     <div class="panel" id="p-gen-dados"></div>
     <div class="panel" id="p-gen-gestao"></div>
@@ -274,9 +268,6 @@ const meta = {
   'e-arq2':{title:'Arq. Software II',badge:'Ebook',badgeClass:'b-analysis'},
   'e-metricas':{title:'Metricas / OKR',badge:'Ebook',badgeClass:'b-analysis'},
   'e-gestao':{title:'Gestao de Projetos',badge:'Ebook',badgeClass:'b-analysis'},
-  'gen-ux':{title:'UX + Usabilidade',badge:'Gerador',badgeClass:'b-gen'},
-  'gen-canivete':{title:'Canivete Suico Pro',badge:'Gerador',badgeClass:'b-gen'},
-  'gen-cloud':{title:'Cloud / Infra',badge:'Gerador',badgeClass:'b-gen'},
   'gen-ia':{title:'IA / Machine Learning',badge:'Gerador',badgeClass:'b-gen'},
   'gen-dados':{title:'Dados / Analytics',badge:'Gerador',badgeClass:'b-gen'},
   'gen-gestao':{title:'Gestao / Metricas',badge:'Gerador',badgeClass:'b-gen'}
@@ -504,110 +495,6 @@ function buildEbookPanels(){
 function buildGenerators(){
   // gen-review foi migrado para o generator.html (piloto da fusão dos dois
   // geradores). Os demais gen-* seguem aqui até a migração completa.
-
-  // UX + Usability
-  document.getElementById('p-gen-ux').innerHTML=`
-    <div class="enh-section" style="border-color:'#e2b34a">
-      <h3><span class="emoji">&#x1f3a8;</span> Domínios Ativos: UX + Usabilidade + Design Centrado</h3>
-      <p>Combina heuristicas de usabilidade, principios de design centrado no usuario e processos de design thinking para gerar prompts com foco na experiencia do usuario.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="ux-repo" placeholder="/home/z/my-project/frontend"></div>
-      <div class="fg"><label>Arquivo(s) de componente/interface <span class="req">*</span></label><input type="text" id="ux-arq" placeholder="src/components/LoginForm.tsx"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto <span class="req">*</span></label>
-      <textarea id="ux-ctx" placeholder="Ex: Revisar componente de login para melhorar a experiencia..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Frameworks</label>
-      <div class="fr">
-        <div class="fg"><label>UI Framework</label><select id="ux-ui"><option value="">Deixe descobrir</option><option value="React">React</option><option value="Next.js">Next.js</option><option value="Vue">Vue</option><option value="Angular">Angular</option><option value="Svelte">Svelte</option></select></div>
-        <div class="fg"><label>Estilo</label><select id="ux-style"><option value="">Deixe descobrir</option><option value="shadcn/ui + Tailwind">shadcn/ui + Tailwind</option><option value="Material UI">Material UI</option><option value="Chakra UI">Chakra UI</option><option value="CSS Modules">CSS Modules</option><option value="Styled Components">Styled Components</option></select></div>
-      </div>
-    </div>
-    <div class="fg">
-      <label>Aspectos UX para incluir</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="ux-heur" checked> Analise Heuristica (Nielsen)</label>
-        <label class="cb-item"><input type="checkbox" id="ux-acess" checked> Acessibilidade</label>
-        <label class="cb-item"><input type="checkbox" id="ux-design" checked> Design Centrado no Usuario</label>
-        <label class="cb-item"><input type="checkbox" id="ux-proto" checked> Prototipacao Rapida</label>
-        <label class="cb-item"><input type="checkbox" id="ux-ia" checked> Arq. de Informacao</label>
-        <label class="cb-item"><input type="checkbox" id="ux-journey"> Jornada do Usuario</label>
-        <label class="cb-item"><input type="checkbox" id="ux-mobile"> Mobile-first</label>
-        <label class="cb-item"><input type="checkbox" id="ux-a11y"> Internacionalizacao (i18n)</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('ux')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-ux"></div>
-  `;
-
-  // Canivete Suico Pro
-  document.getElementById('p-gen-canivete').innerHTML=`
-    <div class="enh-section" style="border-color:var(--yellow)">
-      <h3><span class="emoji">&#x91d;</span> Canivete Suico Pro — Todos os Domínios Ativos</h3>
-      <p>O gerador mais completo. Inclui automaticamente camadas de verificacao de codigo, arquitetura, qualidade, seguranca, performance, UX e processos. Gera prompts altamente especializados com diff pronto para git apply.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="cs-repo" placeholder="/home/z/my-project/meu-app"></div>
-      <div class="fg"><label>Arquivo(s) ou diretorio <span class="req">*</span></label><input type="text" id="cs-arq" placeholder="src/ ou src/services/*"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto / Motivacao <span class="req">*</span></label>
-      <textarea id="cs-ctx" placeholder="Ex: Analise completa do repositorio antes de PR, refatorar debito tecnico..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Tipo de melhoria predominante</label>
-      <select id="cs-tipo"><option value="tudo">Analise completa (todos os dominios)</option><option value="qualidade">Qualidade e Testes</option><option value="arquitetura">Arquitetura e Design</option><option value="seguranca">Seguranca e Compliance</option><option value="performance">Performance e Escalabilidade</option><option value="ux">UX e Usabilidade</option><option value="devops">DevOps e Pipeline</option><option value="processos">Processos e Automacao</option><option value="refatoracao">Refatoracao Geral</option></select>
-    </div>
-    <div class="fg">
-      <label>Profundidade da analise</label>
-      <select id="cs-profund"><option value="completa">Completa (todas as camadas)</option><option value="focada">Focada (apenas dominios relevantes)</option><option value="resumida">Resumida (checklist + diffs)</option></select>
-    </div>
-    <div class="fg">
-      <label>Entregaveis esperados</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="cs-sum" checked> Resumo executivo</label>
-        <label class="cb-item"><input type="checkbox" id="cs-just" checked> Justificativa por mudanca</label>
-        <label class="cb-item"><input type="checkbox" id="cs-diff" checked> Diffs completos (git apply)</label>
-        <label class="cb-item"><input type="checkbox" id="cs-riscos"> Riscos e mitigacoes</label>
-        <label class="cb-item"><input type="checkbox" id="cs-novos"> Novos arquivos criados (conteudo completo)</label>
-        <label class="cb-item"><input type="checkbox" id="cs-testes"> Testes atualizados/criados</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('canivete')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-canivete"></div>
-  `;
-
-  // Cloud / Infra
-  document.getElementById('p-gen-cloud').innerHTML=`
-    <div class="enh-section" style="border-color:var(--accent)">
-      <h3><span class="emoji">&#x2601;</span> Domínios Ativos: Cloud Computing + Segurança + Compliance</h3>
-      <p>Combina verificacao de seguranca na nuvem, modelos de servico, migracao cloud-native e conformidade regulatória para gerar prompts especializados em infraestrutura cloud.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="cl-repo" placeholder="/home/z/my-project/cloud-app"></div>
-      <div class="fg"><label>Arquivo(s) <span class="req">*</span></label><input type="text" id="cl-arq" placeholder="terraform/ ou src/infra/"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto <span class="req">*</span></label>
-      <textarea id="cl-ctx" placeholder="Ex: Migrar infraestrutura para AWS, verificar seguranca de IAM..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Aspectos Cloud para incluir</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="cl-sec" checked> Seguranca na Nuvem (IAM, criptografia)</label>
-        <label class="cb-item"><input type="checkbox" id="cl-model" checked> Modelos de Servico (SaaS/PaaS/IaaS/FaaS)</label>
-        <label class="cb-item"><input type="checkbox" id="cl-migr"> Migracao e Adocao (6 pilares)</label>
-        <label class="cb-item"><input type="checkbox" id="cl-comp"> Compliance (LGPD, BACEN, NIST)</label>
-        <label class="cb-item"><input type="checkbox" id="cl-iac"> Infraestrutura como Codigo (IaC)</label>
-        <label class="cb-item"><input type="checkbox" id="cl-cont"> Containers e Orquestracao</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('cloud')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-cloud"></div>
-  `;
 
   // IA / Machine Learning
   document.getElementById('p-gen-ia').innerHTML=`

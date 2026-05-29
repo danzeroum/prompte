@@ -1414,41 +1414,41 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   'gen-cloud': {
     name: 'Cloud / Infra',
     fields: [
-      { id: 'cl-repo', type: 'text' },
-      { id: 'cl-arq', type: 'text' },
-      { id: 'cl-ctx', type: 'textarea' },
-      { id: 'cl-sec', type: 'checkbox' },
-      { id: 'cl-model', type: 'checkbox' },
-      { id: 'cl-migr', type: 'checkbox' },
-      { id: 'cl-comp', type: 'checkbox' },
-      { id: 'cl-iac', type: 'checkbox' },
-      { id: 'cl-cont', type: 'checkbox' },
+      { id: 'gcl-repo', type: 'text' },
+      { id: 'gcl-arq', type: 'text' },
+      { id: 'gcl-ctx', type: 'textarea' },
+      { id: 'gcl-sec', type: 'checkbox' },
+      { id: 'gcl-model', type: 'checkbox' },
+      { id: 'gcl-migr', type: 'checkbox' },
+      { id: 'gcl-comp', type: 'checkbox' },
+      { id: 'gcl-iac', type: 'checkbox' },
+      { id: 'gcl-cont', type: 'checkbox' },
     ],
     build(d) {
       const v = (id) => d[id];
       const checkedItems = (ids) => ids.filter((id) => d[id]);
 
-      const repo = v('cl-repo'),
-        arq = v('cl-arq'),
-        ctx = v('cl-ctx');
+      const repo = v('gcl-repo'),
+        arq = v('gcl-arq'),
+        ctx = v('gcl-ctx');
       const domains = checkedItems([
-        'cl-sec',
-        'cl-model',
-        'cl-migr',
-        'cl-comp',
-        'cl-iac',
-        'cl-cont',
+        'gcl-sec',
+        'gcl-model',
+        'gcl-migr',
+        'gcl-comp',
+        'gcl-iac',
+        'gcl-cont',
       ]);
       const domainLabels = {
-        'cl-sec':
+        'gcl-sec':
           'Seguranca na Nuvem (IAM, flags de protecao, criptografia, responsabilidade compartilhada)',
-        'cl-model':
+        'gcl-model':
           'Modelos de Servico (SaaS, PaaS, IaaS, FaaS) — verificacao de provisionamento otimizado',
-        'cl-migr':
+        'gcl-migr':
           'Migracao e Adocao Cloud (6 pilares: negocios, pessoas, governanca, plataforma, seguranca, operacoes)',
-        'cl-comp': 'Compliance (LGPD, resolucao BACEN 4.658, NIST CSF, seguranca by design)',
-        'cl-iac': 'Infraestrutura como Codigo (IaC) — Terraform, CloudFormation, automacao',
-        'cl-cont': 'Containers e Orquestracao (Docker, Kubernetes, resiliencia, escalabilidade)',
+        'gcl-comp': 'Compliance (LGPD, resolucao BACEN 4.658, NIST CSF, seguranca by design)',
+        'gcl-iac': 'Infraestrutura como Codigo (IaC) — Terraform, CloudFormation, automacao',
+        'gcl-cont': 'Containers e Orquestracao (Docker, Kubernetes, resiliencia, escalabilidade)',
       };
       let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
       p += `CONTEXTO: ${ctx}\n\n`;

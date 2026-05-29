@@ -551,12 +551,12 @@ FORMATO DE RESPOSTA:
 `;
 
 exports[`generators — snapshots gen-cloud snapshot 1`] = `
-"Analise detalhadamente o repositorio linha-um cl-repo
-  linha-dois cl-repo, com foco em linha-um cl-arq
-  linha-dois cl-arq.
+"Analise detalhadamente o repositorio linha-um gcl-repo
+  linha-dois gcl-repo, com foco em linha-um gcl-arq
+  linha-dois gcl-arq.
 
-CONTEXTO: linha-um cl-ctx
-  linha-dois cl-ctx
+CONTEXTO: linha-um gcl-ctx
+  linha-dois gcl-ctx
 
 INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de computacao em nuvem:
 
