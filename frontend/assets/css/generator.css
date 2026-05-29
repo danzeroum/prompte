@@ -64,7 +64,10 @@ body {
   cursor: pointer;
   font-size: 13px;
   color: var(--text-secondary);
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
   border-left: 3px solid transparent;
 }
 
@@ -304,7 +307,12 @@ a.sidebar-item::after {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
   margin-top: 8px;
 }
 
@@ -343,7 +351,12 @@ a.sidebar-item::after {
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .btn-copy:hover {
@@ -368,7 +381,12 @@ a.sidebar-item::after {
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .btn-clear:hover {

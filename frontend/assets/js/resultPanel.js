@@ -35,7 +35,10 @@ export const AI_PROVIDERS = [
 ];
 
 function esc(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return String(s).replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+  );
 }
 
 // Renderiza o painel dentro de `container`, para o prompt `prompt` do template
@@ -45,7 +48,7 @@ export function renderResultPanel(container, { id, prompt, title } = {}) {
   if (!container) return;
   const state = { text: String(prompt || ''), editing: false };
   const aiOptions = AI_PROVIDERS.map(
-    (p) => `<button type="button" role="menuitem" data-ai="${p.id}">${esc(p.label)}</button>`
+    (p) => `<button type="button" role="menuitem" data-ai="${p.id}">${esc(p.label)}</button>`,
   ).join('');
 
   container.innerHTML = `
@@ -128,7 +131,11 @@ export function renderResultPanel(container, { id, prompt, title } = {}) {
       case 'save': {
         const res = await savePrompt({ template: id, title, content: currentText() });
         if (res.ok) {
-          showToast(t(res.where === 'cloud' ? 'result.saved.cloud' : 'result.saved.local'), '', 'success');
+          showToast(
+            t(res.where === 'cloud' ? 'result.saved.cloud' : 'result.saved.local'),
+            '',
+            'success',
+          );
           track('save_prompt', { template: id, where: res.where });
         } else if (res.needsAuth) {
           showToast(t('result.save.auth'), '', 'info');
