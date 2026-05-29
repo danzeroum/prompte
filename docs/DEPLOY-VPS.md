@@ -10,7 +10,7 @@ navegador fala direto com o Supabase. Por isso o deploy é só "servir arquivos"
 
 ## Pré-requisitos
 - VPS Ubuntu 22.04+ com acesso root/sudo.
-- Um **domínio** (ex.: `prompt.seudominio.com`) com registro **DNS A** apontando
+- Um **domínio** (ex.: `prompte.buildtovalue.cloud`) com registro **DNS A** apontando
   para o **IP da VPS** (configure isso no seu provedor de DNS antes de começar —
   o Caddy só emite o certificado quando o domínio resolve para a VPS).
 
@@ -56,13 +56,13 @@ docker compose --env-file ops/.env -f ops/docker-compose.vps.yml ps
 Esperado: 2 contêineres `running` (`frontend` e `caddy`). O Caddy emite o
 certificado sozinho na primeira subida (pode levar alguns segundos).
 
-Acesse: **`https://SEU_DOMINIO`** 🎉
+Acesse: **`https://prompte.buildtovalue.cloud`** 🎉
 
 ## Passo 6 — Liberar o login (magic link) para o domínio
 No **Supabase Dashboard → Authentication → URL Configuration → Redirect URLs**,
 adicione:
 ```
-https://SEU_DOMINIO/**
+https://prompte.buildtovalue.cloud/**
 ```
 Sem isso, o login por magic link não retorna para o site em produção. (O resto —
 telemetria, cache, LLM, dashboard — já funciona assim que os secrets estiverem
@@ -86,9 +86,9 @@ docker compose --env-file ops/.env -f ops/docker-compose.vps.yml up -d --build
 ## Solução de problemas
 | Sintoma | Causa provável | Solução |
 |---|---|---|
-| TLS não emite / erro ACME | DNS ainda não propagou ou porta 80 fechada | Confirme `dig +short SEU_DOMINIO` = IP da VPS; UFW permitindo 80/443 |
+| TLS não emite / erro ACME | DNS ainda não propagou ou porta 80 fechada | Confirme `dig +short prompte.buildtovalue.cloud` = IP da VPS; UFW permitindo 80/443 |
 | `bind: address already in use` (80/443) | Nginx/Apache do host ativo | `sudo systemctl stop nginx apache2 && sudo systemctl disable nginx apache2` |
-| Página abre mas login não volta | Redirect URL ausente | Adicionar `https://SEU_DOMINIO/**` no Supabase Auth (Passo 6) |
+| Página abre mas login não volta | Redirect URL ausente | Adicionar `https://prompte.buildtovalue.cloud/**` no Supabase Auth (Passo 6) |
 | LLM responde 503 | Secret ausente | Definir `DEEPSEEK_API_KEY` (ver `docker/supabase-cli/`) |
 
 ## Notas de segurança
