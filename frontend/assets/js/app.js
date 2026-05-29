@@ -9,6 +9,7 @@ import {
   injectTopbarControls,
   copyText,
   injectOfflineBanner,
+  initKeyboardShortcuts,
 } from './common.js';
 import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates, collectFormData } from './generators.js';
@@ -16,6 +17,7 @@ import { askLLM } from './llmClient.js';
 import { initAuth } from './auth.js';
 import { initChat } from './chat.js';
 import { isConfigured } from './supabaseClient.js';
+import { addPromptToHistory } from './promptHistory.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
@@ -64,7 +66,15 @@ function init() {
   initI18n();
   enhanceNavigation();
   injectTopbarControls();
-  initAuth();
+  initKeyboardShortcuts();
+  // #M12: adia o carregamento do SDK do Supabase. initAuth() (que importa o SDK)
+  // só roda no load quando há um retorno de magic link na URL; caso contrário é
+  // acionado sob demanda (abrir login/chat) via window.PE.ensureAuth.
+  if (
+    /(access_token|refresh_token|[?&]code=|error_description)/.test(location.hash + location.search)
+  ) {
+    initAuth();
+  }
   initChat();
   mountManualPlayground();
 
@@ -83,7 +93,19 @@ function init() {
 
   // exposto para depuração/uso futuro por scripts inline das páginas
   // (generator.html usa buildPrompt + generatorTemplates para o dispatch).
-  window.PE = { copyText, buildPrompt, generatorTemplates, collectFormData, track, flush, askLLM };
+  // ensureAuth (#M12): inicializa a auth sob demanda quando o usuário abre o
+  // login/chat, evitando carregar o SDK no load para quem nunca os usa.
+  window.PE = {
+    copyText,
+    buildPrompt,
+    generatorTemplates,
+    collectFormData,
+    track,
+    flush,
+    askLLM,
+    ensureAuth: initAuth,
+    addPromptToHistory,
+  };
 }
 
 if (document.readyState === 'loading') {

@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gerador de Prompts — Super Z</title>
 <meta name="description" content="Gerador prático de prompts com 25 templates para trabalho direto com código.">
+<!-- SEO / Open Graph (#M11) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prompt Engineering Pro">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Gerador de Prompts — Prompt Engineering Pro">
+<meta property="og:description" content="Gerador prático de prompts com 25 templates para trabalho direto com código.">
+<meta property="og:image" content="/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gerador de Prompts — Prompt Engineering Pro">
+<meta name="twitter:description" content="Gerador prático de prompts com 25 templates para trabalho direto com código.">
+<meta name="twitter:image" content="/og-image.svg">
 <meta name="theme-color" content="#0d1117">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co">
 <link rel="manifest" href="/manifest.json">
@@ -22,6 +33,12 @@
   <div class="sidebar-header">
     <h1>Prompt Generator</h1>
     <span>Super Z Toolkit</span>
+  </div>
+
+  <!-- Busca de templates (#M16) -->
+  <div class="sidebar-search">
+    <input type="search" id="templateSearch" placeholder="Buscar template..."
+      aria-label="Buscar template" oninput="filterTemplates(this.value)">
   </div>
 
   <!-- Navegação entre páginas -->
@@ -1192,6 +1209,7 @@ function generatePrompt(id) {
       <h3>&#x2705; Prompt Gerado</h3>
       <div class="btn-row" style="margin-top:0;">
         <button class="btn-copy" onclick="copyPrompt(this, '${id}')">&#x1f4cb; Copiar</button>
+        <button class="btn-copy" onclick="exportPrompt('${id}')">&#x2b07; Exportar .md</button>
         <button class="btn-clear" onclick="clearOutput('${id}')">&#x2716; Limpar</button>
       </div>
     </div>
@@ -1203,6 +1221,7 @@ function generatePrompt(id) {
   container.classList.add('visible');
   container.scrollIntoView({ behavior: 'smooth', block: 'start' });
   if (window.PE.track) window.PE.track('generate', { template: id });
+  if (window.PE.addPromptToHistory) window.PE.addPromptToHistory(id, prompt); // #M14
 }
 
 // ─── COPY ───
@@ -1236,6 +1255,43 @@ function clearOutput(id) {
   const container = document.getElementById('output-' + id);
   container.classList.remove('visible');
   container.innerHTML = '';
+}
+
+// ─── EXPORTAR .md (#M15) ───
+function exportPrompt(id) {
+  const text = document.getElementById('prompt-text-' + id).textContent;
+  const title = (templateMeta[id] && templateMeta[id].title) || id;
+  const md = `# ${title}\n\n\`\`\`\n${text}\n\`\`\`\n`;
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `prompt-${id}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  if (window.PE && window.PE.track) window.PE.track('export_md', { template: id });
+}
+
+// ─── BUSCA DE TEMPLATES (#M16) ───
+function filterTemplates(term) {
+  const q = (term || '').trim().toLowerCase();
+  document.querySelectorAll('.sidebar-item[data-template]').forEach((item) => {
+    const id = item.dataset.template;
+    const name = item.textContent.toLowerCase();
+    const meta = templateMeta[id];
+    const badge = meta ? meta.badge.toLowerCase() : '';
+    const hit = !q || name.includes(q) || badge.includes(q) || id.includes(q);
+    item.style.display = hit ? '' : 'none';
+  });
+  // Esconde seções de templates que ficaram sem itens visíveis.
+  document.querySelectorAll('.sidebar-section').forEach((sec) => {
+    const items = sec.querySelectorAll('.sidebar-item[data-template]');
+    if (!items.length) return; // seção de navegação: não mexe
+    const anyVisible = [...items].some((i) => i.style.display !== 'none');
+    sec.style.display = anyVisible ? '' : 'none';
+  });
 }
 </script>
 </body>

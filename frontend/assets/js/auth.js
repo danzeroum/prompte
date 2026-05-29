@@ -57,10 +57,17 @@ export async function signOut() {
   setUser(null);
 }
 
-// Inicializa: lê a sessão atual e assina mudanças de estado.
+// Inicializa: lê a sessão atual e assina mudanças de estado. Idempotente — só
+// resolve o cliente (e carrega o SDK) uma vez (#M12: chamada sob demanda).
+let _initStarted = false;
 export async function initAuth() {
+  if (_initStarted) return;
+  _initStarted = true;
   const supabase = await getSupabase();
-  if (!supabase) return;
+  if (!supabase) {
+    _initStarted = false; // sem config: permite re-tentar se for configurado depois
+    return;
+  }
   const { data } = await supabase.auth.getSession();
   setUser(data?.session?.user ?? null);
   supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user ?? null));

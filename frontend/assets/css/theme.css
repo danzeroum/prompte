@@ -9,6 +9,14 @@
    (.light-theme no <html>) sobrescreve os dois esquemas.
    ============================================================ */
 
+/* Reset compartilhado (#M10): antes duplicado em generator/index/manual.css.
+   theme.css é carregado primeiro em todas as páginas, então vive aqui só uma vez. */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
   color-scheme: dark;
 
@@ -44,6 +52,16 @@
   --text-muted: var(--muted);
   --accent-hover: var(--accent-h);
   --green-hover: var(--green-h);
+}
+
+/* Transição suave ao alternar tema (#M18). Limitada a cores (sem layout) e com
+   especificidade zero via :where(); o bloco prefers-reduced-motion abaixo a
+   neutraliza para quem prefere menos animação. */
+:where(body, header, nav, aside, main, section, article, div, button, input, textarea, select, a) {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 /* ---------- Tema claro ---------- */
@@ -546,4 +564,55 @@
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* Modal de histórico de prompts (#M14) */
+.pe-history-modal {
+  max-width: 560px;
+  width: 92%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.pe-history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.pe-history-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+.pe-history-list {
+  overflow-y: auto;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pe-history-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.pe-history-meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.pe-history-snippet {
+  font-size: 0.85rem;
+  color: var(--text2);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 8px;
+}
+.pe-history-empty {
+  color: var(--text2);
+}
+.pe-history-footer {
+  display: flex;
+  justify-content: flex-end;
 }
