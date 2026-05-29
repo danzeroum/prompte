@@ -25,21 +25,24 @@
 }
 
 :root {
-  color-scheme: dark;
+  /* color-scheme e os tokens base (--bg, --accent, --text, oklch...) são
+     definidos em tokens.css (carregado ANTES). Aqui ficam apenas: (1) a ponte
+     dos nomes legados curtos/longos → tokens novos, e (2) as cores de marca,
+     que não têm equivalente no conjunto de tokens. */
 
-  /* Esquema curto (index.html / manual.html) */
-  --bg: #0d1117;
-  --bg2: #161b22;
-  --bg3: #1c2333;
-  --bg-input: #0d1117;
-  --border: #30363d;
-  --border-focus: #58a6ff;
-  --text: #e6edf3;
-  --text2: #8b949e;
-  /* #M-UX2 (WCAG 1.4.3): subido de #6e7681 (4.12:1, reprovava AA) p/ 7.5:1 */
-  --muted: #9aa4b1;
-  --accent: #58a6ff;
-  --accent-h: #79c0ff;
+  /* Esquema curto (index.html / manual.html) — ponte p/ tokens novos.
+     var() resolve no uso, então estes aliases acompanham .light-theme
+     automaticamente (sem precisar redeclarar no tema claro). */
+  --bg2: var(--bg-2);
+  --bg3: var(--bg-3);
+  --bg-input: var(--bg-inset);
+  --border: var(--line);
+  --border-focus: var(--accent);
+  --text2: var(--text-2);
+  --muted: var(--text-3);
+  --accent-h: color-mix(in oklch, var(--accent) 82%, white);
+
+  /* Cores de marca (sem token equivalente) — mantidas aqui nos dois temas. */
   --green: #3fb950;
   --green-h: #56d364;
   --orange: #d29922;
@@ -73,21 +76,10 @@
 }
 
 /* ---------- Tema claro ---------- */
+/* Superfícies/texto/acento claros vêm de tokens.css (.light-theme). Os aliases
+   curtos (--bg2, --border, --muted...) acompanham via var() — não redeclarar.
+   Aqui só sobrescrevemos as cores de marca p/ contraste no fundo claro. */
 .light-theme {
-  color-scheme: light;
-
-  --bg: #ffffff;
-  --bg2: #f6f8fa;
-  --bg3: #eaeef2;
-  --bg-input: #ffffff;
-  --border: #d0d7de;
-  --border-focus: #0969da;
-  --text: #1f2328;
-  --text2: #57606a;
-  /* #M-UX2 (WCAG 1.4.3): subido de #6e7781 (4.55:1, no limite) p/ 6.4:1 */
-  --muted: #57606a;
-  --accent: #0969da;
-  --accent-h: #0550ae;
   --green: #1a7f37;
   --green-h: #116329;
   --orange: #9a6700;
@@ -281,7 +273,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 14px;
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.7;
   color: var(--text);

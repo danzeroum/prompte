@@ -1,8 +1,7 @@
 /* generator.css — estilos específicos da página, extraídos do <style> inline
    de generator.html (recomendação M1). Carregado após theme.css. */
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  font-family: var(--font-ui);
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
@@ -65,7 +64,10 @@ body {
   cursor: pointer;
   font-size: 13px;
   color: var(--text-secondary);
-  transition: all 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
   border-left: 3px solid transparent;
 }
 
@@ -236,7 +238,7 @@ a.sidebar-item::after {
 .form-group textarea {
   min-height: 160px;
   resize: vertical;
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.6;
   tab-size: 2;
@@ -305,7 +307,12 @@ a.sidebar-item::after {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
   margin-top: 8px;
 }
 
@@ -344,7 +351,12 @@ a.sidebar-item::after {
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .btn-copy:hover {
@@ -369,7 +381,12 @@ a.sidebar-item::after {
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .btn-clear:hover {
@@ -431,7 +448,7 @@ a.sidebar-item::after {
 }
 
 .output-content {
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-family: var(--font-mono);
   font-size: 12.5px;
   line-height: 1.7;
   color: var(--text-primary);
@@ -439,6 +456,67 @@ a.sidebar-item::after {
   word-break: break-word;
   max-height: 600px;
   overflow-y: auto;
+}
+
+/* ─── PAINEL DE RESULTADO (Fase 3) ─── */
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.output-edit {
+  width: 100%;
+  min-height: 220px;
+  resize: vertical;
+  background: var(--bg-inset);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+.output-edit:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.ai-open {
+  position: relative;
+  display: inline-block;
+}
+.ai-menu {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 160px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.ai-menu[hidden] {
+  display: none;
+}
+.ai-menu button {
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ai-menu button:hover {
+  background: var(--bg-3);
+  color: var(--accent);
 }
 
 .output-content::-webkit-scrollbar {
@@ -487,6 +565,40 @@ a.sidebar-item::after {
   .topbar {
     padding: 12px 16px;
   }
+  /* Mode-toggle com alvos de toque maiores no mobile (Fase 5). */
+  .mode-toggle button {
+    padding: 11px 6px;
+  }
+  /* Resultado como bottom-sheet (Fase 5): fica fixo na base, rolável, com
+     cantos arredondados no topo. Mantém aria-live/foco já existentes. */
+  .output-container.visible {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 80;
+    margin: 0;
+    max-height: 78vh;
+    overflow-y: auto;
+    background: var(--bg-2);
+    border-top: 1px solid var(--line);
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    box-shadow: var(--shadow);
+    padding: 16px;
+  }
+  /* "Pega" visual do bottom-sheet. */
+  .output-container.visible::before {
+    content: '';
+    display: block;
+    width: 38px;
+    height: 4px;
+    margin: 0 auto 12px;
+    border-radius: var(--r-pill);
+    background: var(--line-2);
+  }
+  .result-actions {
+    gap: 6px;
+  }
 }
 
 /* Busca de templates na sidebar (#M16) */
@@ -506,4 +618,50 @@ a.sidebar-item::after {
 .sidebar-search input:focus {
   outline: none;
   border-color: var(--border-focus);
+}
+
+/* ─── SWITCH DIRETO ↔ AVANÇADO (Fase 2) ─── */
+/* Visibilidade das seções por modo (classe aplicada em <html> no pré-paint). */
+html.mode-direto .sidebar-section[data-mode='avancado'] {
+  display: none;
+}
+html.mode-avancado .sidebar-section[data-mode='direto'] {
+  display: none;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 3px;
+  margin: 14px 16px 4px;
+  padding: 3px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+.mode-toggle button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-2);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 6px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+.mode-toggle button.on {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.mode-toggle button:not(.on):hover {
+  color: var(--text);
+  background: var(--bg-inset);
+}
+.mode-toggle button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

@@ -19,6 +19,8 @@
 <meta name="theme-color" content="#0d1117">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co">
 <link rel="manifest" href="/manifest.json">
+<link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/theme.css">
 <script type="module" src="/assets/js/app.js"></script>
 <link rel="stylesheet" href="/assets/css/index.css">
@@ -37,7 +39,6 @@
     <a class="sb-item active" href="/index.html" data-i18n-html="c807ejp"><span class="icon" aria-hidden="true">&#x1f4ca;</span> Análise &amp; Gerador</a>
     <a class="sb-item" href="/generator.html" data-i18n-html="c1b6n567"><span class="icon" aria-hidden="true">&#x1f680;</span> Gerador de Prompts</a>
     <a class="sb-item" href="/manual.html" data-i18n-html="c1y5yzbb"><span class="icon" aria-hidden="true">&#x1f4d6;</span> Manual</a>
-    <a class="sb-item" href="/admin.html" hidden data-i18n-html="c2u2ohy"><span class="icon" aria-hidden="true">&#x1f4c8;</span> Admin / Métricas</a>
   </div>
   <div class="sb-sec">
     <div class="sb-sec-title" data-i18n="cf6v0zn">Análise</div>
@@ -69,7 +70,6 @@
   </div>
   <div class="sb-sec">
     <div class="sb-sec-title" data-i18n="cjuk77x">Gerador Avançado</div>
-    <div class="sb-item" data-t="gen-review" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f504;</span> Revisão + Qualidade</div>
     <div class="sb-item" data-t="gen-api" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f310;</span> Design de API</div>
     <div class="sb-item" data-t="gen-arch" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f3d7;</span> Refatoração Arquitetural</div>
     <div class="sb-item" data-t="gen-security" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f6e1;</span> Segurança + LGPD</div>
@@ -94,14 +94,44 @@
 
     <!-- OVERVIEW -->
     <div class="panel active" id="p-overview">
-      <!-- CTA orientado à tarefa (#M-UX4/Rec 5): esta página é de análise e
-           referência; o gerador completo (25 templates) vive em generator.html. -->
-      <div class="pe-hero-cta">
-        <div class="pe-hero-text">
-          <strong data-i18n="idx.cta.q">Quer gerar um prompt agora?</strong>
-          <span data-i18n="idx.cta.sub">Esta página é de análise e referência. O gerador completo, com 25 templates, fica no Gerador de Prompts.</span>
+      <!-- Home orientada à tarefa (Fase 4): comece pela tarefa, não pela lista.
+           As 4 portas levam direto ao gerador no modo/template certo. -->
+      <section class="pe-portas" aria-labelledby="pe-portas-q">
+        <p class="pe-portas-eyebrow" data-i18n="home.eyebrow">Pontos de partida</p>
+        <h2 class="pe-portas-q" id="pe-portas-q" data-i18n="home.question">O que você quer fazer?</h2>
+        <div class="pe-portas-grid">
+          <a class="porta" href="/generator.html?mode=direto#t=revisao-correcao">
+            <span class="porta-ic" aria-hidden="true">&#x1f504;</span>
+            <strong data-i18n="home.porta.revisar">Revisar um trecho</strong>
+            <span data-i18n="home.porta.revisar.sub">Cole o código e receba correções prontas para aplicar.</span>
+          </a>
+          <a class="porta" href="/generator.html?mode=avancado#t=analise-geral">
+            <span class="porta-ic" aria-hidden="true">&#x1f4e6;</span>
+            <strong data-i18n="home.porta.repo">Analisar um repositório</strong>
+            <span data-i18n="home.porta.repo.sub">Mapeie um projeto inteiro com foco e contexto.</span>
+          </a>
+          <a class="porta" href="/generator.html?mode=avancado#t=diff-arquivo">
+            <span class="porta-ic" aria-hidden="true">&#x1f4c4;</span>
+            <strong data-i18n="home.porta.diff">Gerar um diff</strong>
+            <span data-i18n="home.porta.diff.sub">Peça melhorias entregues como patch pronto para git apply.</span>
+          </a>
+          <a class="porta" href="/generator.html?mode=avancado#t=cloud-review">
+            <span class="porta-ic" aria-hidden="true">&#x1f9e0;</span>
+            <strong data-i18n="home.porta.lente">Lente de especialista</strong>
+            <span data-i18n="home.porta.lente.sub">Revise sob a ótica de cloud, dados, segurança e mais.</span>
+          </a>
         </div>
-        <a class="pe-hero-btn" href="/generator.html" data-i18n-html="idx.cta.btn"><span class="emoji" aria-hidden="true">&#x1f680;</span> Ir para o Gerador</a>
+        <p class="pe-portas-foot">
+          <a href="/generator.html" data-i18n="home.allgen">Ver todos os templates</a>
+          <span aria-hidden="true">·</span>
+          <a href="/manual.html" data-i18n="home.manual">Abrir o manual</a>
+        </p>
+      </section>
+
+      <!-- Meus prompts (Fase 3b/4): só aparece quando há prompts salvos. -->
+      <div class="card" id="savedPromptsCard" hidden>
+        <h3><span class="emoji">&#x1f4be;</span> <span data-i18n="home.saved.title">Meus prompts</span></h3>
+        <div id="savedPromptsList"></div>
       </div>
 
       <div class="card" style="border-left-color:var(--teal)">
@@ -212,7 +242,6 @@
     <div class="panel" id="p-e-gestao"></div>
 
     <!-- ENHANCED GENERATORS -->
-    <div class="panel" id="p-gen-review"></div>
     <div class="panel" id="p-gen-api"></div>
     <div class="panel" id="p-gen-arch"></div>
     <div class="panel" id="p-gen-security"></div>
@@ -251,7 +280,6 @@ const meta = {
   'e-arq2':{title:'Arq. Software II',badge:'Ebook',badgeClass:'b-analysis'},
   'e-metricas':{title:'Metricas / OKR',badge:'Ebook',badgeClass:'b-analysis'},
   'e-gestao':{title:'Gestao de Projetos',badge:'Ebook',badgeClass:'b-analysis'},
-  'gen-review':{title:'Revisao + Qualidade',badge:'Gerador',badgeClass:'b-gen'},
   'gen-api':{title:'Design de API',badge:'Gerador',badgeClass:'b-gen'},
   'gen-arch':{title:'Refatoracao Arquitetural',badge:'Gerador',badgeClass:'b-gen'},
   'gen-security':{title:'Seguranca + LGPD',badge:'Gerador',badgeClass:'b-gen'},
@@ -483,38 +511,8 @@ function buildEbookPanels(){
 
 // ─── BUILD ENHANCED GENERATORS ───
 function buildGenerators(){
-  // Review + Quality
-  document.getElementById('p-gen-review').innerHTML=`
-    <div class="enh-section" style="border-color:var(--red)">
-      <h3><span class="emoji">&#x2705;</span> Domínios Ativos: Qualidade SW + Arq. Software + SOLID</h3>
-      <p>Este gerador combina verificacao de qualidade, revisao de codigo com padroes de arquitetura. Inclua automaticamente checklists de V&V, analise estatica, principios SOLID e atributos de qualidade.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="rq-repo" placeholder="/home/z/my-project/meu-app"></div>
-      <div class="fg"><label>Arquivo ou diretorio <span class="req">*</span></label><input type="text" id="rq-arq" placeholder="src/services/ ou src/utils/auth.ts"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto / Motivacao <span class="req">*</span></label>
-      <textarea id="rq-ctx" placeholder="Ex: Refatorar apos incidente de producao, preparando para PR..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Domínios de qualidade para incluir</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="rq-verif" checked> Verificacao e Validacao</label>
-        <label class="cb-item"><input type="checkbox" id="rq-test" checked> Testes (todos os niveis)</label>
-        <label class="cb-item"><input type="checkbox" id="rq-sast" checked> Analise Estatica (SAST)</label>
-        <label class="cb-item"><input type="checkbox" id="rq-rev" checked> Code Review</label>
-        <label class="cb-item"><input type="checkbox" id="rq-qual" checked> Atributos de Qualidade</label>
-        <label class="cb-item"><input type="checkbox" id="rq-solid" checked> Principios SOLID</label>
-        <label class="cb-item"><input type="checkbox" id="rq-clean"> Clean Code / 12-Factor</label>
-        <label class="cb-item"><input type="checkbox" id="rq-arqcb"> Arquitetura (C4, Refatoracao)</label>
-        <label class="cb-item"><input type="checkbox" id="rq-devops"> DevOps / Pipeline</label>
-        <label class="cb-item"><input type="checkbox" id="rq-perf"> Performance / Escalabilidade</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('review')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-review"></div>
-  `;
+  // gen-review foi migrado para o generator.html (piloto da fusão dos dois
+  // geradores). Os demais gen-* seguem aqui até a migração completa.
 
   // API Design
   document.getElementById('p-gen-api').innerHTML=`
@@ -863,11 +861,43 @@ function openPanelFromHash(){
 }
 window.addEventListener('hashchange',openPanelFromHash);
 
+// ─── MEUS PROMPTS (Fase 4) ───
+// Lista os prompts salvos (nuvem se logado, senão local) via window.PE.
+function renderSavedPrompts(){
+  if(!window.PE||typeof window.PE.listSavedPrompts!=='function')return;
+  const card=document.getElementById('savedPromptsCard');
+  const list=document.getElementById('savedPromptsList');
+  if(!card||!list)return;
+  window.PE.listSavedPrompts().then((items)=>{
+    if(!items||!items.length){card.hidden=true;return;}
+    card.hidden=false;
+    list.innerHTML='';
+    items.slice(0,10).forEach((it)=>{
+      const row=document.createElement('div');
+      row.className='saved-row';
+      const txt=document.createElement('div');
+      txt.className='saved-txt';
+      txt.textContent=(it.title||it.template||'prompt')+' — '+String(it.content||'').slice(0,120);
+      const copy=document.createElement('button');
+      copy.type='button';copy.className='btn-copy';copy.textContent='📋';
+      copy.setAttribute('aria-label','Copiar');
+      copy.addEventListener('click',()=>window.PE.copyText&&window.PE.copyText(it.content));
+      row.appendChild(txt);row.appendChild(copy);
+      list.appendChild(row);
+    });
+  }).catch(()=>{});
+}
+
 // ─── INIT ───
 buildGrid();
 buildEbookPanels();
 buildGenerators();
 openPanelFromHash();
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',renderSavedPrompts);
+}else{
+  renderSavedPrompts();
+}
 </script>
 </body>
 </html>

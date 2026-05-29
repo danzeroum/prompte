@@ -1,4 +1,9 @@
-import { buildPrompt, generatorTemplates } from '../assets/js/generators.js';
+import {
+  buildPrompt,
+  generatorTemplates,
+  templatesForMode,
+  collectFormData,
+} from '../assets/js/generators.js';
 import { originalGenerators } from './fixtures/generators-original.js';
 
 describe('generators', () => {
@@ -14,6 +19,43 @@ describe('generators', () => {
     const out = buildPrompt('review', {});
     expect(out).toContain('<repo>');
     expect(out).toContain('<arquivo>');
+  });
+
+  it('templatesForMode separa Direto (6) de Avançado (19) e exclui playground', () => {
+    const direto = templatesForMode('direto');
+    const avancado = templatesForMode('avancado');
+    expect(direto).toEqual([
+      'revisao-correcao',
+      'melhoria-refatoracao',
+      'tela-para-github',
+      'debug-erros',
+      'criar-do-zero',
+      'explicar-codigo',
+    ]);
+    expect(avancado).toHaveLength(19);
+    // Playground (review/api) e os gen-* não têm `mode` → fora dos dois modos.
+    expect(direto).not.toContain('review');
+    expect(avancado).not.toContain('gen-review');
+    // Ordem de declaração preservada: análise de repo vem antes dos diffs.
+    expect(avancado.indexOf('analise-geral')).toBeLessThan(avancado.indexOf('diff-arquivo'));
+  });
+
+  it('gen-review usa ids grv-* (sem colidir com rq-* de requisitos-review)', () => {
+    const ids = generatorTemplates['gen-review'].fields.map((f) => f.id);
+    expect(ids).toContain('grv-repo');
+    expect(ids).not.toContain('rq-repo');
+    // requisitos-review (um dos 25) mantém rq-repo — não pode colidir.
+    expect(generatorTemplates['requisitos-review'].fields.map((f) => f.id)).toContain('rq-repo');
+  });
+
+  it('collectFormData escopa ao painel (ids iguais em painéis diferentes)', () => {
+    document.body.innerHTML = `
+      <div id="panel-a"><input id="grv-repo" value="do-painel-A"></div>
+      <div id="panel-b"><input id="grv-repo" value="do-painel-B"></div>`;
+    const a = collectFormData('gen-review', document.getElementById('panel-a'));
+    const b = collectFormData('gen-review', document.getElementById('panel-b'));
+    expect(a['grv-repo']).toBe('do-painel-A');
+    expect(b['grv-repo']).toBe('do-painel-B');
   });
 
   it('expõe os 35 templates migrados + os exemplos do playground', () => {

@@ -21,6 +21,8 @@ import { initAuth } from './auth.js';
 import { initChat } from './chat.js';
 import { isConfigured } from './supabaseClient.js';
 import { addPromptToHistory } from './promptHistory.js';
+import { renderResultPanel } from './resultPanel.js';
+import { listSavedPrompts, deleteSavedPrompt } from './savedPrompts.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
@@ -115,6 +117,9 @@ function init() {
     askLLM,
     ensureAuth: initAuth,
     addPromptToHistory,
+    renderResultPanel,
+    listSavedPrompts,
+    deleteSavedPrompt,
   };
 }
 
