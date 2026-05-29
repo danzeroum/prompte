@@ -665,3 +665,43 @@ html.mode-avancado .sidebar-section[data-mode='direto'] {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* ─── #KB: seção opt-in "Enriquecer com ebooks" (knowledgeBase.js) ─── */
+.kb-section {
+  margin: 12px 0 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+}
+.kb-summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  user-select: none;
+}
+.kb-summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.kb-body {
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--border);
+}
+.kb-domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 8px 0 14px;
+}
+.kb-domain {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--text);
+  cursor: pointer;
+}
+.kb-domain input {
+  accent-color: var(--accent);
+}

@@ -24,6 +24,14 @@ import { addPromptToHistory } from './promptHistory.js';
 import { renderResultPanel } from './resultPanel.js';
 import { listSavedPrompts, deleteSavedPrompt } from './savedPrompts.js';
 
+// #KB: carregador lazy com cache do módulo da base de conhecimento. A promessa
+// do import() é memoizada, então knowledgeBase.js é baixado e avaliado uma única
+// vez, independentemente de quantas vezes o gerador enriquecer um prompt.
+let _knowledgePromise;
+function ensureKnowledge() {
+  return (_knowledgePromise ??= import('./knowledgeBase.js'));
+}
+
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
   if (!host) return;
@@ -116,6 +124,10 @@ function init() {
     flush,
     askLLM,
     ensureAuth: initAuth,
+    // #KB: base de conhecimento dos ebooks carregada sob demanda (mesmo padrão
+    // lazy do #M12/ensureAuth). Importa knowledgeBase.js só quando o usuário
+    // enriquece um prompt; o Vite gera um chunk separado fora do parse inicial.
+    ensureKnowledge,
     addPromptToHistory,
     renderResultPanel,
     listSavedPrompts,
