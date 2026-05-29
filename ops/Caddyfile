@@ -1,0 +1,7 @@
+# Caddy: HTTPS automático (Let's Encrypt) + proxy para o container do frontend.
+# DOMAIN e ACME_EMAIL vêm do ambiente (ops/.env).
+{$DOMAIN} {
+	encode zstd gzip
+	tls {$ACME_EMAIL}
+	reverse_proxy frontend:80
+}

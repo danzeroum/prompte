@@ -13,6 +13,7 @@ engenharia de software, composta por três páginas:
 - [`docs/SCRIPTS.md`](docs/SCRIPTS.md) — referência clicável de **todos os scripts** (cada função com link para a definição).
 - [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md) — **interligação** entre os scripts (grafo de dependências + fluxos).
 - [`docs/EXPLICACAO-CODIGO.md`](docs/EXPLICACAO-CODIGO.md) — explicação didática **ligada ao código**.
+- [`docs/DEPLOY-VPS.md`](docs/DEPLOY-VPS.md) — **deploy na VPS** (frontend + domínio + HTTPS via Docker/Caddy).
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) — fases e decisões de backend.
 
 ## Arquitetura do frontend
