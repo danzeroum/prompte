@@ -1,0 +1,44 @@
+name: Docker
+
+# Valida que as imagens Docker realmente buildam (sem publicar).
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'frontend/**'
+      - 'docker/**'
+      - '.github/workflows/docker.yml'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - 'docker/**'
+      - '.github/workflows/docker.yml'
+
+jobs:
+  build-frontend-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build frontend image (nginx)
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          push: false
+          tags: prompt-engineering-pro:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-supabase-cli-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build supabase-cli image
+        uses: docker/build-push-action@v6
+        with:
+          context: docker/supabase-cli
+          push: false
+          tags: supabase-cli:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
