@@ -4,12 +4,18 @@
 
 import { initTheme } from './theme.js';
 import { initI18n, t } from './i18n.js';
-import { enhanceNavigation, injectTopbarControls, copyText } from './common.js';
+import {
+  enhanceNavigation,
+  injectTopbarControls,
+  copyText,
+  injectOfflineBanner,
+} from './common.js';
 import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates } from './generators.js';
 import { askLLM } from './llmClient.js';
 import { initAuth } from './auth.js';
 import { initChat } from './chat.js';
+import { isConfigured } from './supabaseClient.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
@@ -61,6 +67,11 @@ function init() {
   initAuth();
   initChat();
   mountManualPlayground();
+
+  // Degradação graciosa (#M8): sem backend configurado, avisa o usuário. A
+  // geração de prompts pelos templates segue funcionando (é 100% client-side).
+  if (!isConfigured()) injectOfflineBanner();
+
   track('pageview', { path: location.pathname });
 
   // Envia a fila de telemetria: no load, periodicamente e ao sair da página.

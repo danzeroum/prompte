@@ -17,6 +17,39 @@ import { onAuthChange, signInWithEmail, signOut, currentUser } from './auth.js';
 
 const NAV_SELECTOR = '.sb-item, .sidebar-item';
 
+// ---- Degradação graciosa (#M8) ----
+// Banner dismissível exibido quando o backend (Supabase) não está configurado.
+// NÃO desabilita a geração local de prompts pelos templates — apenas avisa que
+// os recursos de rede (chat e respostas com IA) estão indisponíveis.
+export function injectOfflineBanner(root = document) {
+  const body = root.body || document.body;
+  if (!body || body.querySelector('.pe-offline-banner')) return null;
+
+  const banner = document.createElement('div');
+  banner.className = 'pe-offline-banner';
+  banner.setAttribute('role', 'status');
+
+  const text = document.createElement('div');
+  text.className = 'pe-offline-text';
+  const strong = document.createElement('strong');
+  strong.textContent = t('banner.offline.title');
+  const span = document.createElement('span');
+  span.textContent = ' ' + t('banner.offline.body');
+  text.append(strong, span);
+
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'pe-offline-close';
+  close.textContent = '✕';
+  close.setAttribute('aria-label', t('banner.dismiss'));
+  close.title = t('banner.dismiss');
+  close.addEventListener('click', () => banner.remove());
+
+  banner.append(text, close);
+  body.prepend(banner);
+  return banner;
+}
+
 // ---- Acessibilidade da navegação ----
 export function enhanceNavigation(root = document) {
   const items = root.querySelectorAll(NAV_SELECTOR);

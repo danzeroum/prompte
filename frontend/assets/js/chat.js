@@ -5,6 +5,7 @@
 import { askLLM } from './llmClient.js';
 import { track } from './telemetry.js';
 import { t } from './i18n.js';
+import { isConfigured } from './supabaseClient.js';
 
 const SYSTEM_PROMPT =
   'Você é um assistente de engenharia de prompts. Faça perguntas objetivas para ' +
@@ -107,6 +108,14 @@ export function initChat(root = document) {
   const send = el('button', 'pe-chat-send', t('chat.send'));
   send.type = 'submit';
   form.append(input, send);
+
+  // #M8: sem backend, o chat (que depende de rede) fica desabilitado; o banner
+  // de modo offline (injetado pelo app) explica a indisponibilidade.
+  if (!isConfigured()) {
+    input.disabled = true;
+    send.disabled = true;
+    input.placeholder = t('banner.offline.title');
+  }
 
   panel.append(header, log, form);
 

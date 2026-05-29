@@ -507,6 +507,38 @@
   cursor: default;
 }
 
+/* Banner de degradação graciosa (#M8) */
+.pe-offline-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--orange);
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.pe-offline-text strong {
+  color: var(--orange);
+}
+
+.pe-offline-close {
+  margin-left: auto;
+  flex: none;
+  background: transparent;
+  border: 0;
+  color: var(--text2);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.pe-offline-close:hover {
+  color: var(--text);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
