@@ -9,6 +9,14 @@
    (.light-theme no <html>) sobrescreve os dois esquemas.
    ============================================================ */
 
+/* Reset compartilhado (#M10): antes duplicado em generator/index/manual.css.
+   theme.css é carregado primeiro em todas as páginas, então vive aqui só uma vez. */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
   color-scheme: dark;
 

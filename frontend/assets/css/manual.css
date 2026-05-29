@@ -1,10 +1,5 @@
 /* manual.css — estilos específicos da página, extraídos do <style> inline
    de manual.html (recomendação M1). Carregado após theme.css. */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 html {
   scroll-behavior: smooth;
 }
