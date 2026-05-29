@@ -13,6 +13,7 @@ import {
 } from './common.js';
 import { initCommandPalette } from './commandPalette.js';
 import { initGlossary } from './glossary.js';
+import { gateAdminLink } from './adminGate.js';
 import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates, collectFormData } from './generators.js';
 import { askLLM } from './llmClient.js';
@@ -70,6 +71,8 @@ function init() {
   injectTopbarControls();
   initKeyboardShortcuts();
   initCommandPalette();
+  // Gate do link Admin/Métricas: oculto por padrão, revelado só p/ admin (#M-UX-D).
+  gateAdminLink();
   // #M12: adia o carregamento do SDK do Supabase. initAuth() (que importa o SDK)
   // só roda no load quando há um retorno de magic link na URL; caso contrário é
   // acionado sob demanda (abrir login/chat) via window.PE.ensureAuth.
