@@ -617,4 +617,29 @@
 .pe-history-footer {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Confirmação inline da ação destrutiva (#M-UX3) */
+.pe-history-confirm-msg {
+  flex: 1;
+  min-width: 180px;
+  font-size: 13px;
+  color: var(--text2);
+}
+.pe-btn-danger {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+.pe-btn-danger:hover {
+  filter: brightness(1.08);
+}
+
+/* Emoji decorativo dentro de botões de ícone (#M-UX7): herda tudo do botão. */
+.pe-emoji {
+  font: inherit;
+  line-height: 1;
 }
