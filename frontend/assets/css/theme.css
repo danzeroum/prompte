@@ -17,6 +17,13 @@
   box-sizing: border-box;
 }
 
+/* O atributo [hidden] precisa vencer o display:flex dos itens de sidebar
+   (usado pelo gate do link Admin/Métricas — #M-UX-D). */
+.sb-item[hidden],
+.sidebar-item[hidden] {
+  display: none;
+}
+
 :root {
   color-scheme: dark;
 

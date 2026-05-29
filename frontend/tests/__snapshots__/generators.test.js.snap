@@ -454,6 +454,312 @@ Faca:
 4. Pontos de atencao e possiveis armadilhas"
 `;
 
+exports[`generators — snapshots gen-api snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um ap-repo
+  linha-dois ap-repo, com foco em linha-um ap-arq
+  linha-dois ap-arq.
+
+CONTEXTO: linha-um ap-ctx
+  linha-dois ap-ctx
+FRAMEWORK: valor-ap-fw
+
+INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos do design da API:
+
+1. Design RESTful (substantivos autoexplicativos, metodos HTTP, feedback, exemplos de resposta)
+2. Observabilidade (logs estruturados com contexto, metricas de desempenho, tracing de requisicoes)
+3. Documentacao (OpenAPI/Swagger, exemplos de resposta claros, guias de uso)
+
+REGRAS OBRIGATORIAS:
+- A API deve ser facil de ler e dificil de usar incorretamente
+- Use substantivos no plural, autoexplicativos e consistentes
+- Feedback deve ser informativo (erros HTTP padrao + mensagens claras)
+- Inclua exemplos de resposta para GET (compreensivel em menos de 5s)
+- Manter completude e concisao ao longo das verses
+
+FORMATO DE RESPOSTA:
+1. Diagnostico com severidade (critica | alta | media | baixa)
+2. Diff completo de cada arquivo corrigido
+3. Novos arquivos criados (se houver)
+4. Migration SQL se o schema mudar
+5. Testes atualizados/criados"
+`;
+
+exports[`generators — snapshots gen-arch snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um ar-repo
+  linha-dois ar-repo, com foco em linha-um ar-arq
+  linha-dois ar-arq.
+
+CONTEXO: linha-um ar-ctx
+  linha-dois ar-ctx
+
+INSTRUCAO DE DOMINIO — Avalie o projeto considerando os seguintes principios arquiteturais:
+
+1. 4 Pilares da Arquitetura (estrutura, "-ilities", decisoes, principios de design)
+2. Leis do Trabalho Arquitetural: (1a) Toda decisao tem seu preco; (2a) Avalie no contexto especifico
+3. Refatoracao e Evolucao (dependencias, automacao, testes de validacao, padroes emergentes)
+4. DevOps / CI/CD (containers, microsservicos, cultura de iteracao continua, automacao de infra)
+
+REGRAS OBRIGATORIAS:
+- Identifique as preocupacoes de dominio para extrair caracteristicas arquiteturais
+- Cada nova requisicao pode ter impacto significativo na arquitetura
+- Documente decisoes com trade-offs explicitos
+- Use modelos de documentacao (C4 e 4+1) para comunicacao
+
+FORMATO DE RESPOSTA:
+1. Mapa de stakeholders e suas preocupacoes
+2. Caracteristicas arquiteturais identificadas (com severidade)
+3. Justificativa para cada decisao de arquitetura
+4. Documentacao C4 atualizada
+5. Diff completo de cada arquivo alterado
+6. Plano de evolucao gradual (sem breaking changes)
+"
+`;
+
+exports[`generators — snapshots gen-canivete snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um cs-repo
+  linha-dois cs-repo, com foco em linha-um cs-arq
+  linha-dois cs-arq.
+
+CONTEXO: linha-um cs-ctx
+  linha-dois cs-ctx
+PROFUNDIDADE: undefined
+TIPO DE MELHORIA: undefined
+
+INSTRUCAO DE DOMINIO — Aplique camadas de verificacao de qualidade multi-domínio:
+
+1. Verificacao e Validacao (shift-left)
+2. Analise Estatica (SAST)
+3. Atributos de Qualidade (-ilities)
+4. Clean Code + 12-Factor App
+5. DevOps / Pipeline
+
+REGRAS OBRIGATORIAS:
+- Todos os diffs devem manter a interface publica sem breaking changes
+- O codigo gerado deve ser indistinguivel do estilo da codebase
+- Priorize mudancas com maior impacto/complexidade
+- Testes validam integridade apos cada alteracao
+
+FORMATO DE RESPOSTA:
+1. Resumo executivo das mudancas (bullet points)
+2. Justificativa detalhada para CADA mudanca
+3. Diff completo de CADA arquivo (pronto para git apply)
+4. Novos arquivos criados (conteudo completo)
+5. Testes atualizados/criados para cada arquivo
+6. Riscos da mudanca e como mitigar
+7. Plano de validacao e regressao
+"
+`;
+
+exports[`generators — snapshots gen-cloud snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um cl-repo
+  linha-dois cl-repo, com foco em linha-um cl-arq
+  linha-dois cl-arq.
+
+CONTEXTO: linha-um cl-ctx
+  linha-dois cl-ctx
+
+INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de computacao em nuvem:
+
+1. Seguranca na Nuvem (IAM, flags de protecao, criptografia, responsabilidade compartilhada)
+2. Migracao e Adocao Cloud (6 pilares: negocios, pessoas, governanca, plataforma, seguranca, operacoes)
+3. Infraestrutura como Codigo (IaC) — Terraform, CloudFormation, automacao
+
+REGRAS OBRIGATORIAS:
+- Siga o modelo de responsabilidade compartilhada da nuvem
+- Verifique configuracoes de seguranca (IAM, policies, criptografia at-rest e in-transit)
+- Avalie otimizacao de custos (Pay as you Go, right-sizing)
+- Garanta conformidade regulatória aplicavel ao setor
+
+FORMATO DE RESPOSTA:
+1. Diagnostico de seguranca cloud (critica | alta | media | baixa)
+2. Avaliacao de modelo de servico e provisionamento
+3. Verificacao de compliance e regulacao
+4. Diff completo de cada arquivo corrigido
+5. Recomendacoes de otimizacao e hardening
+"
+`;
+
+exports[`generators — snapshots gen-dados snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um da-repo
+  linha-dois da-repo, com foco em linha-um da-arq
+  linha-dois da-arq.
+
+CONTEXTO: linha-um da-ctx
+  linha-dois da-ctx
+
+INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de sistemas intensivos em dados:
+
+1. Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)
+2. Microsservicos (dominio bem definido, baixo acoplamento, deploy independente, resiliencia)
+3. Qualidade dos Dados (completude, consistencia, veracidade, integracao de multiplas fontes)
+
+REGRAS OBRIGATORIAS:
+- Avalie se a arquitetura suporta os 5 Vs do Big Data
+- Verifique integridade do pipeline ETL completo
+- Garanta consistencia e rastreabilidade na integracao de multiplas fontes
+- Defina metricas segundo o modelo SMART
+
+FORMATO DE RESPOSTA:
+1. Avaliacao dos 5 Vs do Big Data na arquitetura
+2. Diagnostico do pipeline ETL (qualidade, consistencia, rastreabilidade)
+3. Diff completo de cada arquivo corrigido
+4. Recomendacoes de arquitetura e performance
+5. Plano de metricas e monitoramento
+"
+`;
+
+exports[`generators — snapshots gen-gestao snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um ge-repo
+  linha-dois ge-repo.
+
+CONTEXTO: linha-um ge-ctx
+  linha-dois ge-ctx
+
+INSTRUCAO DE DOMINIO — Avalie o projeto considerando os seguintes aspectos de gestao:
+
+1. Escopo e EAP (declaracao de escopo, Work Breakdown Structure, prevencao de scope creep)
+2. OKR e Alinhamento Estrategico (Key Results quantitativos, orientados a resultado, nao apenas entregas)
+3. Modelo de Gestao (tradicional, agil ou hibrido — analise de complexidade e maturidade)
+
+REGRAS OBRIGATORIAS:
+- Verifique se o escopo esta claramente definido e alinhado com entregas reais
+- Identifique riscos tecnicos e de negocio com probabilidade e impacto
+- Avalie se as metricas medem impacto real no negocio (eficacia), nao apenas produtividade (eficiencia)
+- Recomende o modelo de gestao mais adequado baseado na complexidade
+
+FORMATO DE RESPOSTA:
+1. Analise de escopo e aderencia a EAP
+2. Matriz de riscos (probabilidade x impacto) com plano de mitigacao
+3. Avaliacao de OKRs e alinhamento estrategico
+4. Metricas de fluxo (Lead Time, Throughput, WIP)
+5. Recomendacao de modelo de gestao
+6. Plano de comunicacao e gestao de stakeholders
+"
+`;
+
+exports[`generators — snapshots gen-ia snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um ia-repo
+  linha-dois ia-repo, com foco em linha-um ia-arq
+  linha-dois ia-arq.
+
+CONTEXTO: linha-um ia-ctx
+  linha-dois ia-ctx
+TIPO DE MODELO: undefined
+
+INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de engenharia de IA:
+
+1. Vies e Etica (datasets diversos e representativos, auditoria de vies, prevencao de discriminacao)
+2. Overfitting e Generalizacao (separacao treino/teste, metricas de avaliacao, generalizacao)
+3. Explicabilidade (transparencia, justica, interpretabilidade do modelo)
+
+REGRAS OBRIGATORIAS:
+- Verifique vies nos dados de treinamento e nos resultados do modelo
+- Aplique o principio "garbage in, trash out" na avaliacao de qualidade dos dados
+- Garanta separacao adequada treino/teste com metricas condizentes
+- Avalie robustez contra ataques adversarios
+- Verifique conformidade com LGPD/GDPR no tratamento de dados
+
+FORMATO DE RESPOSTA:
+1. Diagnostico de vies e etica no modelo
+2. Avaliacao de qualidade dos dados e pipeline
+3. Analise de overfitting/underfitting com metricas
+4. Diff completo de cada arquivo corrigido
+5. Plano de mitigacao de riscos de IA
+"
+`;
+
+exports[`generators — snapshots gen-review snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um rq-repo
+  linha-dois rq-repo, com foco em linha-um rq-arq
+  linha-dois rq-arq.
+
+CONTEXTO: linha-um rq-ctx
+  linha-dois rq-ctx
+
+INSTRUCAO DE DOMINIO:
+Verifique os seguintes aspectos de qualidade do codigo aplicando frameworks e principios reconhecidos de engenharia de software:
+
+1. Verificacao e Validacao (shift-left testing)
+2. Analise estatica automatizada (SAST) para code smells e vulnerabilidades
+3. Atributos de qualidade: escalabilidade, performance, seguranca, disponibilidade, manutenibilidade
+4. Clean Code (nomes descritivos, funcoes curtas, sem duplicacao) + 12-Factor App
+5. DevOps / CI-CD pipeline, automacao de build e deploy
+
+REGRAS OBRIGATORIAS:
+- Mantenha a interface publica (exports, tipos, contratos) sem breaking changes
+- Siga EXATAMENTE os padroes existentes no restante do projeto
+- O codigo gerado deve ser indistinguivel do estilo da codebase
+
+FORMATO DE RESPOSTA:
+1. Resumo executivo das mudancas
+2. Para cada mudanca: justificativa + trecho antes/depois
+3. Diff completo de CADA arquivo (pronto para git apply)
+4. Novos arquivos criados (com conteudo completo)
+5. Testes atualizados/criados
+6. Riscos da mudanca e como mitigar
+"
+`;
+
+exports[`generators — snapshots gen-security snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um se-repo
+  linha-dois se-repo, com foco em linha-um se-arq
+  linha-dois se-arq.
+
+CONTEXO: linha-um se-ctx
+  linha-dois se-ctx
+NIVEL DE CONFORMIDADE: undefined
+TIPO DE DADO: undefined
+
+INSTRUCAO DE DOMINIO — Verifique conformidade com os seguintes principios de privacidade e seguranca:
+
+
+REGRAS OBRIGATORIAS:
+- Documente a base legal (consentimento, obrigatoriedade)
+- Inclua cadeia de evidencias para auditoria
+- Forneça plano de resposta a incidentes
+- Verifique classificações de dados sensíveis
+
+FORMATO DE RESPOSTA:
+1. Diagnostico de conformidade (itens em conformidade e pendentes)
+2. Vulnerabilidades de seguranca e privacidade encontradas
+3. Diff completo de cada arquivo corrigido
+4. Guia de compliance para auditoria
+5. Plano de resposta a incidentes
+"
+`;
+
+exports[`generators — snapshots gen-ux snapshot 1`] = `
+"Analise detalhadamente o repositorio linha-um ux-repo
+  linha-dois ux-repo, com foco em linha-um ux-arq
+  linha-dois ux-arq.
+
+CONTEXTO: linha-um ux-ctx
+  linha-dois ux-ctx
+FRAMEWORK UI: valor-ux-ui
+ESTILO UI: valor-ux-style
+
+INSTRUCAO DE DOMINIO — Avalie a experiencia do usuario considerando:
+
+1. Analise Heuristica de Usabilidade (Nielsen)
+2. Design Centrado no Usuario (empatia, definir, idear, prototipar, testar)
+3. Arquitetura de Informacao (organizacao, navegacao, rotulacao, hierarquia)
+4. Mobile-first (responsividade, gestos touch, prioridade de conteudo)
+
+REGRAS OBRIGATORIAS:
+- A analise deve ir alem da estetica ("como se sente ao usar")
+- Nao crie "usuario padrao" — considere necessidades explicitas e implicitas
+- Priorize a acessibilidade universal desde o design
+- Use personas como base para hipoteses de teste
+
+FORMATO DE RESPOSTA:
+1. Resultados de pesquisa de usuario (quem sao, o que fazem)
+2. Mapa de necessidades (explicitas e implicitas)
+3. Analise heuristica ( Nielsen) com problemas por severidade
+4. Sugestoes de melhoria com priorizacao
+5. Wireframes ou especificacoes de prototipo
+"
+`;
+
 exports[`generators — snapshots gestao-projeto snapshot 1`] = `
 "Analise o projeto no repositorio linha-um gp-repo
   linha-dois gp-repo sob a perspectiva de gestao de projetos.
