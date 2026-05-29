@@ -962,6 +962,667 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
       return p;
     },
   },
+  'gen-review': {
+    name: 'Revisão + Qualidade',
+    fields: [
+      { id: 'rq-repo', type: 'text' },
+      { id: 'rq-arq', type: 'text' },
+      { id: 'rq-ctx', type: 'textarea' },
+      { id: 'rq-verif', type: 'checkbox' },
+      { id: 'rq-test', type: 'checkbox' },
+      { id: 'rq-sast', type: 'checkbox' },
+      { id: 'rq-rev', type: 'checkbox' },
+      { id: 'rq-qual', type: 'checkbox' },
+      { id: 'rq-solid', type: 'checkbox' },
+      { id: 'rq-clean', type: 'checkbox' },
+      { id: 'rq-arqcb', type: 'checkbox' },
+      { id: 'rq-devops', type: 'checkbox' },
+      { id: 'rq-perf', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('rq-repo'),
+        arq = v('rq-arq'),
+        ctx = v('rq-ctx');
+      const domains = checkedItems([
+        'rq-verif',
+        'rq-test',
+        'rq-sast',
+        'rq-rev',
+        'rq-qual',
+        'rq-solid',
+        'rq-clean',
+        'rq-arqcb',
+        'rq-devops',
+        'rq-perf',
+      ]);
+      const domainLabels = {
+        'rq-verif': 'Verificacao e Validacao (shift-left testing)',
+        'rq-test': 'Testes em todos os niveis (unidade, integracao, sistema, aceitacao)',
+        'rq-sast': 'Analise estatica automatizada (SAST) para code smells e vulnerabilidades',
+        'rq-rev': 'Revisao de codigo por pares (detectar oportunidades de melhoria mutua)',
+        'rq-qual':
+          'Atributos de qualidade: escalabilidade, performance, seguranca, disponibilidade, manutenibilidade',
+        'rq-solid':
+          'Principios SOLID (Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion)',
+        'rq-clean':
+          'Clean Code (nomes descritivos, funcoes curtas, sem duplicacao) + 12-Factor App',
+        'rq-arqcb': 'Arquitetura (C4, 4+1), refatoracao e evolucao modular',
+        'rq-devops': 'DevOps / CI-CD pipeline, automacao de build e deploy',
+        'rq-perf':
+          'Performance e escalabilidade horizontal/vertical, metricas e balanceamento de carga',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXTO: ${ctx}\n\n`;
+      p += `INSTRUCAO DE DOMINIO:\nVerifique os seguintes aspectos de qualidade do codigo aplicando frameworks e principios reconhecidos de engenharia de software:\n\n`;
+      domains.forEach((_, i) => {
+        const label = domainLabels[_];
+        p += `${i + 1}. ${label}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- Mantenha a interface publica (exports, tipos, contratos) sem breaking changes\n`;
+      p += `- Siga EXATAMENTE os padroes existentes no restante do projeto\n`;
+      p += `- O codigo gerado deve ser indistinguivel do estilo da codebase\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Resumo executivo das mudancas\n`;
+      p += `2. Para cada mudanca: justificativa + trecho antes/depois\n`;
+      p += `3. Diff completo de CADA arquivo (pronto para git apply)\n`;
+      p += `4. Novos arquivos criados (com conteudo completo)\n`;
+      p += `5. Testes atualizados/criados\n`;
+      p += `6. Riscos da mudanca e como mitigar\n`;
+      return p;
+    },
+  },
+  'gen-api': {
+    name: 'Design de API',
+    fields: [
+      { id: 'ap-repo', type: 'text' },
+      { id: 'ap-arq', type: 'text' },
+      { id: 'ap-ctx', type: 'textarea' },
+      { id: 'ap-fw', type: 'select' },
+      { id: 'ap-design', type: 'checkbox' },
+      { id: 'ap-anti', type: 'checkbox' },
+      { id: 'ap-obs', type: 'checkbox' },
+      { id: 'ap-sec', type: 'checkbox' },
+      { id: 'ap-doc', type: 'checkbox' },
+      { id: 'ap-perf', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const sel = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('ap-repo'),
+        arq = v('ap-arq'),
+        ctx = v('ap-ctx'),
+        fw = sel('ap-fw');
+      const domains = checkedItems([
+        'ap-design',
+        'ap-anti',
+        'ap-obs',
+        'ap-sec',
+        'ap-doc',
+        'ap-perf',
+      ]);
+      const domainLabels = {
+        'ap-design':
+          'Design RESTful (substantivos autoexplicativos, metodos HTTP, feedback, exemplos de resposta)',
+        'ap-anti':
+          'Anti-Patterns de API (versionamento, documentacao ausente, sem rate limiting, sem logs, sem docs)',
+        'ap-obs':
+          'Observabilidade (logs estruturados com contexto, metricas de desempenho, tracing de requisicoes)',
+        'ap-sec':
+          'Seguranca (autenticacao, validacao de input, rate limiting, protecao contra ataques comuns)',
+        'ap-doc': 'Documentacao (OpenAPI/Swagger, exemplos de resposta claros, guias de uso)',
+        'ap-perf':
+          'Performance e escalabilidade (identificar gargalos, testes de carga, balanceamento de carga)',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXTO: ${ctx}\n`;
+      if (fw) p += `FRAMEWORK: ${fw}\n`;
+      p += `\nINSTRUCAO DE DOMINIO — Verifique os seguintes aspectos do design da API:\n\n`;
+      domains.forEach((_, i) => {
+        p += `${i + 1}. ${domainLabels[_]}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- A API deve ser facil de ler e dificil de usar incorretamente\n`;
+      p += `- Use substantivos no plural, autoexplicativos e consistentes\n`;
+      p += `- Feedback deve ser informativo (erros HTTP padrao + mensagens claras)\n`;
+      p += `- Inclua exemplos de resposta para GET (compreensivel em menos de 5s)\n`;
+      p += `- Manter completude e concisao ao longo das verses\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Diagnostico com severidade (critica | alta | media | baixa)\n`;
+      p += `2. Diff completo de cada arquivo corrigido\n3. Novos arquivos criados (se houver)\n`;
+      p += `4. Migration SQL se o schema mudar\n5. Testes atualizados/criados`;
+      return p;
+    },
+  },
+  'gen-arch': {
+    name: 'Refatoração Arquitetural',
+    fields: [
+      { id: 'ar-repo', type: 'text' },
+      { id: 'ar-arq', type: 'text' },
+      { id: 'ar-ctx', type: 'textarea' },
+      { id: 'ar-4pil', type: 'checkbox' },
+      { id: 'ar-qual', type: 'checkbox' },
+      { id: 'ar-leis', type: 'checkbox' },
+      { id: 'ar-c4', type: 'checkbox' },
+      { id: 'ar-refat', type: 'checkbox' },
+      { id: 'ar-cloud', type: 'checkbox' },
+      { id: 'ar-devops', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('ar-repo'),
+        arq = v('ar-arq'),
+        ctx = v('ar-ctx');
+      const domains = checkedItems([
+        'ar-4pil',
+        'ar-qual',
+        'ar-leis',
+        'ar-c4',
+        'ar-refat',
+        'ar-cloud',
+        'ar-devops',
+      ]);
+      const domainLabels = {
+        'ar-4pil':
+          '4 Pilares da Arquitetura (estrutura, "-ilities", decisoes, principios de design)',
+        'ar-qual':
+          'Atributos de Qualidade (escalabilidade, performance, seguranca, disponibilidade, manutenibilidade, testabilidade)',
+        'ar-leis':
+          'Leis do Trabalho Arquitetural: (1a) Toda decisao tem seu preco; (2a) Avalie no contexto especifico',
+        'ar-c4':
+          'Documentacao C4 (Contexto, Container, Componente, Codigo) para comunicacao clara com stakeholders',
+        'ar-refat':
+          'Refatoracao e Evolucao (dependencias, automacao, testes de validacao, padroes emergentes)',
+        'ar-cloud':
+          'Arquiteturas Distribuidas e de Nuvem (escalabilidade, resiliencia, flexibilidade, observabilidade)',
+        'ar-devops':
+          'DevOps / CI/CD (containers, microsservicos, cultura de iteracao continua, automacao de infra)',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXO: ${ctx}\n\n`;
+      p += `INSTRUCAO DE DOMINIO — Avalie o projeto considerando os seguintes principios arquiteturais:\n\n`;
+      domains.forEach((_, i) => {
+        p += `${i + 1}. ${domainLabels[_]}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- Identifique as preocupacoes de dominio para extrair caracteristicas arquiteturais\n`;
+      p += `- Cada nova requisicao pode ter impacto significativo na arquitetura\n`;
+      p += `- Documente decisoes com trade-offs explicitos\n`;
+      p += `- Use modelos de documentacao (C4 e 4+1) para comunicacao\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Mapa de stakeholders e suas preocupacoes\n`;
+      p += `2. Caracteristicas arquiteturais identificadas (com severidade)\n`;
+      p += `3. Justificativa para cada decisao de arquitetura\n`;
+      p += `4. Documentacao C4 atualizada\n`;
+      p += `5. Diff completo de cada arquivo alterado\n`;
+      p += `6. Plano de evolucao gradual (sem breaking changes)\n`;
+      return p;
+    },
+  },
+  'gen-security': {
+    name: 'Segurança + LGPD',
+    fields: [
+      { id: 'se-repo', type: 'text' },
+      { id: 'se-arq', type: 'text' },
+      { id: 'se-ctx', type: 'textarea' },
+      { id: 'se-nivel', type: 'select' },
+      { id: 'se-dado', type: 'select' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const sel = (id) => d[id];
+
+      const repo = v('se-repo'),
+        arq = v('se-arq'),
+        ctx = v('se-ctx');
+      const nivel = sel('se-nivel'),
+        dado = sel('se-dado');
+      const domainLabels = {
+        'lgpd-completa': 'LGPD Completa (todos os 10 principios + bases legais)',
+        'lgpd-essenciais': 'LGPD Essenciais (5 principios + bases legais)',
+        'owasp-top10': 'OWASP Top 10 + LGPD (API Security Top 10)',
+        'pbd-7principios': 'Privacy by Design (7 principios de Ann Cavoukian)',
+        completo: 'Completo (LGPD + OWASP + Privacy by Design)',
+      };
+      const dataLabels = {
+        geral: 'Dados pessoais gerais',
+        sensivel: 'Dados pessoais sensiveis',
+        critico: 'Dados criticos (saude, financeiro)',
+        crianca: 'Dados de criancas e adolescentes',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXO: ${ctx}\n`;
+      p += `NIVEL DE CONFORMIDADE: ${domainLabels[nivel]}\n`;
+      p += `TIPO DE DADO: ${dataLabels[dado]}\n\n`;
+      p += `INSTRUCAO DE DOMINIO — Verifique conformidade com os seguintes principios de privacidade e seguranca:\n\n`;
+      if (nivel === 'lgpd-completa' || nivel === 'completo') {
+        p += `1. Princípio da Finalidade: tratamento compatível com finalidade especificada\n`;
+        p += `2. Princípio da Adequação: dados minimos, necessários, relevantes e transparentes\n`;
+        p += `3. Princípio da Necessidade: apenas dados necessarios para a finalidade\n`;
+        p += `4. Princípio da Livre Acesso: dados acessíveis ao titular\n`;
+        p += `5. Princípio da Transparência: informar o titular de forma clara e acessível\n`;
+        p += `6. Princípio da Segurança: proteção contra acesso não autorizado e breach\n`;
+        p += `7. Princípio da Prevenção: medidas preventivas contra incidentes\n`;
+        p += `8. Princípio da Não Discriminacao: tratamento igualitario\n`;
+        p += `9. Princípio da Responsabilização: agentes prestam contas\n`;
+        p += `10. Princípio da Integridade: dados consistentes entre sistemas\n`;
+      } else if (nivel === 'pbd-7principios') {
+        p += `1. Desenvolvimento Proativo e Preventivo\n2. Privacidade por Padrão (Privacy by Default)\n3. Privacidade Incorporada ao Design\n4. Soma Positiva (sem contrapartidas)\n5. Visibilidade e Transparência\n6. Segurança Ponta a Ponta\n7. Desenvolvimento Centrado no Usuário\n`;
+      }
+      if (nivel === 'owasp-top10' || nivel === 'completo') {
+        p += `\nVERIFICACAO OWASP TOP 10 (2021):\n`;
+        p += `A01 - Broken Access Control\nA02 - Cryptographic Failures\nA03 - Injection\nA04 - Insecure Design\nA05 - Security Misconfiguration\nA06 - Vulnerable and Outdated Components\nA07 - Identification and Authentication Failures\nA08 - Software and Data Integrity Failures\nA09 - Security Logging and Monitoring Failures\nA10 - Server-Side Request Forgery\n`;
+      }
+      if (nivel === 'lgpd-essenciais') {
+        p += `\nPRINCIPIOS LGPD ESSENCIAIS:\n1. Finalidade\n2. Adequacao\n3. Necessidade\n4. Livre Acesso\n5. Transparencia\n`;
+      }
+      p += `\nREGRAS OBRIGATORIAS:\n- Documente a base legal (consentimento, obrigatoriedade)\n- Inclua cadeia de evidencias para auditoria\n- Forneça plano de resposta a incidentes\n- Verifique classificações de dados sensíveis\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Diagnostico de conformidade (itens em conformidade e pendentes)\n`;
+      p += `2. Vulnerabilidades de seguranca e privacidade encontradas\n`;
+      p += `3. Diff completo de cada arquivo corrigido\n`;
+      p += `4. Guia de compliance para auditoria\n`;
+      p += `5. Plano de resposta a incidentes\n`;
+      return p;
+    },
+  },
+  'gen-ux': {
+    name: 'UX + Usabilidade',
+    fields: [
+      { id: 'ux-repo', type: 'text' },
+      { id: 'ux-arq', type: 'text' },
+      { id: 'ux-ctx', type: 'textarea' },
+      { id: 'ux-ui', type: 'select' },
+      { id: 'ux-style', type: 'select' },
+      { id: 'ux-heur', type: 'checkbox' },
+      { id: 'ux-acess', type: 'checkbox' },
+      { id: 'ux-design', type: 'checkbox' },
+      { id: 'ux-proto', type: 'checkbox' },
+      { id: 'ux-ia', type: 'checkbox' },
+      { id: 'ux-journey', type: 'checkbox' },
+      { id: 'ux-mobile', type: 'checkbox' },
+      { id: 'ux-a11y', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const sel = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('ux-repo'),
+        arq = v('ux-arq'),
+        ctx = v('ux-ctx');
+      const ui = sel('ux-ui'),
+        st = sel('ux-style');
+      const domains = checkedItems([
+        'ux-heur',
+        'ux-acess',
+        'ux-design',
+        'ux-proto',
+        'ux-ia',
+        'ux-journey',
+        'ux-mobile',
+        'ux-a11y',
+      ]);
+      const domainLabels = {
+        'ux-heur': 'Analise Heuristica de Usabilidade (Nielsen)',
+        'ux-acess': 'Acessibilidade (WCAG 2.1 AA, contraste, adaptavel)',
+        'ux-design': 'Design Centrado no Usuario (empatia, definir, idear, prototipar, testar)',
+        'ux-proto':
+          'Prototipacao Rapida (Crazy 8s, wireframes de baixa fidelidade para co-criacao)',
+        'ux-ia': 'Arquitetura de Informacao (organizacao, navegacao, rotulacao, hierarquia)',
+        'ux-journey': 'Jornada do Usuario (antes, durante e depois — mapeamento de pontos de dor)',
+        'ux-mobile': 'Mobile-first (responsividade, gestos touch, prioridade de conteudo)',
+        'ux-a11y': 'Internacionalizacao i18n (suporte a multiplos idiomas e localizacao)',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXTO: ${ctx}\n`;
+      if (ui) p += `FRAMEWORK UI: ${ui}\n`;
+      if (st) p += `ESTILO UI: ${st}\n`;
+      p += `\nINSTRUCAO DE DOMINIO — Avalie a experiencia do usuario considerando:\n\n`;
+      domains.forEach((_, i) => {
+        p += `${i + 1}. ${domainLabels[_]}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- A analise deve ir alem da estetica ("como se sente ao usar")\n`;
+      p += `- Nao crie "usuario padrao" — considere necessidades explicitas e implicitas\n`;
+      p += `- Priorize a acessibilidade universal desde o design\n`;
+      p += `- Use personas como base para hipoteses de teste\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Resultados de pesquisa de usuario (quem sao, o que fazem)\n`;
+      p += `2. Mapa de necessidades (explicitas e implicitas)\n`;
+      p += `3. Analise heuristica ( Nielsen) com problemas por severidade\n`;
+      p += `4. Sugestoes de melhoria com priorizacao\n`;
+      p += `5. Wireframes ou especificacoes de prototipo\n`;
+      return p;
+    },
+  },
+  'gen-canivete': {
+    name: 'Canivete Suíço Pro',
+    fields: [
+      { id: 'cs-repo', type: 'text' },
+      { id: 'cs-arq', type: 'text' },
+      { id: 'cs-ctx', type: 'textarea' },
+      { id: 'cs-tipo', type: 'select' },
+      { id: 'cs-profund', type: 'select' },
+      { id: 'rq-verif', type: 'checkbox' },
+      { id: 'rq-test', type: 'checkbox' },
+      { id: 'rq-sast', type: 'checkbox' },
+      { id: 'rq-rev', type: 'checkbox' },
+      { id: 'rq-qual', type: 'checkbox' },
+      { id: 'rq-solid', type: 'checkbox' },
+      { id: 'rq-clean', type: 'checkbox' },
+      { id: 'rq-arqcb', type: 'checkbox' },
+      { id: 'rq-devops', type: 'checkbox' },
+      { id: 'rq-perf', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const sel = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('cs-repo'),
+        arq = v('cs-arq'),
+        ctx = v('cs-ctx');
+      const tipo = sel('cs-tipo'),
+        prof = sel('cs-profund');
+      const domains = checkedItems([
+        'rq-verif',
+        'rq-test',
+        'rq-sast',
+        'rq-rev',
+        'rq-qual',
+        'rq-solid',
+        'rq-clean',
+        'rq-arqcb',
+        'rq-devops',
+        'rq-perf',
+      ]);
+      const domainLabels = {
+        'rq-verif': 'Verificacao e Validacao (shift-left)',
+        'rq-test': 'Testes em todos os niveis',
+        'rq-sast': 'Analise Estatica (SAST)',
+        'rq-rev': 'Code Review por pares',
+        'rq-qual': 'Atributos de Qualidade (-ilities)',
+        'rq-solid': 'Principios SOLID',
+        'rq-clean': 'Clean Code + 12-Factor App',
+        'rq-arqcb': 'Arquitetura (C4, Refatoracao)',
+        'rq-devops': 'DevOps / Pipeline',
+        'rq-perf': 'Performance e Escalabilidade',
+      };
+      const profLabels = {
+        completa: 'Completa (todas as camadas)',
+        focada: 'Focada (dominios relevantes)',
+        resumida: 'Resumida (checklist + diffs)',
+      };
+      const tipoLabels = {
+        tudo: 'Analise completa',
+        qualidade: 'Qualidade e Testes',
+        arquitetura: 'Arquitetura e Design',
+        seguranca: 'Seguranca e Compliance',
+        performance: 'Performance e Escalabilidade',
+        ux: 'UX e Usabilidade',
+        devops: 'DevOps e Pipeline',
+        processos: 'Processos e Automacao',
+        refatoracao: 'Refatoracao Geral',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXO: ${ctx}\n`;
+      p += `PROFUNDIDADE: ${profLabels[prof]}\n`;
+      p += `TIPO DE MELHORIA: ${tipoLabels[tipo]}\n\n`;
+      p += `INSTRUCAO DE DOMINIO — Aplique camadas de verificacao de qualidade multi-domínio:\n\n`;
+      domains.forEach((_, i) => {
+        p += `${i + 1}. ${domainLabels[_]}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- Todos os diffs devem manter a interface publica sem breaking changes\n`;
+      p += `- O codigo gerado deve ser indistinguivel do estilo da codebase\n`;
+      p += `- Priorize mudancas com maior impacto/complexidade\n`;
+      p += `- Testes validam integridade apos cada alteracao\n`;
+      p += `\nFORMATO DE RESPOSTA:\n`;
+      p += `1. Resumo executivo das mudancas (bullet points)\n`;
+      p += `2. Justificativa detalhada para CADA mudanca\n`;
+      p += `3. Diff completo de CADA arquivo (pronto para git apply)\n`;
+      p += `4. Novos arquivos criados (conteudo completo)\n`;
+      p += `5. Testes atualizados/criados para cada arquivo\n`;
+      p += `6. Riscos da mudanca e como mitigar\n`;
+      p += `7. Plano de validacao e regressao\n`;
+      return p;
+    },
+  },
+  'gen-cloud': {
+    name: 'Cloud / Infra',
+    fields: [
+      { id: 'cl-repo', type: 'text' },
+      { id: 'cl-arq', type: 'text' },
+      { id: 'cl-ctx', type: 'textarea' },
+      { id: 'cl-sec', type: 'checkbox' },
+      { id: 'cl-model', type: 'checkbox' },
+      { id: 'cl-migr', type: 'checkbox' },
+      { id: 'cl-comp', type: 'checkbox' },
+      { id: 'cl-iac', type: 'checkbox' },
+      { id: 'cl-cont', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('cl-repo'),
+        arq = v('cl-arq'),
+        ctx = v('cl-ctx');
+      const domains = checkedItems([
+        'cl-sec',
+        'cl-model',
+        'cl-migr',
+        'cl-comp',
+        'cl-iac',
+        'cl-cont',
+      ]);
+      const domainLabels = {
+        'cl-sec':
+          'Seguranca na Nuvem (IAM, flags de protecao, criptografia, responsabilidade compartilhada)',
+        'cl-model':
+          'Modelos de Servico (SaaS, PaaS, IaaS, FaaS) — verificacao de provisionamento otimizado',
+        'cl-migr':
+          'Migracao e Adocao Cloud (6 pilares: negocios, pessoas, governanca, plataforma, seguranca, operacoes)',
+        'cl-comp': 'Compliance (LGPD, resolucao BACEN 4.658, NIST CSF, seguranca by design)',
+        'cl-iac': 'Infraestrutura como Codigo (IaC) — Terraform, CloudFormation, automacao',
+        'cl-cont': 'Containers e Orquestracao (Docker, Kubernetes, resiliencia, escalabilidade)',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXTO: ${ctx}\n\n`;
+      p += `INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de computacao em nuvem:\n\n`;
+      domains.forEach((_, i) => {
+        p += `${i + 1}. ${domainLabels[_]}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- Siga o modelo de responsabilidade compartilhada da nuvem\n`;
+      p += `- Verifique configuracoes de seguranca (IAM, policies, criptografia at-rest e in-transit)\n`;
+      p += `- Avalie otimizacao de custos (Pay as you Go, right-sizing)\n`;
+      p += `- Garanta conformidade regulatória aplicavel ao setor\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Diagnostico de seguranca cloud (critica | alta | media | baixa)\n`;
+      p += `2. Avaliacao de modelo de servico e provisionamento\n`;
+      p += `3. Verificacao de compliance e regulacao\n`;
+      p += `4. Diff completo de cada arquivo corrigido\n`;
+      p += `5. Recomendacoes de otimizacao e hardening\n`;
+      return p;
+    },
+  },
+  'gen-ia': {
+    name: 'IA / Machine Learning',
+    fields: [
+      { id: 'ia-repo', type: 'text' },
+      { id: 'ia-arq', type: 'text' },
+      { id: 'ia-ctx', type: 'textarea' },
+      { id: 'ia-tipo', type: 'select' },
+      { id: 'ia-vies', type: 'checkbox' },
+      { id: 'ia-qual', type: 'checkbox' },
+      { id: 'ia-over', type: 'checkbox' },
+      { id: 'ia-sec', type: 'checkbox' },
+      { id: 'ia-expl', type: 'checkbox' },
+      { id: 'ia-lgpd', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const sel = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('ia-repo'),
+        arq = v('ia-arq'),
+        ctx = v('ia-ctx');
+      const tipo = sel('ia-tipo');
+      const domains = checkedItems([
+        'ia-vies',
+        'ia-qual',
+        'ia-over',
+        'ia-sec',
+        'ia-expl',
+        'ia-lgpd',
+      ]);
+      const domainLabels = {
+        'ia-vies':
+          'Vies e Etica (datasets diversos e representativos, auditoria de vies, prevencao de discriminacao)',
+        'ia-qual':
+          'Qualidade dos Dados (completude, consistencia, veracidade, principio "garbage in, trash out")',
+        'ia-over':
+          'Overfitting e Generalizacao (separacao treino/teste, metricas de avaliacao, generalizacao)',
+        'ia-sec':
+          'Seguranca de IA (ataques adversarios, supervisao humana, principios de IA responsavel)',
+        'ia-expl': 'Explicabilidade (transparencia, justica, interpretabilidade do modelo)',
+        'ia-lgpd':
+          'Conformidade LGPD/GDPR (tratamento de dados sensiveis, base legal, direitos do titular)',
+      };
+      const tipoLabels = {
+        Classificacao: 'Classificacao',
+        Regressao: 'Regressao',
+        NLP: 'NLP / Processamento de Linguagem',
+        Visao: 'Visao Computacional',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXTO: ${ctx}\n`;
+      if (tipo) p += `TIPO DE MODELO: ${tipoLabels[tipo]}\n`;
+      p += `\nINSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de engenharia de IA:\n\n`;
+      domains.forEach((_, i) => {
+        p += `${i + 1}. ${domainLabels[_]}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- Verifique vies nos dados de treinamento e nos resultados do modelo\n`;
+      p += `- Aplique o principio "garbage in, trash out" na avaliacao de qualidade dos dados\n`;
+      p += `- Garanta separacao adequada treino/teste com metricas condizentes\n`;
+      p += `- Avalie robustez contra ataques adversarios\n`;
+      p += `- Verifique conformidade com LGPD/GDPR no tratamento de dados\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Diagnostico de vies e etica no modelo\n`;
+      p += `2. Avaliacao de qualidade dos dados e pipeline\n`;
+      p += `3. Analise de overfitting/underfitting com metricas\n`;
+      p += `4. Diff completo de cada arquivo corrigido\n`;
+      p += `5. Plano de mitigacao de riscos de IA\n`;
+      return p;
+    },
+  },
+  'gen-dados': {
+    name: 'Dados / Analytics',
+    fields: [
+      { id: 'da-repo', type: 'text' },
+      { id: 'da-arq', type: 'text' },
+      { id: 'da-ctx', type: 'textarea' },
+      { id: 'da-5vs', type: 'checkbox' },
+      { id: 'da-etl', type: 'checkbox' },
+      { id: 'da-ms', type: 'checkbox' },
+      { id: 'da-anal', type: 'checkbox' },
+      { id: 'da-qd', type: 'checkbox' },
+      { id: 'da-ml', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('da-repo'),
+        arq = v('da-arq'),
+        ctx = v('da-ctx');
+      const domains = checkedItems(['da-5vs', 'da-etl', 'da-ms', 'da-anal', 'da-qd', 'da-ml']);
+      const domainLabels = {
+        'da-5vs': 'Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)',
+        'da-etl':
+          'ETL e Qualidade de Dados (tratamento de faltantes, anomalias, normalizacao, rastreabilidade)',
+        'da-ms':
+          'Microsservicos (dominio bem definido, baixo acoplamento, deploy independente, resiliencia)',
+        'da-anal':
+          'Analise e Decisao (ciclo completo: definicao, coleta, preparacao, modelagem, comunicacao, feedback)',
+        'da-qd':
+          'Qualidade dos Dados (completude, consistencia, veracidade, integracao de multiplas fontes)',
+        'da-ml': 'ML Aplicado (modelos preditivos, metricas SMART, validacao com dados reais)',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
+      p += `CONTEXTO: ${ctx}\n\n`;
+      p += `INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de sistemas intensivos em dados:\n\n`;
+      domains.forEach((_, i) => {
+        p += `${i + 1}. ${domainLabels[_]}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- Avalie se a arquitetura suporta os 5 Vs do Big Data\n`;
+      p += `- Verifique integridade do pipeline ETL completo\n`;
+      p += `- Garanta consistencia e rastreabilidade na integracao de multiplas fontes\n`;
+      p += `- Defina metricas segundo o modelo SMART\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Avaliacao dos 5 Vs do Big Data na arquitetura\n`;
+      p += `2. Diagnostico do pipeline ETL (qualidade, consistencia, rastreabilidade)\n`;
+      p += `3. Diff completo de cada arquivo corrigido\n`;
+      p += `4. Recomendacoes de arquitetura e performance\n`;
+      p += `5. Plano de metricas e monitoramento\n`;
+      return p;
+    },
+  },
+  'gen-gestao': {
+    name: 'Gestão / Métricas',
+    fields: [
+      { id: 'ge-repo', type: 'text' },
+      { id: 'ge-ctx', type: 'textarea' },
+      { id: 'ge-escopo', type: 'checkbox' },
+      { id: 'ge-riscos', type: 'checkbox' },
+      { id: 'ge-okr', type: 'checkbox' },
+      { id: 'ge-fluxo', type: 'checkbox' },
+      { id: 'ge-modelo', type: 'checkbox' },
+      { id: 'ge-stake', type: 'checkbox' },
+    ],
+    build(d) {
+      const v = (id) => d[id];
+      const checkedItems = (ids) => ids.filter((id) => d[id]);
+
+      const repo = v('ge-repo'),
+        ctx = v('ge-ctx');
+      const domains = checkedItems([
+        'ge-escopo',
+        'ge-riscos',
+        'ge-okr',
+        'ge-fluxo',
+        'ge-modelo',
+        'ge-stake',
+      ]);
+      const domainLabels = {
+        'ge-escopo':
+          'Escopo e EAP (declaracao de escopo, Work Breakdown Structure, prevencao de scope creep)',
+        'ge-riscos':
+          'Gerenciamento de Riscos (identificacao, probabilidade, impacto, respostas: evitar/transferir/mitigar/aceitar)',
+        'ge-okr':
+          'OKR e Alinhamento Estrategico (Key Results quantitativos, orientados a resultado, nao apenas entregas)',
+        'ge-fluxo':
+          'Fluxo e Entrega (Lead Time, Throughput, Work in Progress, limites de WIP, Lei de Little)',
+        'ge-modelo':
+          'Modelo de Gestao (tradicional, agil ou hibrido — analise de complexidade e maturidade)',
+        'ge-stake':
+          'Stakeholders e Comunicacao (mapeamento poder/interesse, Project Charter, plano de comunicacao)',
+      };
+      let p = `Analise detalhadamente o repositorio ${repo}.\n\n`;
+      p += `CONTEXTO: ${ctx}\n\n`;
+      p += `INSTRUCAO DE DOMINIO — Avalie o projeto considerando os seguintes aspectos de gestao:\n\n`;
+      domains.forEach((_, i) => {
+        p += `${i + 1}. ${domainLabels[_]}\n`;
+      });
+      p += `\nREGRAS OBRIGATORIAS:\n- Verifique se o escopo esta claramente definido e alinhado com entregas reais\n`;
+      p += `- Identifique riscos tecnicos e de negocio com probabilidade e impacto\n`;
+      p += `- Avalie se as metricas medem impacto real no negocio (eficacia), nao apenas produtividade (eficiencia)\n`;
+      p += `- Recomende o modelo de gestao mais adequado baseado na complexidade\n`;
+      p += `\nFORMATO DE RESPOSTA:\n1. Analise de escopo e aderencia a EAP\n`;
+      p += `2. Matriz de riscos (probabilidade x impacto) com plano de mitigacao\n`;
+      p += `3. Avaliacao de OKRs e alinhamento estrategico\n`;
+      p += `4. Metricas de fluxo (Lead Time, Throughput, WIP)\n`;
+      p += `5. Recomendacao de modelo de gestao\n`;
+      p += `6. Plano de comunicacao e gestao de stakeholders\n`;
+      return p;
+    },
+  },
 };
 
 // Normaliza o objeto de dados de acordo com o tipo de cada campo do template:

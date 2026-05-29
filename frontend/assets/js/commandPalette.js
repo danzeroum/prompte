@@ -41,7 +41,7 @@ export function buildIndex(root = document) {
   root.querySelectorAll('[data-t], [data-template]').forEach((el) => {
     const label = labelOf(el);
     if (!label) return;
-    const key = el.getAttribute('data-template');
+    const key = el.getAttribute('data-template') || el.getAttribute('data-t');
     if (key) onPageTemplates.add(key);
     items.push({
       label,
@@ -68,10 +68,12 @@ export function buildIndex(root = document) {
   Object.keys(generatorTemplates).forEach((key) => {
     const tpl = generatorTemplates[key];
     if (tpl.playground || onPageTemplates.has(key)) return;
+    // Os geradores avançados (gen-*) vivem no index.html; os demais no generator.html.
+    const page = key.startsWith('gen-') ? '/index.html' : '/generator.html';
     items.push({
       label: tpl.name,
       hint: t('palette.template'),
-      run: () => (location.href = '/generator.html#t=' + key),
+      run: () => (location.href = page + '#t=' + key),
     });
   });
 
