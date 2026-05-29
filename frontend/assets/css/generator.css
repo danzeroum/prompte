@@ -1,8 +1,7 @@
 /* generator.css — estilos específicos da página, extraídos do <style> inline
    de generator.html (recomendação M1). Carregado após theme.css. */
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  font-family: var(--font-ui);
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
@@ -65,7 +64,7 @@ body {
   cursor: pointer;
   font-size: 13px;
   color: var(--text-secondary);
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   border-left: 3px solid transparent;
 }
 
@@ -236,7 +235,7 @@ a.sidebar-item::after {
 .form-group textarea {
   min-height: 160px;
   resize: vertical;
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.6;
   tab-size: 2;
@@ -305,7 +304,7 @@ a.sidebar-item::after {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   margin-top: 8px;
 }
 
@@ -344,7 +343,7 @@ a.sidebar-item::after {
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .btn-copy:hover {
@@ -369,7 +368,7 @@ a.sidebar-item::after {
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
 .btn-clear:hover {
@@ -431,7 +430,7 @@ a.sidebar-item::after {
 }
 
 .output-content {
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-family: var(--font-mono);
   font-size: 12.5px;
   line-height: 1.7;
   color: var(--text-primary);
