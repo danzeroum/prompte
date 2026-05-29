@@ -415,6 +415,9 @@ export const DICT = {
     'chat.title': 'Assistente de Prompts',
     'chat.placeholder': 'Descreva o que você precisa…',
     'chat.send': 'Enviar',
+    'chat.kb.suggest': 'Detectei: {terms}. Anexar contexto dos ebooks?',
+    'chat.kb.add': 'Adicionar',
+    'chat.kb.added': 'Adicionado ✓',
     'chat.greeting':
       'Olá! Conte o que você quer fazer (ex.: revisar o arquivo auth.js do meu repositório) e eu monto o prompt ideal.',
     'chat.thinking': 'Pensando…',
@@ -918,6 +921,9 @@ export const DICT = {
     'chat.title': 'Prompt Assistant',
     'chat.placeholder': 'Describe what you need…',
     'chat.send': 'Send',
+    'chat.kb.suggest': 'Detected: {terms}. Attach ebook context?',
+    'chat.kb.add': 'Add',
+    'chat.kb.added': 'Added ✓',
     'chat.greeting':
       "Hi! Tell me what you want to do (e.g. review auth.js in my repo) and I'll craft the ideal prompt.",
     'chat.thinking': 'Thinking…',

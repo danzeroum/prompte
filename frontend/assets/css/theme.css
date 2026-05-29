@@ -493,6 +493,38 @@
   padding: 10px;
   border-top: 1px solid var(--border);
 }
+/* #KB Fase 5: barra de sugestão de conhecimento dos ebooks no chat */
+.pe-chat-suggest {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-inset, var(--bg-input));
+  font-size: 0.82rem;
+}
+.pe-chat-suggest-text {
+  flex: 1;
+  color: var(--text-2, var(--text));
+}
+.pe-chat-suggest-btn {
+  flex: none;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill, 999px);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+.pe-chat-suggest-btn[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-ink, #fff);
+}
+.pe-chat-suggest-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 .pe-chat-input {
   flex: 1;
   padding: 9px 12px;

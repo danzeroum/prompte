@@ -109,6 +109,84 @@ export function initChat(root = document) {
   send.type = 'submit';
   form.append(input, send);
 
+  // ─── #KB Fase 5: sugestão de conhecimento dos ebooks ───
+  // Ao detectar um termo técnico digitado (ex.: "SOLID", "LGPD"), oferece anexar
+  // a regra do ebook correspondente à próxima mensagem. knowledgeBase.js é
+  // carregado sob demanda (lazy) só quando o usuário começa a digitar termos.
+  const suggest = el('div', 'pe-chat-suggest');
+  suggest.hidden = true;
+  let kbMod = null;
+  let kbLoading = false;
+  let kbAccepted = false;
+  let kbMatches = [];
+
+  async function loadKB() {
+    if (kbMod || kbLoading) return kbMod;
+    kbLoading = true;
+    try {
+      kbMod =
+        typeof window !== 'undefined' && window.PE && window.PE.ensureKnowledge
+          ? await window.PE.ensureKnowledge()
+          : await import('./knowledgeBase.js');
+    } catch {
+      kbMod = null;
+    }
+    kbLoading = false;
+    return kbMod;
+  }
+
+  function resetSuggest() {
+    kbMatches = [];
+    kbAccepted = false;
+    suggest.hidden = true;
+    suggest.innerHTML = '';
+  }
+
+  function renderSuggest() {
+    if (!kbMatches.length || !kbMod) {
+      resetSuggest();
+      return;
+    }
+    const labels = kbMatches.slice(0, 3).map((k) => kbMod.knowledgeDomains[k].label);
+    suggest.hidden = false;
+    suggest.innerHTML = '';
+    suggest.append(
+      el(
+        'span',
+        'pe-chat-suggest-text',
+        t('chat.kb.suggest').replace('{terms}', labels.join(', ')),
+      ),
+    );
+    const btn = el('button', 'pe-chat-suggest-btn');
+    btn.type = 'button';
+    const sync = () => {
+      btn.textContent = kbAccepted ? t('chat.kb.added') : t('chat.kb.add');
+      btn.setAttribute('aria-pressed', String(kbAccepted));
+    };
+    sync();
+    btn.addEventListener('click', () => {
+      kbAccepted = !kbAccepted;
+      sync();
+    });
+    suggest.append(btn);
+  }
+
+  let kbTimer;
+  input.addEventListener('input', () => {
+    clearTimeout(kbTimer);
+    kbTimer = setTimeout(async () => {
+      const text = input.value.trim();
+      if (text.length < 3) return resetSuggest();
+      const mod = await loadKB();
+      if (!mod) return;
+      const next = mod.matchDomains(text);
+      // Preserva o "aceito" se os termos não mudaram; senão, recomeça.
+      if (next.join('|') !== kbMatches.join('|')) kbAccepted = false;
+      kbMatches = next;
+      renderSuggest();
+    }, 350);
+  });
+
   // #M8: sem backend, o chat (que depende de rede) fica desabilitado; o banner
   // de modo offline (injetado pelo app) explica a indisponibilidade.
   if (!isConfigured()) {
@@ -117,7 +195,7 @@ export function initChat(root = document) {
     input.placeholder = t('banner.offline.title');
   }
 
-  panel.append(header, log, form);
+  panel.append(header, log, suggest, form);
 
   function addBubble(role, content, extraClass) {
     const b = el('div', `pe-chat-msg pe-chat-${role}${extraClass ? ' ' + extraClass : ''}`);
@@ -155,7 +233,15 @@ export function initChat(root = document) {
     if (!text) return;
     input.value = '';
     addBubble('user', text);
-    const payload = buildMessages(history, text);
+    // #KB Fase 5: se o usuário aceitou a sugestão, enriquece SÓ o que vai à LLM;
+    // a bolha exibida e o histórico guardam o texto original do usuário.
+    let outgoing = text;
+    if (kbAccepted && kbMatches.length && kbMod) {
+      outgoing = kbMod.appendKnowledge(text, { domains: kbMatches, level: 'intermediario' });
+      track('knowledge_inject', { source: 'chat', domains: kbMatches });
+    }
+    resetSuggest();
+    const payload = buildMessages(history, outgoing);
     history.push({ role: 'user', content: text });
     saveHistory(history);
 
