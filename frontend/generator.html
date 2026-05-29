@@ -1328,76 +1328,21 @@ function generatePrompt(id) {
     return;
   }
   const container = document.getElementById('output-' + id);
-  container.innerHTML = `
-    <div class="output-header">
-      <h3>&#x2705; Prompt Gerado</h3>
-      <div class="btn-row" style="margin-top:0;">
-        <button class="btn-copy" onclick="copyPrompt(this, '${id}')">&#x1f4cb; Copiar</button>
-        <button class="btn-copy" onclick="exportPrompt('${id}')">&#x2b07; Exportar .md</button>
-        <button class="btn-clear" onclick="clearOutput('${id}')">&#x2716; Limpar</button>
-      </div>
-    </div>
-    <div class="output-box">
-      <div class="output-content" id="prompt-text-${id}"></div>
-    </div>
-  `;
-  document.getElementById('prompt-text-' + id).textContent = prompt;
+  const title = (templateMeta[id] && templateMeta[id].title) || id;
+  // O painel de resultado (Copiar/Editar/Salvar/Abrir na IA) vive em
+  // assets/js/resultPanel.js, exposto via window.PE — fonte única usada também
+  // pela home. Fallback simples caso o módulo não esteja disponível.
+  if (typeof window.PE.renderResultPanel === 'function') {
+    window.PE.renderResultPanel(container, { id, prompt, title });
+  } else {
+    container.innerHTML = '<div class="output-box"><div class="output-content"></div></div>';
+    container.querySelector('.output-content').textContent = prompt;
+  }
   container.classList.add('visible');
   container.scrollIntoView({ behavior: 'smooth', block: 'start' });
   // Rec 5: leva o foco ao resultado (região aria-live) para teclado/leitor de tela.
   container.focus();
   if (window.PE.track) window.PE.track('generate', { template: id });
-  if (window.PE.addPromptToHistory) window.PE.addPromptToHistory(id, prompt); // #M14
-}
-
-// ─── COPY ───
-function copyPrompt(btn, id) {
-  const text = document.getElementById('prompt-text-' + id).textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    btn.classList.add('copied');
-    btn.innerHTML = '&#x2705; Copiado!';
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = '&#x1f4cb; Copiar';
-    }, 2000);
-  }).catch(() => {
-    // fallback
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    btn.classList.add('copied');
-    btn.innerHTML = '&#x2705; Copiado!';
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = '&#x1f4cb; Copiar';
-    }, 2000);
-  });
-}
-
-function clearOutput(id) {
-  const container = document.getElementById('output-' + id);
-  container.classList.remove('visible');
-  container.innerHTML = '';
-}
-
-// ─── EXPORTAR .md (#M15) ───
-function exportPrompt(id) {
-  const text = document.getElementById('prompt-text-' + id).textContent;
-  const title = (templateMeta[id] && templateMeta[id].title) || id;
-  const md = `# ${title}\n\n\`\`\`\n${text}\n\`\`\`\n`;
-  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `prompt-${id}.md`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  if (window.PE && window.PE.track) window.PE.track('export_md', { template: id });
 }
 
 // ─── BUSCA DE TEMPLATES (#M16) ───

@@ -440,6 +440,67 @@ a.sidebar-item::after {
   overflow-y: auto;
 }
 
+/* ─── PAINEL DE RESULTADO (Fase 3) ─── */
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.output-edit {
+  width: 100%;
+  min-height: 220px;
+  resize: vertical;
+  background: var(--bg-inset);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+.output-edit:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.ai-open {
+  position: relative;
+  display: inline-block;
+}
+.ai-menu {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 160px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.ai-menu[hidden] {
+  display: none;
+}
+.ai-menu button {
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ai-menu button:hover {
+  background: var(--bg-3);
+  color: var(--accent);
+}
+
 .output-content::-webkit-scrollbar {
   width: 6px;
 }
