@@ -17,6 +17,7 @@ import { askLLM } from './llmClient.js';
 import { initAuth } from './auth.js';
 import { initChat } from './chat.js';
 import { isConfigured } from './supabaseClient.js';
+import { addPromptToHistory } from './promptHistory.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
@@ -103,6 +104,7 @@ function init() {
     flush,
     askLLM,
     ensureAuth: initAuth,
+    addPromptToHistory,
   };
 }
 

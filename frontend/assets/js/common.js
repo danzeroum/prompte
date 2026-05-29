@@ -14,6 +14,7 @@ import {
 } from './preferences.js';
 import { showToast } from './validation.js';
 import { onAuthChange, signInWithEmail, signOut, currentUser } from './auth.js';
+import { getPromptHistory, clearPromptHistory } from './promptHistory.js';
 
 const NAV_SELECTOR = '.sb-item, .sidebar-item';
 
@@ -154,6 +155,9 @@ export function injectTopbarControls(root = document) {
     },
   );
 
+  // Histórico de prompts (#M14)
+  const historyBtn = buildIconButton(t('history.title'), '🕘', () => openHistoryModal());
+
   // Botão de preferências + menu
   const menu = buildPreferencesMenu(root);
   const settingsBtn = buildIconButton(t('topbar.settings'), '⚙️', () => {
@@ -163,7 +167,7 @@ export function injectTopbarControls(root = document) {
   settingsBtn.setAttribute('aria-haspopup', 'true');
   settingsBtn.setAttribute('aria-expanded', 'false');
 
-  controls.append(themeBtn, settingsBtn);
+  controls.append(themeBtn, historyBtn, settingsBtn);
   topbar.appendChild(controls);
   root.body ? root.body.appendChild(menu) : document.body.appendChild(menu);
 
@@ -302,6 +306,85 @@ function buildPreferencesMenu() {
     accountBtn,
   );
   return menu;
+}
+
+// ---- Modal de histórico de prompts (#M14) ----
+let _historyModal = null;
+function openHistoryModal() {
+  if (_historyModal) _historyModal.remove();
+  _historyModal = buildHistoryModal();
+  document.body.appendChild(_historyModal);
+  _historyModal.hidden = false;
+}
+
+function buildHistoryModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'pe-modal-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', t('history.title'));
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+
+  const modal = document.createElement('div');
+  modal.className = 'pe-modal pe-history-modal';
+
+  const head = document.createElement('div');
+  head.className = 'pe-history-head';
+  const h = document.createElement('h2');
+  h.textContent = t('history.title');
+  const close = buildIconButton(t('auth.close'), '✕', () => overlay.remove());
+  head.append(h, close);
+  modal.append(head);
+
+  const list = document.createElement('div');
+  list.className = 'pe-history-list';
+  const items = getPromptHistory();
+
+  if (!items.length) {
+    const empty = document.createElement('p');
+    empty.className = 'pe-history-empty';
+    empty.textContent = t('history.empty');
+    list.append(empty);
+  } else {
+    items.forEach((it) => {
+      const row = document.createElement('div');
+      row.className = 'pe-history-item';
+      const meta = document.createElement('div');
+      meta.className = 'pe-history-meta';
+      const when = new Date(it.ts);
+      meta.textContent = `${it.template} · ${isNaN(when) ? '' : when.toLocaleString()}`;
+      const snippet = document.createElement('div');
+      snippet.className = 'pe-history-snippet';
+      snippet.textContent = it.content.slice(0, 160) + (it.content.length > 160 ? '…' : '');
+      const copyBtn = document.createElement('button');
+      copyBtn.type = 'button';
+      copyBtn.className = 'pe-btn';
+      copyBtn.textContent = t('history.copy');
+      copyBtn.addEventListener('click', () => copyText(it.content));
+      row.append(meta, snippet, copyBtn);
+      list.append(row);
+    });
+  }
+  modal.append(list);
+
+  const footer = document.createElement('div');
+  footer.className = 'pe-history-footer';
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'pe-btn';
+  clearBtn.textContent = t('history.clear');
+  clearBtn.disabled = !items.length;
+  clearBtn.addEventListener('click', () => {
+    clearPromptHistory();
+    overlay.remove();
+  });
+  footer.append(clearBtn);
+  modal.append(footer);
+
+  overlay.append(modal);
+  return overlay;
 }
 
 // ---- Modal de login (magic link) ----

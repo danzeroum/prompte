@@ -1221,6 +1221,7 @@ function generatePrompt(id) {
   container.classList.add('visible');
   container.scrollIntoView({ behavior: 'smooth', block: 'start' });
   if (window.PE.track) window.PE.track('generate', { template: id });
+  if (window.PE.addPromptToHistory) window.PE.addPromptToHistory(id, prompt); // #M14
 }
 
 // ─── COPY ───
