@@ -580,12 +580,12 @@ FORMATO DE RESPOSTA:
 `;
 
 exports[`generators — snapshots gen-dados snapshot 1`] = `
-"Analise detalhadamente o repositorio linha-um da-repo
-  linha-dois da-repo, com foco em linha-um da-arq
-  linha-dois da-arq.
+"Analise detalhadamente o repositorio linha-um gda-repo
+  linha-dois gda-repo, com foco em linha-um gda-arq
+  linha-dois gda-arq.
 
-CONTEXTO: linha-um da-ctx
-  linha-dois da-ctx
+CONTEXTO: linha-um gda-ctx
+  linha-dois gda-ctx
 
 INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de sistemas intensivos em dados:
 
@@ -638,12 +638,12 @@ FORMATO DE RESPOSTA:
 `;
 
 exports[`generators — snapshots gen-ia snapshot 1`] = `
-"Analise detalhadamente o repositorio linha-um ia-repo
-  linha-dois ia-repo, com foco em linha-um ia-arq
-  linha-dois ia-arq.
+"Analise detalhadamente o repositorio linha-um gia-repo
+  linha-dois gia-repo, com foco em linha-um gia-arq
+  linha-dois gia-arq.
 
-CONTEXTO: linha-um ia-ctx
-  linha-dois ia-ctx
+CONTEXTO: linha-um gia-ctx
+  linha-dois gia-ctx
 TIPO DE MODELO: undefined
 
 INSTRUCAO DE DOMINIO — Verifique os seguintes aspectos de engenharia de IA:

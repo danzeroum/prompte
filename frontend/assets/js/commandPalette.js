@@ -64,28 +64,16 @@ export function buildIndex(root = document) {
       });
   });
 
-  // Geradores avançados (gen-*) já migrados para o generator.html (fusão
-  // incremental); os ainda não migrados continuam no index.html.
-  const MIGRATED_GEN = new Set([
-    'gen-review',
-    'gen-api',
-    'gen-arch',
-    'gen-security',
-    'gen-ux',
-    'gen-canivete',
-    'gen-cloud',
-  ]);
-
   // Templates do gerador não presentes nesta página → deep-link cross-page.
+  // A fusão dos geradores está completa: todos os templates (inclusive os gen-*)
+  // vivem no generator.html.
   Object.keys(generatorTemplates).forEach((key) => {
     const tpl = generatorTemplates[key];
     if (tpl.playground || onPageTemplates.has(key)) return;
-    const onIndex = key.startsWith('gen-') && !MIGRATED_GEN.has(key);
-    const page = onIndex ? '/index.html' : '/generator.html';
     items.push({
       label: tpl.name,
       hint: t('palette.template'),
-      run: () => (location.href = page + '#t=' + key),
+      run: () => (location.href = '/generator.html#t=' + key),
     });
   });
 

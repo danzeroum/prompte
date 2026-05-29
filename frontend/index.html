@@ -68,12 +68,6 @@
     <div class="sb-item" data-t="e-metricas" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f4c8;</span> Métricas / OKR</div>
     <div class="sb-item" data-t="e-gestao" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f4c5;</span> Gestão de Projetos</div>
   </div>
-  <div class="sb-sec">
-    <div class="sb-sec-title" data-i18n="cjuk77x">Gerador Avançado</div>
-    <div class="sb-item" data-t="gen-ia" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f9e0;</span> IA / Machine Learning</div>
-    <div class="sb-item" data-t="gen-dados" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f4ca;</span> Dados / Analytics</div>
-    <div class="sb-item" data-t="gen-gestao" onclick="show(this)"><span class="icon" aria-hidden="true">&#x1f4c5;</span> Gestão / Métricas</div>
-  </div>
 </nav>
 
 <main class="main">
@@ -235,11 +229,6 @@
     <div class="panel" id="p-e-metricas"></div>
     <div class="panel" id="p-e-gestao"></div>
 
-    <!-- ENHANCED GENERATORS -->
-    <div class="panel" id="p-gen-ia"></div>
-    <div class="panel" id="p-gen-dados"></div>
-    <div class="panel" id="p-gen-gestao"></div>
-
   </div>
 </main>
 
@@ -267,10 +256,7 @@ const meta = {
   'e-dados':{title:'Dados Intensivos',badge:'Ebook',badgeClass:'b-analysis'},
   'e-arq2':{title:'Arq. Software II',badge:'Ebook',badgeClass:'b-analysis'},
   'e-metricas':{title:'Metricas / OKR',badge:'Ebook',badgeClass:'b-analysis'},
-  'e-gestao':{title:'Gestao de Projetos',badge:'Ebook',badgeClass:'b-analysis'},
-  'gen-ia':{title:'IA / Machine Learning',badge:'Gerador',badgeClass:'b-gen'},
-  'gen-dados':{title:'Dados / Analytics',badge:'Gerador',badgeClass:'b-gen'},
-  'gen-gestao':{title:'Gestao / Metricas',badge:'Gerador',badgeClass:'b-gen'}
+  'e-gestao':{title:'Gestao de Projetos',badge:'Ebook',badgeClass:'b-analysis'}
 };
 
 const ebooks = [
@@ -491,156 +477,6 @@ function buildEbookPanels(){
   });
 }
 
-// ─── BUILD ENHANCED GENERATORS ───
-function buildGenerators(){
-  // gen-review foi migrado para o generator.html (piloto da fusão dos dois
-  // geradores). Os demais gen-* seguem aqui até a migração completa.
-
-  // IA / Machine Learning
-  document.getElementById('p-gen-ia').innerHTML=`
-    <div class="enh-section" style="border-color:var(--red)">
-      <h3><span class="emoji">&#x1f9e0;</span> Domínios Ativos: IA Responsavel + Etica + Qualidade de Dados</h3>
-      <p>Gera prompts que incluem verificacao de vies, qualidade de dados, overfitting, seguranca de IA e conformidade com principios de IA responsavel.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="ia-repo" placeholder="/home/z/my-project/ml-model"></div>
-      <div class="fg"><label>Arquivo(s) <span class="req">*</span></label><input type="text" id="ia-arq" placeholder="src/model/ ou notebooks/"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto <span class="req">*</span></label>
-      <textarea id="ia-ctx" placeholder="Ex: Avaliar modelo de classificacao para vies e conformidade LGPD..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Tipo de modelo</label>
-      <select id="ia-tipo"><option value="">Deixe descobrir</option><option value="Classificacao">Classificacao</option><option value="Regressao">Regressao</option><option value="NLP">NLP / Processamento de Linguagem</option><option value="Visao">Visao Computacional</option></select>
-    </div>
-    <div class="fg">
-      <label>Aspectos de IA para incluir</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="ia-vies" checked> Vies e Etica</label>
-        <label class="cb-item"><input type="checkbox" id="ia-qual" checked> Qualidade dos Dados</label>
-        <label class="cb-item"><input type="checkbox" id="ia-over" checked> Overfitting e Generalizacao</label>
-        <label class="cb-item"><input type="checkbox" id="ia-sec" checked> Seguranca de IA</label>
-        <label class="cb-item"><input type="checkbox" id="ia-expl"> Explicabilidade</label>
-        <label class="cb-item"><input type="checkbox" id="ia-lgpd"> Conformidade LGPD/GDPR</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('ia')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-ia"></div>
-  `;
-
-  // Dados / Analytics
-  document.getElementById('p-gen-dados').innerHTML=`
-    <div class="enh-section" style="border-color:var(--teal)">
-      <h3><span class="emoji">&#x1f4ca;</span> Domínios Ativos: Big Data + ETL + Microsservicos + Analytics</h3>
-      <p>Combina verificacao dos 5 Vs do Big Data, pipelines ETL, arquitetura de microsservicos e ciclo analítico completo.</p>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Caminho do repositorio <span class="req">*</span></label><input type="text" id="da-repo" placeholder="/home/z/my-project/data-pipeline"></div>
-      <div class="fg"><label>Arquivo(s) <span class="req">*</span></label><input type="text" id="da-arq" placeholder="src/etl/ ou src/pipelines/"></div>
-    </div>
-    <div class="fg">
-      <label>Contexto <span class="req">*</span></label>
-      <textarea id="da-ctx" placeholder="Ex: Otimizar pipeline de ETL, implementar metricas SMART..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Aspectos de Dados para incluir</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="da-5vs" checked> Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)</label>
-        <label class="cb-item"><input type="checkbox" id="da-etl" checked> ETL e Qualidade de Dados</label>
-        <label class="cb-item"><input type="checkbox" id="da-ms"> Microsservicos</label>
-        <label class="cb-item"><input type="checkbox" id="da-anal"> Analise e Decisao (SMART)</label>
-        <label class="cb-item"><input type="checkbox" id="da-qd"> Qualidade dos Dados</label>
-        <label class="cb-item"><input type="checkbox" id="da-ml"> ML Aplicado</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('dados')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-dados"></div>
-  `;
-
-  // Gestao / Metricas
-  document.getElementById('p-gen-gestao').innerHTML=`
-    <div class="enh-section" style="border-color:var(--pink)">
-      <h3><span class="emoji">&#x1f4c5;</span> Domínios Ativos: Gestão de Projetos + OKR + Métricas de Fluxo</h3>
-      <p>Combina escopo e EAP, gestao de riscos, OKRs, metricas de fluxo e modelos de gestao para gerar prompts especializados em gestao de projetos de software.</p>
-    </div>
-    <div class="fg">
-      <label>Caminho do repositorio <span class="req">*</span></label>
-      <input type="text" id="ge-repo" placeholder="/home/z/my-project/meu-app">
-    </div>
-    <div class="fg">
-      <label>Contexto <span class="req">*</span></label>
-      <textarea id="ge-ctx" placeholder="Ex: Avaliar aderencia ao escopo, verificar riscos do projeto, analisar OKRs..."></textarea>
-    </div>
-    <div class="fg">
-      <label>Aspectos de Gestao para incluir</label>
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="ge-escopo" checked> Escopo e EAP</label>
-        <label class="cb-item"><input type="checkbox" id="ge-riscos" checked> Gerenciamento de Riscos</label>
-        <label class="cb-item"><input type="checkbox" id="ge-okr" checked> OKR e Alinhamento Estrategico</label>
-        <label class="cb-item"><input type="checkbox" id="ge-fluxo"> Fluxo e Entrega (Lead Time, WIP)</label>
-        <label class="cb-item"><input type="checkbox" id="ge-modelo"> Modelo de Gestao (Agil/Hibrido)</label>
-        <label class="cb-item"><input type="checkbox" id="ge-stake"> Stakeholders e Comunicacao</label>
-      </div>
-    </div>
-    <button class="btn-gen" onclick="genEnhanced('gestao')">&#x1f680; Gerar Prompt com Dominios</button>
-    <div class="out" id="out-gestao"></div>
-  `;
-}
-
-// ─── HELPERS ───
-
-// ─── ENHANCED GENERATORS ───
-
-function genEnhanced(type){
-  // Despacha para o gerador declarativo unico (generators.js via window.PE),
-  // usando a chave gen-<type> migrada do antigo enhGen inline.
-  const key='gen-'+type;
-  if(!window.PE||typeof window.PE.buildPrompt!=='function')return;
-  let prompt;
-  try{
-    const data=window.PE.collectFormData?window.PE.collectFormData(key):{};
-    prompt=window.PE.buildPrompt(key,data);
-  }catch(e){return;}
-  const container=document.getElementById('out-'+type);
-  container.innerHTML=`
-    <div class="out-hdr"><h3>&#x2705; Prompt com Domínios Gerado</h3>
-      <div class="btn-row"><button class="btn-copy" onclick="copyP('${type}')">&#x1f4cb; Copiar</button>
-      <button class="btn-clr" onclick="clearO('${type}')">&#x2716; Limpar</button></div>
-    </div>
-    <div class="out-box"><div class="out-text" id="prompt-${type}"></div></div>
-  `;
-  document.getElementById('prompt-'+type).textContent=prompt;
-  container.classList.add('vis');
-  container.setAttribute('role','region');
-  container.setAttribute('aria-live','polite');
-  container.setAttribute('tabindex','-1');
-  container.setAttribute('aria-label','Prompt gerado');
-  container.scrollIntoView({behavior:'smooth',block:'start'});
-  container.focus();
-  if(window.PE.track)window.PE.track('generate',{template:key});
-  if(window.PE.addPromptToHistory)window.PE.addPromptToHistory(key,prompt);
-}
-
-function copyP(type){
-  const text=document.getElementById('prompt-'+type).textContent;
-  navigator.clipboard.writeText(text).then(()=>{
-    const btn=document.querySelector(`#out-${type} .btn-copy`);
-    btn.classList.add('copied');
-    btn.innerHTML='&#x2705; Copiado!';
-    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='&#x1f4cb; Copiar';},2000);
-  }).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    const btn=document.querySelector(`#out-${type} .btn-copy`);
-    btn.classList.add('copied');btn.innerHTML='&#x2705; Copiado!';
-    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='&#x1f4cb; Copiar';},2000);
-  });
-}
-function clearO(type){
-  const c=document.getElementById('out-'+type);
-  c.classList.remove('vis');c.innerHTML='';
-}
-
 // Deep-link da paleta de comando (#M-UX4): abre o painel indicado em #t=<key>.
 function openPanelFromHash(){
   const m=/(?:^|#)t=([\w-]+)/.exec(location.hash);
@@ -680,7 +516,6 @@ function renderSavedPrompts(){
 // ─── INIT ───
 buildGrid();
 buildEbookPanels();
-buildGenerators();
 openPanelFromHash();
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded',renderSavedPrompts);
