@@ -21,6 +21,31 @@ export const glossary = {
   SMART: 'Ciclo/critério: específico, mensurável, atingível, relevante e temporal.',
   OKR: 'Objectives and Key Results — objetivos com resultados-chave mensuráveis.',
   Scrum: 'Framework ágil com papéis, eventos e artefatos para entregas iterativas.',
+  // ─── #KB: termos técnicos que aparecem nas regras dos ebooks (base de conhecimento) ───
+  SOLID:
+    'Cinco princípios de design OO: Single Responsibility, Open/Closed, Liskov, Interface Segregation e Dependency Inversion.',
+  OWASP:
+    'Open Worldwide Application Security Project — referência de boas práticas e listas de vulnerabilidades (ex.: OWASP Top 10).',
+  DORA: 'DevOps Research and Assessment — métricas de desempenho de entrega (deploy frequency, lead time, MTTR, change fail rate).',
+  BPMN: 'Business Process Model and Notation — notação gráfica padrão para modelar processos de negócio.',
+  DMN: 'Decision Model and Notation — modela regras de decisão (tabelas de decisão) separadas do código.',
+  SAST: 'Static Application Security Testing — análise estática de código em busca de vulnerabilidades.',
+  SAMM: 'Software Assurance Maturity Model (OpenSAMM) — modelo de maturidade de segurança em 5 dimensões.',
+  C4: 'Modelo de documentação de arquitetura em 4 níveis: Contexto, Container, Componente e Código.',
+  WIP: 'Work in Progress — quantidade de itens em andamento; limitá-lo melhora o fluxo de entrega.',
+  Throughput: 'Quantidade de itens de trabalho entregues por período (vazão).',
+  MoSCoW: 'Técnica de priorização: Must, Should, Could e Won’t have.',
+  '12-Factor':
+    'Metodologia para apps SaaS portáveis e resilientes (configuração no ambiente, logs como eventos, etc.).',
+  Kotter: 'Modelo de gestão de mudanças em 8 etapas, de John Kotter.',
+  'Big-O':
+    'Notação que descreve o crescimento do custo (tempo/espaço) de um algoritmo em função da entrada.',
+  IAM: 'Identity and Access Management — gestão de identidades e controle de acesso a recursos.',
+  'Privacy by Design':
+    'Abordagem que incorpora a privacidade desde a concepção do sistema (7 princípios).',
+  Nielsen: 'Conjunto de 10 heurísticas de usabilidade de Jakob Nielsen para avaliar interfaces.',
+  TDD: 'Test-Driven Development — escreve-se o teste antes do código de produção.',
+  'Cost of Delay': 'Custo de adiar uma entrega; base do WSJF para priorização por valor.',
 };
 
 function decorate(node, term) {

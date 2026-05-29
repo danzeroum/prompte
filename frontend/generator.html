@@ -1794,7 +1794,7 @@ function toggleSidebar() {
 // window.PE). Aqui apenas coletamos os valores brutos dos campos declarados e
 // delegamos a construção do prompt a buildPrompt(), mantendo uma única fonte
 // de verdade (sem duplicar os 25 builders neste HTML).
-function generatePrompt(id) {
+async function generatePrompt(id) {
   if (!window.PE || typeof window.PE.buildPrompt !== 'function') return;
   let prompt;
   try {
@@ -1804,6 +1804,19 @@ function generatePrompt(id) {
     prompt = window.PE.buildPrompt(id, data);
   } catch (e) {
     return;
+  }
+  // #KB: camada ADITIVA opt-in. A saída de buildPrompt() acima fica intacta; só
+  // anexamos o bloco de conhecimento quando o usuário marcou subtemas ou colou
+  // contexto extra. knowledgeBase.js é carregado sob demanda (lazy) aqui.
+  const kb = collectKnowledge(id);
+  if (kb.domains.length || kb.extra.trim()) {
+    try {
+      const { appendKnowledge } = await window.PE.ensureKnowledge();
+      prompt = appendKnowledge(prompt, kb);
+      if (window.PE.track) window.PE.track('knowledge_inject', { template: id, domains: kb.domains });
+    } catch (e) {
+      /* sem KB, segue com o prompt-base */
+    }
   }
   const container = document.getElementById('output-' + id);
   const title = (templateMeta[id] && templateMeta[id].title) || id;
@@ -1895,11 +1908,110 @@ document.addEventListener('pe:i18n', () => {
   if (active) rehydrateForm(active.dataset.template);
 });
 
+// ─── #KB: enriquecimento opcional com a base de conhecimento dos ebooks ───
+// Insere, em cada painel de template, uma seção colapsável "Enriquecer com
+// ebooks". Os campos usam o prefixo kb-* e NÃO entram em generatorTemplates.fields,
+// então não são lidos por collectFormData nem afetam a saída de buildPrompt().
+function mountKnowledgeSections() {
+  document.querySelectorAll('.template-panel .btn-generate').forEach((btn) => {
+    const m = (btn.getAttribute('onclick') || '').match(/generatePrompt\('([^']+)'\)/);
+    if (!m) return;
+    const id = m[1];
+    if (document.getElementById('kb-section-' + id)) return;
+    const det = document.createElement('details');
+    det.className = 'kb-section';
+    det.id = 'kb-section-' + id;
+    det.innerHTML =
+      '<summary class="kb-summary"><span aria-hidden="true">\u{1F4DA}</span> ' +
+      '<span data-i18n="kb.section.title">Enriquecer com ebooks (opcional)</span></summary>' +
+      '<div class="kb-body">' +
+      '<div class="form-group"><label for="kb-theme-' + id + '" data-i18n="kb.theme.label">Tema (ebook)</label>' +
+      '<select id="kb-theme-' + id + '" class="kb-theme"><option value="">—</option></select></div>' +
+      '<div class="kb-domains" id="kb-domains-' + id + '" role="group" aria-label="Subtemas"></div>' +
+      '<div class="form-group"><label for="kb-level-' + id + '" data-i18n="kb.level.label">Nivel de profundidade</label>' +
+      '<select id="kb-level-' + id + '" class="kb-level">' +
+      '<option value="pratico" data-i18n="kb.level.pratico">Pratico</option>' +
+      '<option value="intermediario" data-i18n="kb.level.intermediario">Intermediario</option>' +
+      '<option value="academico" data-i18n="kb.level.academico">Academico</option></select></div>' +
+      '<div class="form-group"><label for="kb-extra-' + id + '" data-i18n="kb.extra.label">Contexto adicional (opcional)</label>' +
+      '<textarea id="kb-extra-' + id + '" class="kb-extra" rows="3" placeholder="Cole ADRs, documentacao ou trechos de ebook..." ' +
+      'data-i18n="kb.extra.ph" data-i18n-attr="placeholder"></textarea></div>' +
+      '</div>';
+    btn.parentNode.insertBefore(det, btn);
+    // Popula sob demanda na 1ª expansão — mantém knowledgeBase.js carregado lazy.
+    det.addEventListener('toggle', () => {
+      if (det.open) populateKnowledge(id);
+    });
+  });
+}
+
+const _kbReady = {};
+async function populateKnowledge(id) {
+  if (_kbReady[id]) return;
+  _kbReady[id] = true;
+  if (!window.PE || typeof window.PE.ensureKnowledge !== 'function') return;
+  let km;
+  try {
+    km = await window.PE.ensureKnowledge();
+  } catch (e) {
+    _kbReady[id] = false;
+    return;
+  }
+  const themeSel = document.getElementById('kb-theme-' + id);
+  const box = document.getElementById('kb-domains-' + id);
+  if (!themeSel || !box) return;
+  const opts = Object.entries(km.themes)
+    .map(([eid, theme]) => '<option value="' + eid + '">' + theme.title + '</option>')
+    .join('');
+  themeSel.insertAdjacentHTML('beforeend', opts);
+  // Pré-seleciona um tema relevante ao template (casa pelo título de exibição).
+  const name = (templateMeta[id] && templateMeta[id].title) || '';
+  const suggested = km.domainsForTemplate(name);
+  if (suggested.length) themeSel.value = suggested[0].split('/')[0];
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  const renderDomains = () => {
+    const eid = themeSel.value;
+    if (!eid || !km.themes[eid]) {
+      box.innerHTML = '';
+      return;
+    }
+    box.innerHTML = km.themes[eid].domains
+      .map((key) => {
+        const d = km.knowledgeDomains[key];
+        const cid = 'kb-d-' + id + '-' + key.replace(/[^a-z0-9]+/gi, '-');
+        return (
+          '<label class="kb-domain" for="' + cid + '" title="' + esc(d.rule) + '">' +
+          '<input type="checkbox" id="' + cid + '" class="kb-domain-cb" value="' + key + '"> ' +
+          esc(d.label) + '</label>'
+        );
+      })
+      .join('');
+  };
+  themeSel.addEventListener('change', renderDomains);
+  renderDomains();
+}
+
+// Lê as escolhas de conhecimento do painel (fora de generatorTemplates.fields).
+function collectKnowledge(id) {
+  const box = document.getElementById('kb-domains-' + id);
+  const domains = box
+    ? [...box.querySelectorAll('.kb-domain-cb:checked')].map((c) => c.value)
+    : [];
+  const levelEl = document.getElementById('kb-level-' + id);
+  const extraEl = document.getElementById('kb-extra-' + id);
+  return {
+    domains,
+    level: levelEl ? levelEl.value : 'pratico',
+    extra: extraEl ? extraEl.value : '',
+  };
+}
+
 // Inicialização: sincroniza o modo (classe já aplicada no <head>) ANTES de
 // resolver o deep-link #t=, senão o painel-alvo poderia estar oculto pelo modo.
 function initGeneratorModeAndHash() {
   setMode(currentMode());      // sincroniza tabs + garante template do modo
   openTemplateFromHash();      // #t= sobrepõe a seleção, se presente
+  mountKnowledgeSections();    // #KB: injeta a seção opt-in em cada painel
 }
 window.addEventListener('hashchange', openTemplateFromHash);
 if (document.readyState === 'loading') {
