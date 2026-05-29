@@ -66,7 +66,15 @@ export function buildIndex(root = document) {
 
   // Geradores avançados (gen-*) já migrados para o generator.html (fusão
   // incremental); os ainda não migrados continuam no index.html.
-  const MIGRATED_GEN = new Set(['gen-review', 'gen-api', 'gen-arch', 'gen-security']);
+  const MIGRATED_GEN = new Set([
+    'gen-review',
+    'gen-api',
+    'gen-arch',
+    'gen-security',
+    'gen-ux',
+    'gen-canivete',
+    'gen-cloud',
+  ]);
 
   // Templates do gerador não presentes nesta página → deep-link cross-page.
   Object.keys(generatorTemplates).forEach((key) => {

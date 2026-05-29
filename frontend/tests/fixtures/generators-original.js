@@ -934,15 +934,15 @@ export const originalGenerators = {
   'gen-cloud'(data) {
     const { val: v, checkedItems } = makeHelpers(data);
 
-    const repo=v('cl-repo'),arq=v('cl-arq'),ctx=v('cl-ctx');
-    const domains=checkedItems(['cl-sec','cl-model','cl-migr','cl-comp','cl-iac','cl-cont']);
+    const repo=v('gcl-repo'),arq=v('gcl-arq'),ctx=v('gcl-ctx');
+    const domains=checkedItems(['gcl-sec','gcl-model','gcl-migr','gcl-comp','gcl-iac','gcl-cont']);
     const domainLabels={
-      'cl-sec':'Seguranca na Nuvem (IAM, flags de protecao, criptografia, responsabilidade compartilhada)',
-      'cl-model':'Modelos de Servico (SaaS, PaaS, IaaS, FaaS) — verificacao de provisionamento otimizado',
-      'cl-migr':'Migracao e Adocao Cloud (6 pilares: negocios, pessoas, governanca, plataforma, seguranca, operacoes)',
-      'cl-comp':'Compliance (LGPD, resolucao BACEN 4.658, NIST CSF, seguranca by design)',
-      'cl-iac':'Infraestrutura como Codigo (IaC) — Terraform, CloudFormation, automacao',
-      'cl-cont':'Containers e Orquestracao (Docker, Kubernetes, resiliencia, escalabilidade)'
+      'gcl-sec':'Seguranca na Nuvem (IAM, flags de protecao, criptografia, responsabilidade compartilhada)',
+      'gcl-model':'Modelos de Servico (SaaS, PaaS, IaaS, FaaS) — verificacao de provisionamento otimizado',
+      'gcl-migr':'Migracao e Adocao Cloud (6 pilares: negocios, pessoas, governanca, plataforma, seguranca, operacoes)',
+      'gcl-comp':'Compliance (LGPD, resolucao BACEN 4.658, NIST CSF, seguranca by design)',
+      'gcl-iac':'Infraestrutura como Codigo (IaC) — Terraform, CloudFormation, automacao',
+      'gcl-cont':'Containers e Orquestracao (Docker, Kubernetes, resiliencia, escalabilidade)'
     };
     let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
     p+=`CONTEXTO: ${ctx}\n\n`;

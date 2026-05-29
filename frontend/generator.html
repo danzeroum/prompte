@@ -190,6 +190,15 @@
     <div class="sidebar-item" data-template="gen-security" onclick="showTemplate(this)">
       <span class="icon" aria-hidden="true">&#x1f6e1;</span> Segurança + LGPD
     </div>
+    <div class="sidebar-item" data-template="gen-ux" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x1f3a8;</span> UX + Usabilidade
+    </div>
+    <div class="sidebar-item" data-template="gen-canivete" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x1f91d;</span> Canivete Suíço Pro
+    </div>
+    <div class="sidebar-item" data-template="gen-cloud" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x2601;</span> Cloud / Infra
+    </div>
   </div>
 </nav>
 
@@ -1360,6 +1369,168 @@
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-security"></div>
     </div>
 
+    <!-- Geradores Avancados: gen-ux (lote 2 da fusao) -->
+    <div class="template-panel" id="panel-gen-ux">
+      <p class="template-description">
+        Gera prompts de revisão de UX combinando heurísticas de Nielsen,
+        acessibilidade, design centrado no usuário e arquitetura de informação.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositório <span class="required">*</span></label>
+          <input type="text" id="ux-repo" placeholder="/home/eu/meu-app/frontend">
+        </div>
+        <div class="form-group">
+          <label>Arquivo / Componente <span class="required">*</span></label>
+          <input type="text" id="ux-arq" placeholder="src/components/LoginForm.tsx">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Objetivo <span class="required">*</span></label>
+        <textarea id="ux-ctx" placeholder="Ex: Revisar componente de login para melhorar a experiencia..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>UI Framework</label>
+          <select id="ux-ui">
+            <option value="">Deixe descobrir</option>
+            <option value="React">React</option>
+            <option value="Next.js">Next.js</option>
+            <option value="Vue">Vue</option>
+            <option value="Angular">Angular</option>
+            <option value="Svelte">Svelte</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estilo</label>
+          <select id="ux-style">
+            <option value="">Deixe descobrir</option>
+            <option value="shadcn/ui + Tailwind">shadcn/ui + Tailwind</option>
+            <option value="Material UI">Material UI</option>
+            <option value="Chakra UI">Chakra UI</option>
+            <option value="CSS Modules">CSS Modules</option>
+            <option value="Styled Components">Styled Components</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Aspectos UX para incluir</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="ux-heur" checked> Análise Heurística (Nielsen)</label>
+          <label class="checkbox-item"><input type="checkbox" id="ux-acess" checked> Acessibilidade</label>
+          <label class="checkbox-item"><input type="checkbox" id="ux-design" checked> Design Centrado no Usuário</label>
+          <label class="checkbox-item"><input type="checkbox" id="ux-proto" checked> Prototipação Rápida</label>
+          <label class="checkbox-item"><input type="checkbox" id="ux-ia" checked> Arq. de Informação</label>
+          <label class="checkbox-item"><input type="checkbox" id="ux-journey"> Jornada do Usuário</label>
+          <label class="checkbox-item"><input type="checkbox" id="ux-mobile"> Mobile-first</label>
+          <label class="checkbox-item"><input type="checkbox" id="ux-a11y"> Internacionalização (i18n)</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-ux')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-ux"></div>
+    </div>
+
+    <!-- Geradores Avancados: gen-canivete (lote 2 da fusao) -->
+    <div class="template-panel" id="panel-gen-canivete">
+      <p class="template-description">
+        O gerador mais completo: combina qualidade, arquitetura, segurança,
+        performance, UX e processos numa única passada, com diff pronto para git apply.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositório <span class="required">*</span></label>
+          <input type="text" id="cs-repo" placeholder="/home/eu/meu-app">
+        </div>
+        <div class="form-group">
+          <label>Arquivo ou diretório <span class="required">*</span></label>
+          <input type="text" id="cs-arq" placeholder="src/ ou src/services/*">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Motivação <span class="required">*</span></label>
+        <textarea id="cs-ctx" placeholder="Ex: Análise completa do repositório antes de PR, refatorar débito técnico..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo de melhoria predominante</label>
+          <select id="cs-tipo">
+            <option value="tudo">Análise completa (todos os domínios)</option>
+            <option value="qualidade">Qualidade e Testes</option>
+            <option value="arquitetura">Arquitetura e Design</option>
+            <option value="seguranca">Segurança e Compliance</option>
+            <option value="performance">Performance e Escalabilidade</option>
+            <option value="ux">UX e Usabilidade</option>
+            <option value="devops">DevOps e Pipeline</option>
+            <option value="processos">Processos e Automação</option>
+            <option value="refatoracao">Refatoração Geral</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Profundidade da análise</label>
+          <select id="cs-profund">
+            <option value="completa">Completa (todas as camadas)</option>
+            <option value="focada">Focada (apenas domínios relevantes)</option>
+            <option value="resumida">Resumida (checklist + diffs)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Domínios para ativar</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="rq-verif" checked> Verificação e Validação</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-test" checked> Testes (todos os níveis)</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-sast" checked> Análise Estática (SAST)</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-rev" checked> Code Review</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-qual" checked> Atributos de Qualidade</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-solid" checked> Princípios SOLID</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-clean"> Clean Code / 12-Factor</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-arqcb"> Arquitetura (C4, Refatoração)</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-devops"> DevOps / Pipeline</label>
+          <label class="checkbox-item"><input type="checkbox" id="rq-perf"> Performance / Escalabilidade</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-canivete')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-canivete"></div>
+    </div>
+
+    <!-- Geradores Avancados: gen-cloud (lote 2 da fusao; ids gcl-* p/ nao colidir com cloud-review) -->
+    <div class="template-panel" id="panel-gen-cloud">
+      <p class="template-description">
+        Gera prompts de revisão de infraestrutura cloud: segurança (IAM,
+        criptografia), modelos de serviço, IaC, containers e compliance.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositório <span class="required">*</span></label>
+          <input type="text" id="gcl-repo" placeholder="/home/eu/meu-app/infra">
+        </div>
+        <div class="form-group">
+          <label>Arquivo / Diretório <span class="required">*</span></label>
+          <input type="text" id="gcl-arq" placeholder="terraform/ ou src/infra/">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Objetivo <span class="required">*</span></label>
+        <textarea id="gcl-ctx" placeholder="Ex: Migrar infraestrutura para AWS, verificar seguranca de IAM..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos Cloud para incluir</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="gcl-sec" checked> Segurança na Nuvem (IAM, criptografia)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gcl-model" checked> Modelos de Serviço (SaaS/PaaS/IaaS/FaaS)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gcl-migr"> Migração e Adoção (6 pilares)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gcl-comp"> Compliance (LGPD, BACEN, NIST)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gcl-iac"> Infraestrutura como Código (IaC)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gcl-cont"> Containers e Orquestração</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-cloud')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-cloud"></div>
+    </div>
+
   </div><!-- /content -->
 </main>
 
@@ -1395,6 +1566,9 @@ const templateMeta = {
   'gen-api':             { title: 'Design de API',                badge: 'Gerador',    badgeClass: 'badge-avancado' },
   'gen-arch':            { title: 'Refatoração Arquitetural',     badge: 'Gerador',    badgeClass: 'badge-avancado' },
   'gen-security':        { title: 'Segurança + LGPD',             badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-ux':              { title: 'UX + Usabilidade',             badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-canivete':        { title: 'Canivete Suíço Pro',           badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-cloud':           { title: 'Cloud / Infra',                badge: 'Gerador',    badgeClass: 'badge-avancado' },
 };
 
 // ─── PRESERVAÇÃO DE FORMULÁRIO POR TEMPLATE (Fase 2) ───
