@@ -199,6 +199,15 @@
     <div class="sidebar-item" data-template="gen-cloud" onclick="showTemplate(this)">
       <span class="icon" aria-hidden="true">&#x2601;</span> Cloud / Infra
     </div>
+    <div class="sidebar-item" data-template="gen-ia" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x1f9e0;</span> IA / Machine Learning
+    </div>
+    <div class="sidebar-item" data-template="gen-dados" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x1f4ca;</span> Dados / Analytics
+    </div>
+    <div class="sidebar-item" data-template="gen-gestao" onclick="showTemplate(this)">
+      <span class="icon" aria-hidden="true">&#x1f4c5;</span> Gestão / Métricas
+    </div>
   </div>
 </nav>
 
@@ -1531,6 +1540,118 @@
       <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-cloud"></div>
     </div>
 
+    <!-- Geradores Avancados: gen-ia (lote 3; ids gia-* p/ nao colidir com ia-ml-review) -->
+    <div class="template-panel" id="panel-gen-ia">
+      <p class="template-description">
+        Gera prompts de revisão de IA/ML: viés e ética, qualidade de dados,
+        overfitting, segurança de IA, explicabilidade e conformidade LGPD.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositório <span class="required">*</span></label>
+          <input type="text" id="gia-repo" placeholder="/home/eu/meu-app/ml-model">
+        </div>
+        <div class="form-group">
+          <label>Arquivo / Diretório <span class="required">*</span></label>
+          <input type="text" id="gia-arq" placeholder="src/model/ ou notebooks/">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Objetivo <span class="required">*</span></label>
+        <textarea id="gia-ctx" placeholder="Ex: Avaliar modelo de classificacao para vies e conformidade LGPD..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Tipo de modelo</label>
+        <select id="gia-tipo">
+          <option value="">Deixe descobrir</option>
+          <option value="Classificacao">Classificação</option>
+          <option value="Regressao">Regressão</option>
+          <option value="NLP">NLP / Processamento de Linguagem</option>
+          <option value="Visao">Visão Computacional</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Aspectos de IA para incluir</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="gia-vies" checked> Viés e Ética</label>
+          <label class="checkbox-item"><input type="checkbox" id="gia-qual" checked> Qualidade dos Dados</label>
+          <label class="checkbox-item"><input type="checkbox" id="gia-over" checked> Overfitting e Generalização</label>
+          <label class="checkbox-item"><input type="checkbox" id="gia-sec" checked> Segurança de IA</label>
+          <label class="checkbox-item"><input type="checkbox" id="gia-expl"> Explicabilidade</label>
+          <label class="checkbox-item"><input type="checkbox" id="gia-lgpd"> Conformidade LGPD/GDPR</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-ia')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-ia"></div>
+    </div>
+
+    <!-- Geradores Avancados: gen-dados (lote 3; ids gda-* p/ nao colidir com diff-arquivo) -->
+    <div class="template-panel" id="panel-gen-dados">
+      <p class="template-description">
+        Gera prompts de revisão de dados/analytics: 5 Vs do Big Data, pipelines
+        ETL, microsserviços, análise/decisão (SMART), qualidade de dados e ML aplicado.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caminho do repositório <span class="required">*</span></label>
+          <input type="text" id="gda-repo" placeholder="/home/eu/meu-app/data-pipeline">
+        </div>
+        <div class="form-group">
+          <label>Arquivo / Diretório <span class="required">*</span></label>
+          <input type="text" id="gda-arq" placeholder="src/etl/ ou src/pipelines/">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contexto / Objetivo <span class="required">*</span></label>
+        <textarea id="gda-ctx" placeholder="Ex: Otimizar pipeline de ETL, implementar metricas SMART..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos de Dados para incluir</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="gda-5vs" checked> Big Data 5 Vs</label>
+          <label class="checkbox-item"><input type="checkbox" id="gda-etl" checked> ETL e Qualidade de Dados</label>
+          <label class="checkbox-item"><input type="checkbox" id="gda-ms"> Microsserviços</label>
+          <label class="checkbox-item"><input type="checkbox" id="gda-anal"> Análise e Decisão (SMART)</label>
+          <label class="checkbox-item"><input type="checkbox" id="gda-qd"> Qualidade dos Dados</label>
+          <label class="checkbox-item"><input type="checkbox" id="gda-ml"> ML Aplicado</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-dados')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-dados"></div>
+    </div>
+
+    <!-- Geradores Avancados: gen-gestao (lote 3; ids ge-* unicos) -->
+    <div class="template-panel" id="panel-gen-gestao">
+      <p class="template-description">
+        Gera prompts de gestão de projetos: escopo/EAP, riscos, OKR, métricas de
+        fluxo (Lead Time, WIP), modelo de gestão e stakeholders.
+      </p>
+      <div class="form-group">
+        <label>Caminho do repositório <span class="required">*</span></label>
+        <input type="text" id="ge-repo" placeholder="/home/eu/meu-app">
+      </div>
+      <div class="form-group">
+        <label>Contexto / Objetivo <span class="required">*</span></label>
+        <textarea id="ge-ctx" placeholder="Ex: Avaliar aderencia ao escopo, verificar riscos, analisar OKRs..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Aspectos de Gestão para incluir</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item"><input type="checkbox" id="ge-escopo" checked> Escopo e EAP</label>
+          <label class="checkbox-item"><input type="checkbox" id="ge-riscos" checked> Gerenciamento de Riscos</label>
+          <label class="checkbox-item"><input type="checkbox" id="ge-okr" checked> OKR e Alinhamento Estratégico</label>
+          <label class="checkbox-item"><input type="checkbox" id="ge-fluxo"> Fluxo e Entrega (Lead Time, WIP)</label>
+          <label class="checkbox-item"><input type="checkbox" id="ge-modelo"> Modelo de Gestão (Ágil/Híbrido)</label>
+          <label class="checkbox-item"><input type="checkbox" id="ge-stake"> Stakeholders e Comunicação</label>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePrompt('gen-gestao')" data-i18n-html="tlc9a5e">&#x1f680; Gerar Prompt</button>
+      <span class="shortcut-hint" aria-hidden="true"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+      <div class="output-container" role="region" aria-live="polite" tabindex="-1" aria-label="Prompt gerado" id="output-gen-gestao"></div>
+    </div>
+
   </div><!-- /content -->
 </main>
 
@@ -1569,6 +1690,9 @@ const templateMeta = {
   'gen-ux':              { title: 'UX + Usabilidade',             badge: 'Gerador',    badgeClass: 'badge-avancado' },
   'gen-canivete':        { title: 'Canivete Suíço Pro',           badge: 'Gerador',    badgeClass: 'badge-avancado' },
   'gen-cloud':           { title: 'Cloud / Infra',                badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-ia':              { title: 'IA / Machine Learning',        badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-dados':           { title: 'Dados / Analytics',            badge: 'Gerador',    badgeClass: 'badge-avancado' },
+  'gen-gestao':          { title: 'Gestão / Métricas',            badge: 'Gerador',    badgeClass: 'badge-avancado' },
 };
 
 // ─── PRESERVAÇÃO DE FORMULÁRIO POR TEMPLATE (Fase 2) ───

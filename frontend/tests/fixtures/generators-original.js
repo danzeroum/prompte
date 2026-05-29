@@ -962,16 +962,16 @@ export const originalGenerators = {
   'gen-ia'(data) {
     const { val: v, sel, checkedItems } = makeHelpers(data);
 
-    const repo=v('ia-repo'),arq=v('ia-arq'),ctx=v('ia-ctx');
-    const tipo=sel('ia-tipo');
-    const domains=checkedItems(['ia-vies','ia-qual','ia-over','ia-sec','ia-expl','ia-lgpd']);
+    const repo=v('gia-repo'),arq=v('gia-arq'),ctx=v('gia-ctx');
+    const tipo=sel('gia-tipo');
+    const domains=checkedItems(['gia-vies','gia-qual','gia-over','gia-sec','gia-expl','gia-lgpd']);
     const domainLabels={
-      'ia-vies':'Vies e Etica (datasets diversos e representativos, auditoria de vies, prevencao de discriminacao)',
-      'ia-qual':'Qualidade dos Dados (completude, consistencia, veracidade, principio "garbage in, trash out")',
-      'ia-over':'Overfitting e Generalizacao (separacao treino/teste, metricas de avaliacao, generalizacao)',
-      'ia-sec':'Seguranca de IA (ataques adversarios, supervisao humana, principios de IA responsavel)',
-      'ia-expl':'Explicabilidade (transparencia, justica, interpretabilidade do modelo)',
-      'ia-lgpd':'Conformidade LGPD/GDPR (tratamento de dados sensiveis, base legal, direitos do titular)'
+      'gia-vies':'Vies e Etica (datasets diversos e representativos, auditoria de vies, prevencao de discriminacao)',
+      'gia-qual':'Qualidade dos Dados (completude, consistencia, veracidade, principio "garbage in, trash out")',
+      'gia-over':'Overfitting e Generalizacao (separacao treino/teste, metricas de avaliacao, generalizacao)',
+      'gia-sec':'Seguranca de IA (ataques adversarios, supervisao humana, principios de IA responsavel)',
+      'gia-expl':'Explicabilidade (transparencia, justica, interpretabilidade do modelo)',
+      'gia-lgpd':'Conformidade LGPD/GDPR (tratamento de dados sensiveis, base legal, direitos do titular)'
     };
     const tipoLabels={Classificacao:'Classificacao',Regressao:'Regressao','NLP':'NLP / Processamento de Linguagem',Visao:'Visao Computacional'};
     let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
@@ -994,15 +994,15 @@ export const originalGenerators = {
   'gen-dados'(data) {
     const { val: v, checkedItems } = makeHelpers(data);
 
-    const repo=v('da-repo'),arq=v('da-arq'),ctx=v('da-ctx');
-    const domains=checkedItems(['da-5vs','da-etl','da-ms','da-anal','da-qd','da-ml']);
+    const repo=v('gda-repo'),arq=v('gda-arq'),ctx=v('gda-ctx');
+    const domains=checkedItems(['gda-5vs','gda-etl','gda-ms','gda-anal','gda-qd','gda-ml']);
     const domainLabels={
-      'da-5vs':'Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)',
-      'da-etl':'ETL e Qualidade de Dados (tratamento de faltantes, anomalias, normalizacao, rastreabilidade)',
-      'da-ms':'Microsservicos (dominio bem definido, baixo acoplamento, deploy independente, resiliencia)',
-      'da-anal':'Analise e Decisao (ciclo completo: definicao, coleta, preparacao, modelagem, comunicacao, feedback)',
-      'da-qd':'Qualidade dos Dados (completude, consistencia, veracidade, integracao de multiplas fontes)',
-      'da-ml':'ML Aplicado (modelos preditivos, metricas SMART, validacao com dados reais)'
+      'gda-5vs':'Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)',
+      'gda-etl':'ETL e Qualidade de Dados (tratamento de faltantes, anomalias, normalizacao, rastreabilidade)',
+      'gda-ms':'Microsservicos (dominio bem definido, baixo acoplamento, deploy independente, resiliencia)',
+      'gda-anal':'Analise e Decisao (ciclo completo: definicao, coleta, preparacao, modelagem, comunicacao, feedback)',
+      'gda-qd':'Qualidade dos Dados (completude, consistencia, veracidade, integracao de multiplas fontes)',
+      'gda-ml':'ML Aplicado (modelos preditivos, metricas SMART, validacao com dados reais)'
     };
     let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
     p+=`CONTEXTO: ${ctx}\n\n`;

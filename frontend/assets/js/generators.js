@@ -1471,45 +1471,45 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   'gen-ia': {
     name: 'IA / Machine Learning',
     fields: [
-      { id: 'ia-repo', type: 'text' },
-      { id: 'ia-arq', type: 'text' },
-      { id: 'ia-ctx', type: 'textarea' },
-      { id: 'ia-tipo', type: 'select' },
-      { id: 'ia-vies', type: 'checkbox' },
-      { id: 'ia-qual', type: 'checkbox' },
-      { id: 'ia-over', type: 'checkbox' },
-      { id: 'ia-sec', type: 'checkbox' },
-      { id: 'ia-expl', type: 'checkbox' },
-      { id: 'ia-lgpd', type: 'checkbox' },
+      { id: 'gia-repo', type: 'text' },
+      { id: 'gia-arq', type: 'text' },
+      { id: 'gia-ctx', type: 'textarea' },
+      { id: 'gia-tipo', type: 'select' },
+      { id: 'gia-vies', type: 'checkbox' },
+      { id: 'gia-qual', type: 'checkbox' },
+      { id: 'gia-over', type: 'checkbox' },
+      { id: 'gia-sec', type: 'checkbox' },
+      { id: 'gia-expl', type: 'checkbox' },
+      { id: 'gia-lgpd', type: 'checkbox' },
     ],
     build(d) {
       const v = (id) => d[id];
       const sel = (id) => d[id];
       const checkedItems = (ids) => ids.filter((id) => d[id]);
 
-      const repo = v('ia-repo'),
-        arq = v('ia-arq'),
-        ctx = v('ia-ctx');
-      const tipo = sel('ia-tipo');
+      const repo = v('gia-repo'),
+        arq = v('gia-arq'),
+        ctx = v('gia-ctx');
+      const tipo = sel('gia-tipo');
       const domains = checkedItems([
-        'ia-vies',
-        'ia-qual',
-        'ia-over',
-        'ia-sec',
-        'ia-expl',
-        'ia-lgpd',
+        'gia-vies',
+        'gia-qual',
+        'gia-over',
+        'gia-sec',
+        'gia-expl',
+        'gia-lgpd',
       ]);
       const domainLabels = {
-        'ia-vies':
+        'gia-vies':
           'Vies e Etica (datasets diversos e representativos, auditoria de vies, prevencao de discriminacao)',
-        'ia-qual':
+        'gia-qual':
           'Qualidade dos Dados (completude, consistencia, veracidade, principio "garbage in, trash out")',
-        'ia-over':
+        'gia-over':
           'Overfitting e Generalizacao (separacao treino/teste, metricas de avaliacao, generalizacao)',
-        'ia-sec':
+        'gia-sec':
           'Seguranca de IA (ataques adversarios, supervisao humana, principios de IA responsavel)',
-        'ia-expl': 'Explicabilidade (transparencia, justica, interpretabilidade do modelo)',
-        'ia-lgpd':
+        'gia-expl': 'Explicabilidade (transparencia, justica, interpretabilidade do modelo)',
+        'gia-lgpd':
           'Conformidade LGPD/GDPR (tratamento de dados sensiveis, base legal, direitos do titular)',
       };
       const tipoLabels = {
@@ -1541,35 +1541,42 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   'gen-dados': {
     name: 'Dados / Analytics',
     fields: [
-      { id: 'da-repo', type: 'text' },
-      { id: 'da-arq', type: 'text' },
-      { id: 'da-ctx', type: 'textarea' },
-      { id: 'da-5vs', type: 'checkbox' },
-      { id: 'da-etl', type: 'checkbox' },
-      { id: 'da-ms', type: 'checkbox' },
-      { id: 'da-anal', type: 'checkbox' },
-      { id: 'da-qd', type: 'checkbox' },
-      { id: 'da-ml', type: 'checkbox' },
+      { id: 'gda-repo', type: 'text' },
+      { id: 'gda-arq', type: 'text' },
+      { id: 'gda-ctx', type: 'textarea' },
+      { id: 'gda-5vs', type: 'checkbox' },
+      { id: 'gda-etl', type: 'checkbox' },
+      { id: 'gda-ms', type: 'checkbox' },
+      { id: 'gda-anal', type: 'checkbox' },
+      { id: 'gda-qd', type: 'checkbox' },
+      { id: 'gda-ml', type: 'checkbox' },
     ],
     build(d) {
       const v = (id) => d[id];
       const checkedItems = (ids) => ids.filter((id) => d[id]);
 
-      const repo = v('da-repo'),
-        arq = v('da-arq'),
-        ctx = v('da-ctx');
-      const domains = checkedItems(['da-5vs', 'da-etl', 'da-ms', 'da-anal', 'da-qd', 'da-ml']);
+      const repo = v('gda-repo'),
+        arq = v('gda-arq'),
+        ctx = v('gda-ctx');
+      const domains = checkedItems([
+        'gda-5vs',
+        'gda-etl',
+        'gda-ms',
+        'gda-anal',
+        'gda-qd',
+        'gda-ml',
+      ]);
       const domainLabels = {
-        'da-5vs': 'Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)',
-        'da-etl':
+        'gda-5vs': 'Big Data 5 Vs (volume, velocidade, variedade, veracidade, valor)',
+        'gda-etl':
           'ETL e Qualidade de Dados (tratamento de faltantes, anomalias, normalizacao, rastreabilidade)',
-        'da-ms':
+        'gda-ms':
           'Microsservicos (dominio bem definido, baixo acoplamento, deploy independente, resiliencia)',
-        'da-anal':
+        'gda-anal':
           'Analise e Decisao (ciclo completo: definicao, coleta, preparacao, modelagem, comunicacao, feedback)',
-        'da-qd':
+        'gda-qd':
           'Qualidade dos Dados (completude, consistencia, veracidade, integracao de multiplas fontes)',
-        'da-ml': 'ML Aplicado (modelos preditivos, metricas SMART, validacao com dados reais)',
+        'gda-ml': 'ML Aplicado (modelos preditivos, metricas SMART, validacao com dados reais)',
       };
       let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
       p += `CONTEXTO: ${ctx}\n\n`;
