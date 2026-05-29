@@ -96,6 +96,16 @@ a:hover {
   text-align: center;
   flex-shrink: 0;
 }
+/* Distinção visual nav × painel (#M-UX4): links de página com seta de saída. */
+a.sb-item {
+  text-decoration: none;
+}
+a.sb-item::after {
+  content: '\2197'; /* ↗ */
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.55;
+}
 .sb-item .badge-new {
   font-size: 8px;
   font-weight: 700;

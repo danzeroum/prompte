@@ -66,6 +66,11 @@ export const DICT = {
     'banner.offline.body':
       'Sem conexão com o backend: o chat e as respostas com IA estão indisponíveis. A geração de prompts pelos templates continua funcionando normalmente.',
     'banner.dismiss': 'Dispensar',
+    'palette.title': 'Busca rápida',
+    'palette.placeholder': 'Buscar páginas, templates e seções…',
+    'palette.page': 'Página',
+    'palette.template': 'Template',
+    'palette.section': 'Seção',
     // Conteúdo do gerador (#M6): seções da sidebar e descrições dos templates.
     'gen.section.nav': 'Navegação',
     'gen.section.codigo': 'Código Direto',
@@ -182,6 +187,11 @@ export const DICT = {
     'banner.offline.body':
       'No connection to the backend: chat and AI answers are unavailable. Generating prompts from templates still works normally.',
     'banner.dismiss': 'Dismiss',
+    'palette.title': 'Quick search',
+    'palette.placeholder': 'Search pages, templates and sections…',
+    'palette.page': 'Page',
+    'palette.template': 'Template',
+    'palette.section': 'Section',
     // Generator content (#M6): sidebar sections and template descriptions.
     'gen.section.nav': 'Navigation',
     'gen.section.codigo': 'Direct Code',

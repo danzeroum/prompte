@@ -103,6 +103,61 @@ pre code {
   flex-shrink: 0;
 }
 
+/* Distinção visual nav × painel (#M-UX4): links de página (<a>) ganham uma
+   seta de saída; itens que apenas trocam o painel (<div>) não. */
+a.sb-item {
+  text-decoration: none;
+}
+a.sb-item::after {
+  content: '\2197'; /* ↗ */
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.55;
+}
+
+/* CTA orientado à tarefa no topo da Visão Geral (#M-UX4) */
+.pe-hero-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 12px;
+  background: var(--bg2);
+}
+.pe-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.pe-hero-text strong {
+  font-size: 16px;
+}
+.pe-hero-text span {
+  font-size: 13px;
+  color: var(--text2);
+}
+.pe-hero-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--green);
+  color: #0d1117;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.pe-hero-btn:hover {
+  background: var(--green-h);
+}
+
 /* MAIN */
 .main {
   margin-left: var(--sidebar-w);

@@ -1320,6 +1320,20 @@ function filterTemplates(term) {
     sec.style.display = anyVisible ? '' : 'none';
   });
 }
+
+// Deep-link da paleta de comando (#M-UX4): abre o template indicado em #t=<key>.
+function openTemplateFromHash() {
+  const m = /(?:^|#)t=([\w-]+)/.exec(location.hash);
+  if (!m) return;
+  const item = document.querySelector('.sidebar-item[data-template="' + m[1] + '"]');
+  if (item) showTemplate(item);
+}
+window.addEventListener('hashchange', openTemplateFromHash);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', openTemplateFromHash);
+} else {
+  openTemplateFromHash();
+}
 </script>
 </body>
 </html>

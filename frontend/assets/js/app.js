@@ -11,6 +11,8 @@ import {
   injectOfflineBanner,
   initKeyboardShortcuts,
 } from './common.js';
+import { initCommandPalette } from './commandPalette.js';
+import { initGlossary } from './glossary.js';
 import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates, collectFormData } from './generators.js';
 import { askLLM } from './llmClient.js';
@@ -67,6 +69,7 @@ function init() {
   enhanceNavigation();
   injectTopbarControls();
   initKeyboardShortcuts();
+  initCommandPalette();
   // #M12: adia o carregamento do SDK do Supabase. initAuth() (que importa o SDK)
   // só roda no load quando há um retorno de magic link na URL; caso contrário é
   // acionado sob demanda (abrir login/chat) via window.PE.ensureAuth.
@@ -77,6 +80,9 @@ function init() {
   }
   initChat();
   mountManualPlayground();
+  // Glossário inline (#M-UX6): roda após o i18n para não ser sobrescrito ao
+  // aplicar as traduções nas descrições dos templates.
+  initGlossary();
 
   // Degradação graciosa (#M8): sem backend configurado, avisa o usuário. A
   // geração de prompts pelos templates segue funcionando (é 100% client-side).

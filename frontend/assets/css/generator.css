@@ -87,6 +87,18 @@ body {
   flex-shrink: 0;
 }
 
+/* Distinção visual nav × painel (#M-UX4): links de página (<a>) com seta de
+   saída; itens que trocam de template (<div>) não. */
+a.sidebar-item {
+  text-decoration: none;
+}
+a.sidebar-item::after {
+  content: '\2197'; /* ↗ */
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.55;
+}
+
 /* ─── MAIN ─── */
 .main {
   margin-left: var(--sidebar-w);
