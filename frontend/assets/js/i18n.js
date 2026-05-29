@@ -52,6 +52,7 @@ export const DICT = {
     'chat.thinking': 'Pensando…',
     'chat.error': 'Não foi possível responder agora.',
     'chat.rateLimited': 'Limite de requisições atingido. Tente novamente em alguns minutos.',
+    'chat.rateLimitedCountdown': 'Limite atingido. Tente novamente em {seconds}s.',
   },
   en: {
     'topbar.settings': 'Preferences',
@@ -98,6 +99,7 @@ export const DICT = {
     'chat.thinking': 'Thinking…',
     'chat.error': 'Could not respond right now.',
     'chat.rateLimited': 'Rate limit reached. Try again in a few minutes.',
+    'chat.rateLimitedCountdown': 'Rate limit reached. Try again in {seconds}s.',
   },
 };
 
