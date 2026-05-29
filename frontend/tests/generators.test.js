@@ -16,12 +16,27 @@ describe('generators', () => {
     expect(out).toContain('<arquivo>');
   });
 
-  it('expõe os 25 templates migrados + os exemplos do playground', () => {
+  it('expõe os 35 templates migrados + os exemplos do playground', () => {
     const keys = Object.keys(generatorTemplates);
     expect(keys).toEqual(expect.arrayContaining(['review', 'api']));
-    // Todos os 25 keys do generator.html devem estar presentes.
+    // Todos os 25 do generator.html + os 10 geradores avançados do index.html.
     expect(keys).toEqual(expect.arrayContaining(Object.keys(originalGenerators)));
-    expect(Object.keys(originalGenerators)).toHaveLength(25);
+    expect(Object.keys(originalGenerators)).toHaveLength(35);
+    // Os 10 geradores avançados migrados do index.html.
+    expect(keys).toEqual(
+      expect.arrayContaining([
+        'gen-review',
+        'gen-api',
+        'gen-arch',
+        'gen-security',
+        'gen-ux',
+        'gen-canivete',
+        'gen-cloud',
+        'gen-ia',
+        'gen-dados',
+        'gen-gestao',
+      ]),
+    );
   });
 
   it('lança erro para template desconhecido', () => {
