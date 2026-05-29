@@ -9,6 +9,7 @@ import {
   injectTopbarControls,
   copyText,
   injectOfflineBanner,
+  initKeyboardShortcuts,
 } from './common.js';
 import { track, flush } from './telemetry.js';
 import { buildPrompt, generatorTemplates, collectFormData } from './generators.js';
@@ -64,6 +65,7 @@ function init() {
   initI18n();
   enhanceNavigation();
   injectTopbarControls();
+  initKeyboardShortcuts();
   // #M12: adia o carregamento do SDK do Supabase. initAuth() (que importa o SDK)
   // só roda no load quando há um retorno de magic link na URL; caso contrário é
   // acionado sob demanda (abrir login/chat) via window.PE.ensureAuth.

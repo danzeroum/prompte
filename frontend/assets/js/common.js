@@ -50,6 +50,33 @@ export function injectOfflineBanner(root = document) {
   return banner;
 }
 
+// ---- Atalhos de teclado (#M13) ----
+// Ctrl/Cmd+Enter gera o prompt do painel ativo; Escape fecha overlays (chat,
+// modal de login). Não interfere na digitação normal nos campos.
+export function initKeyboardShortcuts(root = document) {
+  root.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      const btn =
+        root.querySelector('.template-panel.active .btn-generate') ||
+        root.querySelector('.btn-generate');
+      if (btn) {
+        e.preventDefault();
+        btn.click();
+      }
+      return;
+    }
+    if (e.key === 'Escape') {
+      const panel = root.querySelector('.pe-chat-panel');
+      if (panel && !panel.hidden) {
+        panel.hidden = true;
+        return;
+      }
+      const modal = root.querySelector('.pe-modal-overlay:not([hidden])');
+      if (modal) modal.hidden = true;
+    }
+  });
+}
+
 // ---- Acessibilidade da navegação ----
 export function enhanceNavigation(root = document) {
   const items = root.querySelectorAll(NAV_SELECTOR);
