@@ -24,6 +24,25 @@
 <link rel="stylesheet" href="/assets/css/theme.css">
 <script type="module" src="/assets/js/app.js"></script>
 <link rel="stylesheet" href="/assets/css/generator.css">
+<script>
+  // Pré-paint (Fase 2): aplica o modo Direto/Avançado como classe em <html>
+  // ANTES do primeiro paint, para a visibilidade das seções (via CSS) não dar
+  // flash. Prioridade: ?mode= da URL (deep-link das 4 portas) > localStorage >
+  // 'direto'. A leitura de search vem antes do hash (#t=), garantindo a ordem
+  // setMode → openTemplateFromHash exigida na inicialização.
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search).get('mode');
+      var stored = localStorage.getItem('pe:gen-mode');
+      var mode = (q === 'direto' || q === 'avancado') ? q
+        : (stored === 'direto' || stored === 'avancado') ? stored : 'direto';
+      document.documentElement.classList.add('mode-' + mode);
+      if (q === 'direto' || q === 'avancado') localStorage.setItem('pe:gen-mode', mode);
+    } catch (e) {
+      document.documentElement.classList.add('mode-direto');
+    }
+  })();
+</script>
 </head>
 <body>
 
@@ -35,6 +54,16 @@
   <div class="sidebar-header">
     <h1 data-i18n="cozj5fo">Prompt Engineering Pro</h1>
     <span data-i18n="c1gt8z06">Gerador de Prompts</span>
+  </div>
+
+  <!-- Switch Direto ↔ Avançado (Fase 2): filtra quais grupos de templates a
+       navegação mostra. O estado é aplicado antes do paint via classe no <body>
+       (script no <head>), então não há flash. -->
+  <div class="mode-toggle" role="tablist" aria-label="Modo do gerador" id="modeToggle">
+    <button type="button" role="tab" id="tab-direto" data-mode="direto"
+      aria-selected="true" tabindex="0" data-i18n="gen.mode.direto">Direto</button>
+    <button type="button" role="tab" id="tab-avancado" data-mode="avancado"
+      aria-selected="false" tabindex="-1" data-i18n="gen.mode.avancado">Avançado</button>
   </div>
 
   <!-- Busca de templates (#M16) -->
@@ -53,7 +82,7 @@
   </div>
 
   <!-- Código Direto -->
-  <div class="sidebar-section">
+  <div class="sidebar-section" data-mode="direto">
     <div class="sidebar-section-title" data-i18n="gen.section.codigo">Código Direto</div>
     <div class="sidebar-item active" data-template="revisao-correcao" onclick="showTemplate(this)">
       <span class="icon" aria-hidden="true">&#x1f504;</span> Revisão e Correção
@@ -76,7 +105,7 @@
   </div>
 
   <!-- Analise de Repositorio -->
-  <div class="sidebar-section">
+  <div class="sidebar-section" data-mode="avancado">
     <div class="sidebar-section-title" data-i18n="gen.section.repo">Análise de Repositório</div>
     <div class="sidebar-item" data-template="analise-geral" onclick="showTemplate(this)">
       <span class="icon" aria-hidden="true">&#x1f4e6;</span> Análise Geral
@@ -93,7 +122,7 @@
   </div>
 
   <!-- Melhoria com Diff -->
-  <div class="sidebar-section">
+  <div class="sidebar-section" data-mode="avancado">
     <div class="sidebar-section-title" data-i18n="gen.section.diff">Melhoria com Diff</div>
     <div class="sidebar-item" data-template="diff-arquivo" onclick="showTemplate(this)">
       <span class="icon" aria-hidden="true">&#x1f4c4;</span> Melhoria de Arquivo
@@ -119,7 +148,7 @@
   </div>
 
   <!-- Dominios Avancados -->
-  <div class="sidebar-section">
+  <div class="sidebar-section" data-mode="avancado">
     <div class="sidebar-section-title" data-i18n="gen.section.avancado">Domínios Avançados</div>
     <div class="sidebar-item" data-template="cloud-review" onclick="showTemplate(this)">
       <span class="icon" aria-hidden="true">&#x2601;</span> Cloud / Infra
@@ -1190,10 +1219,40 @@ const templateMeta = {
   'squads-review':       { title: 'Tech Squads Review',           badge: 'Avancado',   badgeClass: 'badge-avancado' },
 };
 
+// ─── PRESERVAÇÃO DE FORMULÁRIO POR TEMPLATE (Fase 2) ───
+// Mapa { [templateKey]: { [fieldId]: value } }. Mantido em memória para que
+// trocar de template/modo não apague o que o usuário digitou.
+const formState = {};
+function snapshotForm(id) {
+  const panel = id && document.getElementById('panel-' + id);
+  if (!panel) return;
+  const data = {};
+  panel.querySelectorAll('input, textarea, select').forEach((el) => {
+    if (!el.id) return;
+    data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  formState[id] = data;
+}
+function rehydrateForm(id) {
+  const data = formState[id];
+  const panel = id && document.getElementById('panel-' + id);
+  if (!data || !panel) return;
+  Object.keys(data).forEach((fid) => {
+    const el = panel.querySelector('#' + (window.CSS && CSS.escape ? CSS.escape(fid) : fid));
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = Boolean(data[fid]);
+    else el.value = data[fid];
+  });
+}
+
 // ─── SIDEBAR & NAVIGATION ───
 function showTemplate(el) {
   const id = el.dataset.template;
   const meta = templateMeta[id];
+
+  // snapshot do template que estava ativo (preserva dados ao trocar)
+  const prev = document.querySelector('.sidebar-item.active[data-template]');
+  if (prev && prev.dataset.template !== id) snapshotForm(prev.dataset.template);
 
   // update sidebar active
   document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
@@ -1203,12 +1262,50 @@ function showTemplate(el) {
   document.querySelectorAll('.template-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + id).classList.add('active');
 
+  // reidrata os dados previamente digitados deste template, se houver
+  rehydrateForm(id);
+
   // update topbar
   document.getElementById('topbarTitle').innerHTML =
     `${meta.title} <span class="badge ${meta.badgeClass}">${meta.badge}</span>`;
 
   // close sidebar on mobile
   if (window.innerWidth <= 768) toggleSidebar();
+}
+
+// ─── SWITCH DIRETO ↔ AVANÇADO (Fase 2) ───
+function currentMode() {
+  return document.documentElement.classList.contains('mode-avancado') ? 'avancado' : 'direto';
+}
+
+function setMode(mode) {
+  if (mode !== 'direto' && mode !== 'avancado') mode = 'direto';
+  const root = document.documentElement;
+  root.classList.remove('mode-direto', 'mode-avancado');
+  root.classList.add('mode-' + mode);
+  try { localStorage.setItem('pe:gen-mode', mode); } catch (e) { /* sem storage */ }
+
+  // estado dos tabs: aria-selected + roving tabindex + classe visual
+  document.querySelectorAll('#modeToggle button[role="tab"]').forEach((b) => {
+    const on = b.dataset.mode === mode;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-selected', String(on));
+    b.tabIndex = on ? 0 : -1;
+  });
+
+  // se o template ativo pertence a uma seção agora oculta, seleciona o primeiro
+  // item da primeira seção visível do modo.
+  const active = document.querySelector('.sidebar-item.active[data-template]');
+  const activeSec = active && active.closest('.sidebar-section[data-mode]');
+  if (!activeSec || activeSec.dataset.mode !== mode) {
+    const first = document.querySelector(
+      '.sidebar-section[data-mode="' + mode + '"] .sidebar-item[data-template]');
+    if (first) showTemplate(first);
+  }
+
+  // recompõe a busca dentro do novo modo
+  const search = document.getElementById('templateSearch');
+  filterTemplates(search ? search.value : '');
 }
 
 function toggleSidebar() {
@@ -1304,9 +1401,19 @@ function exportPrompt(id) {
 }
 
 // ─── BUSCA DE TEMPLATES (#M16) ───
+// Compõe com o modo (Fase 2): itens/seções fora do modo atual NUNCA recebem
+// display inline — ficam por conta do CSS (que os esconde), evitando que a
+// busca reexiba uma seção do outro modo. Dentro do modo atual, a busca filtra
+// normalmente.
 function filterTemplates(term) {
   const q = (term || '').trim().toLowerCase();
+  const mode = currentMode();
   document.querySelectorAll('.sidebar-item[data-template]').forEach((item) => {
+    const sec = item.closest('.sidebar-section[data-mode]');
+    if (!sec || sec.dataset.mode !== mode) {
+      item.style.display = ''; // defere ao CSS (oculto pelo modo)
+      return;
+    }
     const id = item.dataset.template;
     const name = item.textContent.toLowerCase();
     const meta = templateMeta[id];
@@ -1314,10 +1421,14 @@ function filterTemplates(term) {
     const hit = !q || name.includes(q) || badge.includes(q) || id.includes(q);
     item.style.display = hit ? '' : 'none';
   });
-  // Esconde seções de templates que ficaram sem itens visíveis.
-  document.querySelectorAll('.sidebar-section').forEach((sec) => {
+  // Seções de templates: só as do modo atual escondem por busca vazia; as do
+  // outro modo deferem ao CSS (display inline vazio).
+  document.querySelectorAll('.sidebar-section[data-mode]').forEach((sec) => {
+    if (sec.dataset.mode !== mode) {
+      sec.style.display = '';
+      return;
+    }
     const items = sec.querySelectorAll('.sidebar-item[data-template]');
-    if (!items.length) return; // seção de navegação: não mexe
     const anyVisible = [...items].some((i) => i.style.display !== 'none');
     sec.style.display = anyVisible ? '' : 'none';
   });
@@ -1330,11 +1441,48 @@ function openTemplateFromHash() {
   const item = document.querySelector('.sidebar-item[data-template="' + m[1] + '"]');
   if (item) showTemplate(item);
 }
+// Tablist: delegação de eventos num pai estável (#modeToggle), para os handlers
+// sobreviverem a um eventual re-render de i18n nos rótulos dos botões.
+const modeToggle = document.getElementById('modeToggle');
+if (modeToggle) {
+  modeToggle.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[role="tab"]');
+    if (btn) { setMode(btn.dataset.mode); btn.focus(); }
+  });
+  modeToggle.addEventListener('keydown', (e) => {
+    const tabs = [...modeToggle.querySelectorAll('button[role="tab"]')];
+    const i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    let n = i;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % tabs.length;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i - 1 + tabs.length) % tabs.length;
+    else if (e.key === 'Home') n = 0;
+    else if (e.key === 'End') n = tabs.length - 1;
+    else return;
+    e.preventDefault();
+    setMode(tabs[n].dataset.mode);
+    tabs[n].focus();
+  });
+}
+
+// Após re-render de i18n, reidrata o painel ativo (caso algum input tenha sido
+// recriado) a partir do estado em memória.
+document.addEventListener('pe:i18n', () => {
+  const active = document.querySelector('.sidebar-item.active[data-template]');
+  if (active) rehydrateForm(active.dataset.template);
+});
+
+// Inicialização: sincroniza o modo (classe já aplicada no <head>) ANTES de
+// resolver o deep-link #t=, senão o painel-alvo poderia estar oculto pelo modo.
+function initGeneratorModeAndHash() {
+  setMode(currentMode());      // sincroniza tabs + garante template do modo
+  openTemplateFromHash();      // #t= sobrepõe a seleção, se presente
+}
 window.addEventListener('hashchange', openTemplateFromHash);
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', openTemplateFromHash);
+  document.addEventListener('DOMContentLoaded', initGeneratorModeAndHash);
 } else {
-  openTemplateFromHash();
+  initGeneratorModeAndHash();
 }
 </script>
 </body>

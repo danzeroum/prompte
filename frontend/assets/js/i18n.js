@@ -423,6 +423,8 @@ export const DICT = {
     'gen.section.repo': 'Análise de Repositório',
     'gen.section.diff': 'Melhoria com Diff',
     'gen.section.avancado': 'Domínios Avançados',
+    'gen.mode.direto': 'Direto',
+    'gen.mode.avancado': 'Avançado',
     'gen.desc.revisao-correcao':
       'Revise e corrija um codigo, identificando bugs, problemas de logica e sugerindo correcoes prontas para aplicar.',
     'gen.desc.melhoria-refatoracao':
@@ -890,6 +892,8 @@ export const DICT = {
     'gen.section.repo': 'Repository Analysis',
     'gen.section.diff': 'Diff Improvement',
     'gen.section.avancado': 'Advanced Domains',
+    'gen.mode.direto': 'Direct',
+    'gen.mode.avancado': 'Advanced',
     'gen.desc.revisao-correcao':
       'Review and fix code, spotting bugs and logic issues and suggesting ready-to-apply fixes.',
     'gen.desc.melhoria-refatoracao':
