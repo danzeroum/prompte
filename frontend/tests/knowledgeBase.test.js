@@ -70,11 +70,13 @@ describe('knowledgeBase — appendKnowledge', () => {
 
   it('injeta um bloco numerado com a regra de cada domínio marcado', () => {
     const key = Object.keys(knowledgeDomains)[0];
-    const out = appendKnowledge(base, { domains: [key] });
+    const d = knowledgeDomains[key];
+    const out = appendKnowledge(base, { domains: [key], level: 'pratico' });
     expect(out.startsWith(base)).toBe(true);
     expect(out).toContain('BASE DE CONHECIMENTO (ebooks):');
-    expect(out).toContain(`1. [${knowledgeDomains[key].ebookTitle}] ${knowledgeDomains[key].label}`);
-    expect(out).toContain(knowledgeDomains[key].rule);
+    expect(out).toContain(`1. [${d.ebookTitle}] ${d.label}`);
+    // texto sob medida do nível quando existe; senão o texto base.
+    expect(out).toContain((d.levels && d.levels.pratico) || d.rule);
   });
 
   it('ignora chaves de domínio inexistentes', () => {
