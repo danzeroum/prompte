@@ -46,6 +46,16 @@
   --green-hover: var(--green-h);
 }
 
+/* Transição suave ao alternar tema (#M18). Limitada a cores (sem layout) e com
+   especificidade zero via :where(); o bloco prefers-reduced-motion abaixo a
+   neutraliza para quem prefere menos animação. */
+:where(body, header, nav, aside, main, section, article, div, button, input, textarea, select, a) {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
 /* ---------- Tema claro ---------- */
 .light-theme {
   color-scheme: light;

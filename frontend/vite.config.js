@@ -24,8 +24,22 @@ export default defineConfig({
       includeAssets: ['icons/*.svg'],
       manifest: false, // usamos public/manifest.json (versionado)
       workbox: {
-        globPatterns: ['**/*.{html,js,css,svg,png,woff2}'],
+        // Assets com hash entram no precache; os HTML passam a ser servidos via
+        // runtimeCaching StaleWhileRevalidate (#M19): resposta imediata do cache
+        // e atualização em segundo plano, evitando servir HTML defasado.
+        globPatterns: ['**/*.{js,css,svg,png,woff2}'],
         navigateFallback: null,
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) =>
+              request.mode === 'navigate' || request.destination === 'document',
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'html-pages',
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 7 },
+            },
+          },
+        ],
       },
     }),
   ],
