@@ -62,9 +62,12 @@
   --tracking-tight: -0.02em;
 
   /* ---------- Acento (sinal único) ---------- */
+  --accent: #aee753;
   --accent: oklch(0.86 0.185 128); /* lime — padrão */
   --accent-ink: #17160d; /* texto sobre o acento */
+  --accent-soft: rgba(174, 231, 83, 0.16);
   --accent-soft: color-mix(in oklch, var(--accent) 16%, transparent); /* fills de estado ativo */
+  --accent-line: rgba(174, 231, 83, 0.42);
   --accent-line: color-mix(in oklch, var(--accent) 42%, transparent); /* bordas/sublinhados   */
 
   /* Opções de acento (curadas — mesmo papel, hue diferente).
@@ -76,14 +79,23 @@
   --accent-teal: #6fe3d2;
 
   /* ---------- Superfícies & texto (tema escuro — tinta quente) ---------- */
+  --bg: #100e0c;
   --bg: oklch(0.165 0.006 70); /* fundo da aplicação      */
+  --bg-2: #191714;
   --bg-2: oklch(0.205 0.007 70); /* painéis / cards          */
+  --bg-3: #24211e;
   --bg-3: oklch(0.25 0.008 70); /* elementos elevados       */
+  --bg-inset: #090705;
   --bg-inset: oklch(0.13 0.006 70); /* inputs, blocos de código */
+  --line: #302d2a;
   --line: oklch(0.3 0.008 70); /* bordas / divisores       */
+  --line-2: #4b4742;
   --line-2: oklch(0.4 0.01 70); /* bordas de ênfase         */
+  --text: #f0eeeb;
   --text: oklch(0.95 0.005 85); /* texto primário           */
+  --text-2: #afaca7;
   --text-2: oklch(0.745 0.008 85); /* texto secundário (AA)    */
+  --text-3: #7c7a75;
   --text-3: oklch(0.58 0.008 85); /* texto terciário / dicas  */
 
   /* ---------- Espaçamento (escala de 4px) ---------- */
@@ -126,14 +138,23 @@
   color-scheme: light;
 
   --accent-ink: #17160d;
+  --bg: #fbfaf7;
   --bg: oklch(0.985 0.004 90);
+  --bg-2: #f5f3ef;
   --bg-2: oklch(0.965 0.006 90);
+  --bg-3: #eae8e2;
   --bg-3: oklch(0.93 0.008 90);
+  --bg-inset: #ffffff;
   --bg-inset: oklch(1 0 0);
+  --line: #dddbd5;
   --line: oklch(0.89 0.008 90);
+  --line-2: #c1bdb5;
   --line-2: oklch(0.8 0.012 90);
+  --text: #221f19;
   --text: oklch(0.24 0.012 80);
+  --text-2: #5c5751;
   --text-2: oklch(0.46 0.012 80);
+  --text-3: #848078;
   --text-3: oklch(0.6 0.012 80);
   --shadow: 0 18px 50px -18px rgba(40, 36, 24, 0.22);
   --shadow-sm: 0 4px 16px -6px rgba(40, 36, 24, 0.14);
