@@ -25,6 +25,13 @@ const norm = (s) =>
     .toLowerCase()
     .trim();
 
+// Rótulo limpo do item: texto sem o emoji decorativo (.icon) nem badges.
+function labelOf(el) {
+  const clone = el.cloneNode(true);
+  clone.querySelectorAll('.icon, .badge, .badge-new').forEach((n) => n.remove());
+  return clone.textContent.replace(/\s+/g, ' ').trim();
+}
+
 // Monta o índice pesquisável a partir do DOM da página + dos templates.
 export function buildIndex(root = document) {
   const items = [];
@@ -32,7 +39,7 @@ export function buildIndex(root = document) {
 
   // Itens de painel da página atual (jump in-page): data-t / data-template.
   root.querySelectorAll('[data-t], [data-template]').forEach((el) => {
-    const label = el.textContent.trim();
+    const label = labelOf(el);
     if (!label) return;
     const key = el.getAttribute('data-template');
     if (key) onPageTemplates.add(key);
@@ -48,7 +55,7 @@ export function buildIndex(root = document) {
 
   // Links de página (navegação entre páginas).
   root.querySelectorAll('a.sb-item[href], a.sidebar-item[href]').forEach((a) => {
-    const label = a.textContent.trim();
+    const label = labelOf(a);
     if (label)
       items.push({
         label,
