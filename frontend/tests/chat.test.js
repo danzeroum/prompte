@@ -4,7 +4,7 @@ import { jest } from '@jest/globals';
 jest.unstable_mockModule('../assets/js/llmClient.js', () => ({ askLLM: jest.fn() }));
 jest.unstable_mockModule('../assets/js/telemetry.js', () => ({ track: jest.fn() }));
 
-const { buildMessages, initChat } = await import('../assets/js/chat.js');
+const { buildMessages, initChat, loadHistory, saveHistory } = await import('../assets/js/chat.js');
 
 describe('buildMessages', () => {
   it('prefixa o system prompt e anexa a mensagem do usuário', () => {
@@ -23,9 +23,30 @@ describe('buildMessages', () => {
   });
 });
 
+describe('persistência do histórico (#M5)', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('saveHistory grava e loadHistory restaura as mensagens', () => {
+    const history = [
+      { role: 'user', content: 'oi' },
+      { role: 'assistant', content: 'olá' },
+    ];
+    saveHistory(history);
+    expect(loadHistory()).toEqual(history);
+  });
+
+  it('loadHistory ignora dados inválidos', () => {
+    localStorage.setItem('pe-chat-history', '{not json');
+    expect(loadHistory()).toEqual([]);
+    localStorage.setItem('pe-chat-history', JSON.stringify([{ role: 'x' }, null, { role: 'user', content: 'ok' }]));
+    expect(loadHistory()).toEqual([{ role: 'user', content: 'ok' }]);
+  });
+});
+
 describe('initChat', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
+    localStorage.clear();
   });
 
   it('injeta o FAB e o painel (oculto) uma única vez', () => {
@@ -42,5 +63,18 @@ describe('initChat', () => {
     document.querySelector('.pe-chat-fab').click();
     expect(document.querySelector('.pe-chat-panel').hidden).toBe(false);
     expect(document.querySelector('.pe-chat-assistant')).not.toBeNull();
+  });
+
+  it('restaura o histórico salvo ao abrir, sem mostrar a saudação', () => {
+    saveHistory([
+      { role: 'user', content: 'pergunta antiga' },
+      { role: 'assistant', content: 'resposta antiga' },
+    ]);
+    initChat();
+    document.querySelector('.pe-chat-fab').click();
+    const msgs = document.querySelectorAll('.pe-chat-msg');
+    expect(msgs).toHaveLength(2);
+    expect(msgs[0].textContent).toBe('pergunta antiga');
+    expect(msgs[1].textContent).toBe('resposta antiga');
   });
 });

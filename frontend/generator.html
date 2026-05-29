@@ -10,448 +10,7 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="/assets/css/theme.css">
 <script type="module" src="/assets/js/app.js"></script>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-  }
-
-  /* ─── SIDEBAR ─── */
-  .sidebar {
-    width: var(--sidebar-w);
-    background: var(--bg-secondary);
-    border-right: 1px solid var(--border);
-    height: 100vh;
-    position: fixed;
-    top: 0; left: 0;
-    overflow-y: auto;
-    z-index: 100;
-    transition: transform 0.3s ease;
-  }
-
-  .sidebar-header {
-    padding: 20px;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-  }
-
-  .sidebar-header h1 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: -0.3px;
-  }
-
-  .sidebar-header span {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .sidebar-section {
-    padding: 12px 0;
-  }
-
-  .sidebar-section-title {
-    padding: 6px 20px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: var(--text-muted);
-  }
-
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 20px;
-    cursor: pointer;
-    font-size: 13px;
-    color: var(--text-secondary);
-    transition: all 0.15s ease;
-    border-left: 3px solid transparent;
-  }
-
-  .sidebar-item:hover {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-  }
-
-  .sidebar-item.active {
-    background: var(--bg-tertiary);
-    color: var(--accent);
-    border-left-color: var(--accent);
-  }
-
-  .sidebar-item .icon {
-    font-size: 16px;
-    width: 22px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-
-  /* ─── MAIN ─── */
-  .main {
-    margin-left: var(--sidebar-w);
-    flex: 1;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 32px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-secondary);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-
-  .topbar h2 {
-    font-size: 20px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .topbar .badge {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .badge-codigo { background: rgba(88,166,255,0.15); color: var(--accent); }
-  .badge-repo { background: rgba(188,140,255,0.15); color: var(--purple); }
-  .badge-diff { background: rgba(63,185,80,0.15); color: var(--green); }
-  .badge-avancado { background: rgba(210,153,34,0.15); color: var(--orange); }
-
-  .menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 24px;
-    cursor: pointer;
-    padding: 4px 8px;
-  }
-
-  .content {
-    flex: 1;
-    padding: 32px;
-    max-width: 960px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  /* ─── TEMPLATE PANELS ─── */
-  .template-panel {
-    display: none;
-  }
-
-  .template-panel.active {
-    display: block;
-  }
-
-  .template-description {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 28px;
-    line-height: 1.7;
-    padding: 16px;
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    border: 1px solid var(--border);
-  }
-
-  /* ─── FORM ─── */
-  .form-group {
-    margin-bottom: 20px;
-  }
-
-  .form-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 6px;
-  }
-
-  .form-group label .required {
-    color: var(--red);
-    margin-left: 2px;
-  }
-
-  .form-group input[type="text"],
-  .form-group input[type="url"],
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 10px 14px;
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-primary);
-    font-size: 13px;
-    font-family: inherit;
-    transition: border-color 0.2s;
-    outline: none;
-  }
-
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    border-color: var(--border-focus);
-    box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
-  }
-
-  .form-group textarea {
-    min-height: 160px;
-    resize: vertical;
-    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-    font-size: 12px;
-    line-height: 1.6;
-    tab-size: 2;
-  }
-
-  .form-group textarea.code-area {
-    min-height: 200px;
-  }
-
-  .form-group select {
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 36px;
-  }
-
-  .form-hint {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  .checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .checkbox-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    cursor: pointer;
-  }
-
-  .checkbox-item input[type="checkbox"] {
-    accent-color: var(--accent);
-    width: 15px;
-    height: 15px;
-  }
-
-  .indent-select {
-    margin-top: 6px;
-  }
-
-  /* ─── BUTTONS ─── */
-  .btn-generate {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 28px;
-    background: var(--green);
-    color: #0d1117;
-    font-weight: 700;
-    font-size: 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 8px;
-  }
-
-  .btn-generate:hover {
-    background: var(--green-hover);
-    transform: translateY(-1px);
-  }
-
-  .btn-copy {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: transparent;
-    color: var(--accent);
-    font-weight: 600;
-    font-size: 13px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-copy:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--accent);
-  }
-
-  .btn-copy.copied {
-    color: var(--green);
-    border-color: var(--green);
-  }
-
-  .btn-clear {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 20px;
-    background: transparent;
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 13px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-clear:hover {
-    color: var(--red);
-    border-color: var(--red);
-  }
-
-  .btn-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 16px;
-    flex-wrap: wrap;
-  }
-
-  /* ─── OUTPUT ─── */
-  .output-container {
-    margin-top: 32px;
-    display: none;
-  }
-
-  .output-container.visible {
-    display: block;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .output-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-  }
-
-  .output-header h3 {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--green);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .output-box {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px;
-    position: relative;
-  }
-
-  .output-content {
-    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-    font-size: 12.5px;
-    line-height: 1.7;
-    color: var(--text-primary);
-    white-space: pre-wrap;
-    word-break: break-word;
-    max-height: 600px;
-    overflow-y: auto;
-  }
-
-  .output-content::-webkit-scrollbar {
-    width: 6px;
-  }
-  .output-content::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .output-content::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px;
-  }
-
-  /* ─── OVERLAY ─── */
-  .sidebar-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 90;
-  }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 768px) {
-    .sidebar {
-      transform: translateX(-100%);
-    }
-    .sidebar.open {
-      transform: translateX(0);
-    }
-    .sidebar-overlay.open {
-      display: block;
-    }
-    .main {
-      margin-left: 0;
-    }
-    .menu-toggle {
-      display: block;
-    }
-    .content {
-      padding: 20px 16px;
-    }
-    .form-row {
-      grid-template-columns: 1fr;
-    }
-    .topbar {
-      padding: 12px 16px;
-    }
-  }
-</style>
+<link rel="stylesheet" href="/assets/css/generator.css">
 </head>
 <body>
 
@@ -467,7 +26,7 @@
 
   <!-- Navegação entre páginas -->
   <div class="sidebar-section">
-    <div class="sidebar-section-title">Navegacao</div>
+    <div class="sidebar-section-title" data-i18n="gen.section.nav">Navegacao</div>
     <a class="sidebar-item" href="/index.html"><span class="icon">&#x1f4ca;</span> Analise &amp; Gerador</a>
     <a class="sidebar-item active" href="/generator.html"><span class="icon">&#x1f680;</span> Gerador de Prompts</a>
     <a class="sidebar-item" href="/manual.html"><span class="icon">&#x1f4d6;</span> Manual</a>
@@ -476,7 +35,7 @@
 
   <!-- Código Direto -->
   <div class="sidebar-section">
-    <div class="sidebar-section-title">Codigo Direto</div>
+    <div class="sidebar-section-title" data-i18n="gen.section.codigo">Codigo Direto</div>
     <div class="sidebar-item active" data-template="revisao-correcao" onclick="showTemplate(this)">
       <span class="icon">&#x1f504;</span> Revisao e Correcao
     </div>
@@ -499,7 +58,7 @@
 
   <!-- Analise de Repositorio -->
   <div class="sidebar-section">
-    <div class="sidebar-section-title">Analise de Repositorio</div>
+    <div class="sidebar-section-title" data-i18n="gen.section.repo">Analise de Repositorio</div>
     <div class="sidebar-item" data-template="analise-geral" onclick="showTemplate(this)">
       <span class="icon">&#x1f4e6;</span> Analise Geral
     </div>
@@ -516,7 +75,7 @@
 
   <!-- Melhoria com Diff -->
   <div class="sidebar-section">
-    <div class="sidebar-section-title">Melhoria com Diff</div>
+    <div class="sidebar-section-title" data-i18n="gen.section.diff">Melhoria com Diff</div>
     <div class="sidebar-item" data-template="diff-arquivo" onclick="showTemplate(this)">
       <span class="icon">&#x1f4c4;</span> Melhoria de Arquivo
     </div>
@@ -542,7 +101,7 @@
 
   <!-- Dominios Avancados -->
   <div class="sidebar-section">
-    <div class="sidebar-section-title">Dominios Avancados</div>
+    <div class="sidebar-section-title" data-i18n="gen.section.avancado">Dominios Avancados</div>
     <div class="sidebar-item" data-template="cloud-review" onclick="showTemplate(this)">
       <span class="icon">&#x2601;</span> Cloud / Infra
     </div>
@@ -588,7 +147,7 @@
 
     <!-- 1. REVISÃO E CORREÇÃO -->
     <div class="template-panel active" id="panel-revisao-correcao">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.revisao-correcao">
         Revise e corrija um codigo, identificando bugs, problemas de logica e sugerindo correcoes prontas para aplicar.
       </div>
       <div class="form-row">
@@ -615,7 +174,7 @@
 
     <!-- 2. MELHORIA / REFAÇÃO -->
     <div class="template-panel" id="panel-melhoria-refatoracao">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.melhoria-refatoracao">
         Melhore um codigo existente priorizando performance, legibilidade e boas praticas.
       </div>
       <div class="form-row">
@@ -651,7 +210,7 @@
 
     <!-- 3. TELA PARA GITHUB -->
     <div class="template-panel" id="panel-tela-para-github">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.tela-para-github">
         Prepare codigo copiado da tela para commit no GitHub, corrigindo formatacao, caracteres e indentacao.
       </div>
       <div class="form-row">
@@ -689,7 +248,7 @@
 
     <!-- 4. DEBUG DE ERROS -->
     <div class="template-panel" id="panel-debug-erros">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.debug-erros">
         Diagnostique erros no codigo com base na mensagem de erro e no comportamento observado.
       </div>
       <div class="form-group">
@@ -714,7 +273,7 @@
 
     <!-- 5. CRIAR DO ZERO -->
     <div class="template-panel" id="panel-criar-do-zero">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.criar-do-zero">
         Crie codigo do zero com requisitos especificos, restricoes e estilo definidos.
       </div>
       <div class="form-row">
@@ -745,7 +304,7 @@
 
     <!-- 6. EXPLICAR CÓDIGO -->
     <div class="template-panel" id="panel-explicar-codigo">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.explicar-codigo">
         Receba uma explicacao detalhada de um codigo, ajustada ao seu nivel de conhecimento.
       </div>
       <div class="form-row">
@@ -784,7 +343,7 @@
 
     <!-- 7. ANÁLISE GERAL -->
     <div class="template-panel" id="panel-analise-geral">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.analise-geral">
         Obtenha uma visao ampla e completa de um repositorio: estrutura, qualidade, seguranca e documentacao.
       </div>
       <div class="form-row">
@@ -823,7 +382,7 @@
 
     <!-- 8. ANÁLISE ESPECÍFICA -->
     <div class="template-panel" id="panel-analise-especifica">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.analise-especifica">
         Investigue algo especifico no repositorio: um modulo, um bug recorrente, ou prepare-se para um PR.
       </div>
       <div class="form-group">
@@ -862,7 +421,7 @@
 
     <!-- 9. ANÁLISE COMPARATIVA -->
     <div class="template-panel" id="panel-analise-comparativa">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.analise-comparativa">
         Compare duas versoes, branches ou estados de um repositorio para identificar mudancas significativas.
       </div>
       <div class="form-group">
@@ -897,7 +456,7 @@
 
     <!-- 10. REFAÇÃO ORIENTADA -->
     <div class="template-panel" id="panel-refatoracao-orientada">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.refatoracao-orientada">
         Proponha refatoracoes completas com codigo pronto, priorizando os criterios que voce definir.
       </div>
       <div class="form-group">
@@ -930,7 +489,7 @@
 
     <!-- 11. DIFF - ARQUIVO -->
     <div class="template-panel" id="panel-diff-arquivo">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.diff-arquivo">
         Analise um arquivo e gere o diff completo corrigido, coerente com os padroes do projeto.
       </div>
       <div class="form-row">
@@ -963,7 +522,7 @@
 
     <!-- 12. DIFF - MÓDULO -->
     <div class="template-panel" id="panel-diff-modulo">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.diff-modulo">
         Analise um diretorio inteiro, identifique inconsistencias e gere diffs completos para cada arquivo.
       </div>
       <div class="form-group">
@@ -1000,7 +559,7 @@
 
     <!-- 13. DIFF - REACT -->
     <div class="template-panel" id="panel-diff-react">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.diff-react">
         Refatore componentes React gerando diffs completos, seguindo os padroes do projeto.
       </div>
       <div class="form-row">
@@ -1065,7 +624,7 @@
 
     <!-- 14. DIFF - API -->
     <div class="template-panel" id="panel-diff-api">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.diff-api">
         Refatore endpoints e servicos de backend com foco em seguranca, performance e consistencia.
       </div>
       <div class="form-row">
@@ -1135,7 +694,7 @@
 
     <!-- 15. DIFF - TESTES -->
     <div class="template-panel" id="panel-diff-testes">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.diff-testes">
         Revise e melhore testes existentes, identifique gaps de coverage e gere testes faltantes.
       </div>
       <div class="form-row">
@@ -1170,7 +729,7 @@
 
     <!-- 16. DIFF - PERFORMANCE -->
     <div class="template-panel" id="panel-diff-performance">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.diff-performance">
         Analise com foco exclusivo em performance: identifique gargalos e gere diffs otimizados.
       </div>
       <div class="form-row">
@@ -1208,7 +767,7 @@
 
     <!-- 17. DIFF - CANIVETE SUÍÇO -->
     <div class="template-panel" id="panel-diff-canivete">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.diff-canivete">
         Analise completa e flexivel: gera diffs prontos para aplicar em qualquer escopo do repositorio.
       </div>
       <div class="form-group">
@@ -1243,7 +802,7 @@
 
     <!-- 18. CLOUD / INFRA -->
     <div class="template-panel" id="panel-cloud-review">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.cloud-review">
         Revise codigo e infraestrutura em nuvem com foco em seguranca (responsabilidade compartilhada), modelos de servico (SaaS/PaaS/IaaS), conformidade (LGPD, NIST) e boas praticas cloud-native.
       </div>
       <div class="form-row">
@@ -1287,7 +846,7 @@
 
     <!-- 19. ENGENHARIA DE REQUISITOS -->
     <div class="template-panel" id="panel-requisitos-review">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.requisitos-review">
         Analise codigo verificando se os requisitos (funcionais e nao funcionais) foram implementados corretamente, se historias de usuario seguem INVEST e se ha gaps entre especificacao e codigo.
       </div>
       <div class="form-row">
@@ -1320,7 +879,7 @@
 
     <!-- 20. METODOS AGEIS -->
     <div class="template-panel" id="panel-agile-review">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.agile-review">
         Revise codigo com foco em praticas ageis: BDD (Given-When-Then), artefatos Scrum (burndown, DoD), metricas de fluxo (lead time, throughput) e priorizacao por valor (WSJF).
       </div>
       <div class="form-row">
@@ -1363,7 +922,7 @@
 
     <!-- 21. IA / MACHINE LEARNING -->
     <div class="template-panel" id="panel-ia-ml-review">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.ia-ml-review">
         Revise codigo de IA/ML com foco em etica e vies, qualidade dos dados, overfitting/generalizacao, seguranca adversarial e conformidade com LGPD para dados sensiveis.
       </div>
       <div class="form-row">
@@ -1409,7 +968,7 @@
 
     <!-- 22. DADOS INTENSIVOS -->
     <div class="template-panel" id="panel-dados-pipeline">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.dados-pipeline">
         Revise pipelines e arquiteturas de dados com foco nos 5 Vs do Big Data, qualidade ETL, design de microsservicos de dados e ciclo completo de analise (SMART).
       </div>
       <div class="form-row">
@@ -1453,7 +1012,7 @@
 
     <!-- 23. GESTAO DE PROJETOS -->
     <div class="template-panel" id="panel-gestao-projeto">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.gestao-projeto">
         Analise o projeto sob a perspectiva de gestao: escopo (EAP), riscos (probabilidade/impacto), stakeholders (poder/interesse), modelo de gestao adequado e PMBOK.
       </div>
       <div class="form-row">
@@ -1491,7 +1050,7 @@
 
     <!-- 24. METRICAS / OKR -->
     <div class="template-panel" id="panel-metricas-okr">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.metricas-okr">
         Analise entregas e codigo sob a lente de metricas: OKR (output vs outcome), fluxo (Lead Time, Throughput, WIP), eficiencia vs eficacia, e previsibilidade (Monte Carlo).
       </div>
       <div class="form-group">
@@ -1518,7 +1077,7 @@
 
     <!-- 25. TECH SQUADS -->
     <div class="template-panel" id="panel-squads-review">
-      <div class="template-description">
+      <div class="template-description" data-i18n="gen.desc.squads-review">
         Revise codigo sob a perspectiva de dinamica de squads: estrutura multifuncional, OKRs do time, competencias necessarias, fase do time (Tuckman) e lideranca positiva.
       </div>
       <div class="form-row">
@@ -1613,607 +1172,20 @@ function toggleSidebar() {
   document.getElementById('sidebarOverlay').classList.toggle('open');
 }
 
-// ─── HELPERS ───
-function val(id) {
-  const el = document.getElementById(id);
-  return el ? el.value.trim() : '';
-}
-
-function chk(id) {
-  const el = document.getElementById(id);
-  return el ? el.checked : false;
-}
-
-function sel(id) {
-  const el = document.getElementById(id);
-  return el ? el.value : '';
-}
-
-function bulletList(text) {
-  if (!text) return '';
-  return text.split('\n').filter(l => l.trim()).map(l => '- ' + l.trim()).join('\n');
-}
-
-function checkedItems(ids) {
-  return ids.filter(id => chk(id));
-}
-
-// ─── PROMPT GENERATORS ───
-const generators = {
-  'revisao-correcao'() {
-    const lang = val('rc-linguagem');
-    const ctx  = val('rc-contexto');
-    const code = val('rc-codigo');
-    const probs = val('rc-problemas');
-    let p = `Revise e corrija o seguinte codigo ${lang}:\n\n`;
-    p += '```\n' + code + '\n```\n\n';
-    p += `Contexto: ${ctx}\n`;
-    if (probs) p += `\nProblemas que percebo:\n${bulletList(probs)}\n`;
-    p += `\nPara cada correcao:\n1. Descreva o problema\n2. Justifique a solucao\n3. Forneça o trecho corrigido\n4. Codigo completo corrigido ao final`;
-    return p;
-  },
-
-  'melhoria-refatoracao'() {
-    const lang = val('mr-linguagem');
-    const func = val('mr-funcionalidade');
-    const code = val('mr-codigo');
-    const preoc = val('mr-preocupacao');
-    const pr = checkedItems(['mr-perf','mr-legi','mr-boas','mr-seg']).map(id => {
-      const map = { 'mr-perf':'Performance', 'mr-legi':'Legibilidade', 'mr-boas':'Boas praticas', 'mr-seg':'Seguranca' };
-      return map[id];
-    });
-    let p = `Melhore este codigo ${lang}, priorizando:\n${pr.map(x => '- ' + x).join('\n')}\n\n`;
-    p += '```\n' + code + '\n```\n\n';
-    p += `Este codigo faz: ${func}\n`;
-    if (preoc) p += `Preocupo-me especialmente com: ${preoc}\n`;
-    p += `\nEntregue:\n1. Analise dos problemas encontrados\n2. Para cada melhoria: justificativa + trecho antes/depois\n3. Codigo completo melhorado ao final`;
-    return p;
-  },
-
-  'tela-para-github'() {
-    const lang = val('tg-linguagem');
-    const indent = sel('tg-indent');
-    const size = sel('tg-indent-size');
-    const code = val('tg-codigo');
-    const conv = val('tg-convencao');
-    let p = `Analise este codigo ${lang} que copiei da tela e prepare-o para commit no GitHub:\n\n`;
-    p += '```\n' + code + '\n```\n\n';
-    p += `Fazer:\n1. Corrigir possiveis problemas de formatacao da copia\n`;
-    p += `2. Identificar e corrigir caracteres corrompidos\n`;
-    p += `3. Garantir indentacao correta em ${indent} (${size})\n`;
-    p += `4. Verificar se ha trechos cortados ou incompletos\n`;
-    if (conv) p += `5. Seguir as convencoes: ${conv}\n`;
-    p += `\nEntregue o codigo corrigido completo, pronto para colar no arquivo e commitar.`;
-    return p;
-  },
-
-  'debug-erros'() {
-    const code = val('db-codigo');
-    const erro = val('db-erro');
-    const esp  = val('db-esperado');
-    const atu  = val('db-atual');
-    let p = `Este codigo esta gerando o seguinte erro:\n\n`;
-    p += '```\n' + code + '\n```\n\n';
-    p += `Erro/mensagem:\n\`\`\`\n${erro}\n\`\`\`\n\n`;
-    p += `O que eu esperava: ${esp}\n`;
-    p += `O que acontece: ${atu}\n\n`;
-    p += `Faca:\n1. Identifique a causa raiz\n2. Explique o erro em linguagem clara\n3. Forneça o codigo corrigido completo\n4. Sugira como prevenir o problema no futuro`;
-    return p;
-  },
-
-  'criar-do-zero'() {
-    const tipo = val('cz-tipo');
-    const lang = val('cz-linguagem');
-    const func = val('cz-funcionalidades');
-    const rest = val('cz-restricoes');
-    const est  = val('cz-estilo');
-    let p = `Crie ${tipo} em ${lang} com os seguintes requisitos:\n\n`;
-    p += `Funcionalidades:\n${bulletList(func)}\n`;
-    if (rest) p += `\nRestricoes:\n${bulletList(rest)}\n`;
-    if (est) p += `\nEstilo: ${est}\n`;
-    p += `\nEntregue:\n1. Explicacao da solucao escolhida\n2. Codigo completo pronto para uso\n3. Instrucoes de integracao com o projeto\n4. Testes basicos se aplicavel`;
-    return p;
-  },
-
-  'explicar-codigo'() {
-    const lang = val('ec-linguagem');
-    const nivel = sel('ec-nivel');
-    const foco = sel('ec-foco');
-    const code = val('ec-codigo');
-    let p = `Explique detalhadamente este codigo ${lang}:\n\n`;
-    p += '```\n' + code + '\n```\n\n';
-    p += `Nivel de detalhe: ${nivel}\nFoco em: ${foco}\n\n`;
-    p += `Faca:\n1. Visao geral do que o codigo faz\n2. Explicacao linha a linha (ou bloco a bloco)\n3. Conceitos usados (padroes, algoritmos, tecnicas)\n4. Pontos de atencao e possiveis armadilhas`;
-    return p;
-  },
-
-  'analise-geral'() {
-    const repo = val('ag-caminho');
-    const prof = sel('ag-profundidade');
-    const ctx  = val('ag-contexto');
-    const aspects = checkedItems(['ag-est','ag-qual','ag-seg','ag-doc','ag-dep','ag-perf','ag-test']).map(id => {
-      const map = { 'ag-est':'Estrutura e organizacao', 'ag-qual':'Qualidade do codigo', 'ag-seg':'Seguranca',
-        'ag-doc':'Documentacao', 'ag-dep':'Dependencias e vulnerabilidades', 'ag-perf':'Performance e arquitetura', 'ag-test':'Testes e coverage' };
-      return map[id];
-    });
-    let p = `Analise o repositorio ${repo}.\n\nFoque em:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nNivel de profundidade: ${prof}\n`;
-    if (ctx) p += `\nContexto: ${ctx}\n`;
-    p += `\nEntregue:\n1. Resumo executivo\n2. Analise detalhada por aspecto\n3. Problemas encontrados (classificados por severidade)\n4. Recomendacoes prioritarias`;
-    return p;
-  },
-
-  'analise-especifica'() {
-    const repo = val('ae-caminho');
-    const area = val('ae-area');
-    const cena = sel('ae-cenario');
-    const ctx  = val('ae-contexto');
-    const entre = checkedItems(['ae-lista','ae-sugestoes','ae-codigo','ae-mapadep']).map(id => {
-      const map = { 'ae-lista':'Lista de problemas com severidade', 'ae-sugestoes':'Sugestoes de correcao',
-        'ae-codigo':'Codigo corrigido pronto', 'ae-mapadep':'Mapa de dependencias' };
-      return map[id];
-    });
-    let p = `Analise o repositorio ${repo} com foco especifico em:\n\nArea: ${area}\n`;
-    if (cena !== 'personalizado') p += `Cenario: ${cena}\n`;
-    if (ctx) p += `\nContexto:\n${ctx}\n`;
-    if (entre.length) {
-      p += `\nEntregaveis esperados:\n`;
-      entre.forEach((e, i) => p += `${i+1}. ${e}\n`);
-    }
-    p += `\nInstrucoes:\n- Leia os arquivos relevantes antes de analisar\n- Compare com outros arquivos do projeto para seguir padroes existentes\n- Seja especifico e pratico nas recomendacoes`;
-    return p;
-  },
-
-  'analise-comparativa'() {
-    const repo = val('ac-caminho');
-    const bA   = val('ac-branchA');
-    const bB   = val('ac-branchB');
-    const aspects = checkedItems(['ac-arq','ac-reg','ac-perf','ac-dep','ac-schema','ac-test','ac-api']).map(id => {
-      const map = { 'ac-arq':'Mudancas de arquitetura', 'ac-reg':'Regressoes potenciais', 'ac-perf':'Melhorias/pioresias de performance',
-        'ac-dep':'Novas dependencias', 'ac-schema':'Mudancas no schema do BD', 'ac-test':'Impacto nos testes', 'ac-api':'Impacto nas rotas/API' };
-      return map[id];
-    });
-    let p = `Compare o estado do repositorio ${repo} entre:\n`;
-    p += `- Branch/Pasta A: ${bA}\n- Branch/Pasta B: ${bB}\n\n`;
-    p += `Foque em:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nEntregue:\n1. Resumo das mudancas\n2. Analise de impacto para cada aspecto\n3. Riscos identificados\n4. Recomendacoes antes do merge`;
-    return p;
-  },
-
-  'refatoracao-orientada'() {
-    const repo = val('ro-caminho');
-    const area = val('ro-area');
-    const rest = val('ro-restricoes');
-    const pris = checkedItems(['ro-manut','ro-perf','ro-legi','ro-seg','ro-todos']).map(id => {
-      const map = { 'ro-manut':'Manutenibilidade', 'ro-perf':'Performance', 'ro-legi':'Legibilidade', 'ro-seg':'Seguranca', 'ro-todos':'Todas as anteriores' };
-      return map[id];
-    });
-    let p = `Analise o repositorio ${repo}`;
-    if (area) p += `, especificamente ${area}`;
-    p += ` e proponha refatoracoes.\n\n`;
-    p += `Priorize: ${pris.join(', ')}\n`;
-    if (rest) p += `\nRestricoes:\n${bulletList(rest)}\n`;
-    p += `\nPara cada problema encontrado, forneça:\n1. Descricao do problema\n2. Severidade (critica | alta | media | baixa)\n3. Codigo corrigido pronto para uso\n\nEntregue diffs completos prontos para aplicar.`;
-    return p;
-  },
-
-  'diff-arquivo'() {
-    const repo = val('da-repo');
-    const file = val('da-arquivo');
-    const obs  = val('da-obs');
-    const foco = checkedItems(['da-perf','da-legi','da-seg','da-padr','da-anti']).map(id => {
-      const map = { 'da-perf':'Performance', 'da-legi':'Legibilidade', 'da-seg':'Seguranca', 'da-padr':'Padronizacao', 'da-anti':'Anti-padroes' };
-      return map[id];
-    });
-    let p = `Analise detalhadamente o arquivo ${file} no repositorio ${repo}.\n\n`;
-    p += `TAREFA:\n1. Leia todo o arquivo e entenda seu proposito no contexto da arquitetura\n`;
-    p += `2. Identifique problemas de:\n   ${foco.map(f => '- ' + f).join('\n   ')}\n`;
-    p += `3. Gere o diff completo do arquivo corrigido\n\n`;
-    if (obs) p += `OBSERVACOES: ${obs}\n\n`;
-    p += `REGRAS:\n- Mantenha a mesma interface publica (exports, tipos, contratos)\n- Siga EXATAMENTE os padroes que ja existem no restante do projeto\n- Nao adicione dependencias que nao existem no projeto\n- Cada mudanca deve ter justificativa clara\n- O codigo gerado deve ser indistinguivel do estilo do restante da codebase\n\n`;
-    p += `FORMATO DE RESPOSTA:\n1. Resumo das mudancas (bullet points)\n2. Para cada mudanca: justificativa + trecho antes → depois\n3. Diff completo do arquivo (pronto para git apply)\n4. Arquivos adicionais que precisam ser modificados (se houver)`;
-    return p;
-  },
-
-  'diff-modulo'() {
-    const repo = val('dm-repo');
-    const dir  = val('dm-dir');
-    const ctx  = val('dm-contexto');
-    const lang = val('dm-ling');
-    const preoc = sel('dm-preoc');
-    let p = `Analise o diretorio ${dir} no repositorio ${repo}.\n\n`;
-    p += `CONTEXTO:\n- Esse modulo e responsavel por: ${ctx || '(a ser descoberto pela analise)'}\n`;
-    if (lang) p += `- Linguagem/Framework: ${lang}\n`;
-    if (preoc) p += `- Me preocupa: ${preoc}\n`;
-    p += `\nTAREFA:\n1. Explore TODOS os arquivos do diretorio e suas dependencias internas\n`;
-    p += `2. Identifique inconsistencias entre os arquivos do proprio modulo\n`;
-    p += `3. Compare os padroes usados aqui com o resto do projeto\n`;
-    p += `4. Gere diffs completos para CADA arquivo que precisar de mudanca\n\n`;
-    p += `REGRAS OBRIGATORIAS:\n- Preservar TODAS as interfaces publicas do modulo\n- Manter compatibilidade com os consumidores do modulo\n- Seguir as convencoes de estilo do restante da codebase\n- Nao introduzir breaking changes\n- Se precisar de nova dependencia, justificar e verificar conflitos\n\n`;
-    p += `FORMATO DE RESPOSTA:\n1. Visao geral: o que esta bom e o que precisa mudar\n2. Mapa de dependencias do modulo\n3. Para cada arquivo alterado: justificativa + diff completo\n4. Testes que precisam ser criados/atualizados (com codigo)\n5. Riscos da mudanca e como mitigar`;
-    return p;
-  },
-
-  'diff-react'() {
-    const repo = val('dr-repo');
-    const comp = val('dr-comp');
-    const fw   = sel('dr-framework');
-    const st   = sel('dr-estilo');
-    const est  = sel('dr-estado');
-    const foco = checkedItems(['dr-logica','dr-hooks','dr-tipo','dr-rend','dr-a11y','dr-error']).map(id => {
-      const map = { 'dr-logica':'Separar logica de apresentacao', 'dr-hooks':'Extrair hooks customizados',
-        'dr-tipo':'Melhorar tipagem TypeScript', 'dr-rend':'Otimizar re-renders', 'dr-a11y':'Acessibilidade (a11y)', 'dr-error':'Error boundaries' };
-      return map[id];
-    });
-    let p = `Analise e melhore o componente ${comp} no repositorio ${repo}.\n\n`;
-    p += `CONTEXTO DO PROJETO:\n- Framework: ${fw}\n- Estilo: ${st}\n- Gerenciamento de estado: ${est}\n\n`;
-    p += `TAREFA:\n1. Leia o componente e seus filhos/dependencias\n`;
-    p += `2. Compare com outros componentes do projeto para identificar padroes de estrutura, naming, styling e hooks\n`;
-    p += `3. Gere o diff completo refatorado\n\n`;
-    p += `FOCO ESPECIFICO:\n`;
-    foco.forEach(f => p += `[x] ${f}\n`);
-    p += `\nFORMATO DE RESPOSTA:\n1. Analise: problemas encontrados com severidade\n2. Diff completo do componente refatorado\n3. Diffs de arquivos auxiliares (hooks, tipos, utils) se criados\n4. Nota sobre impacto nos componentes pais/filhos`;
-    return p;
-  },
-
-  'diff-api'() {
-    const repo = val('di-repo');
-    const file = val('di-arquivo');
-    const fw   = sel('di-framework');
-    const db   = sel('di-db');
-    const auth = sel('di-auth');
-    const obs  = val('di-obs');
-    const foco = checkedItems(['di-val','di-err','di-sec','di-perf','di-log','di-contr']).map(id => {
-      const map = { 'di-val':'Validacao de input', 'di-err':'Tratamento de erros', 'di-sec':'Seguranca',
-        'di-perf':'Performance (N+1, paginacao)', 'di-log':'Logging e monitoramento', 'di-contr':'Contratos de resposta' };
-      return map[id];
-    });
-    let p = `Analise e melhore o endpoint/servico ${file} no repositorio ${repo}.\n\n`;
-    p += `CONTEXTO DO PROJETO:\n- Framework: ${fw}\n- Banco de dados: ${db}\n- Autenticacao: ${auth}\n\n`;
-    p += `TAREFA:\n1. Leia o arquivo e entenda o fluxo request → response\n`;
-    p += `2. Analise:\n   ${foco.map(f => '- ' + f).join('\n   ')}\n`;
-    p += `3. Compare com outros endpoints do projeto para seguir MESMO padrao\n\n`;
-    if (obs) p += `OBSERVACOES: ${obs}\n\n`;
-    p += `REGRAS:\n- Manter a mesma URL e metodo HTTP\n- Manter o mesmo formato de request/response (ou documentar a mudanca)\n- Seguir EXATAMENTE o padrao de error handling do projeto\n- Seguir EXATAMENTE o padrao de validacao do projeto\n\n`;
-    p += `FORMATO DE RESPOSTA:\n1. Diagnostico detalhado com severidade (critica | alta | media | baixa)\n2. Diff completo do arquivo corrigido\n3. Diffs de arquivos auxiliares se necessario\n4. Migration SQL se o schema mudar\n5. Testes atualizados/criados`;
-    return p;
-  },
-
-  'diff-testes'() {
-    const repo = val('dt-repo');
-    const file = val('dt-arquivo');
-    const fw   = sel('dt-framework');
-    const prob = val('dt-problemas');
-    let p = `Analise os testes em ${file} no repositorio ${repo}.\n\n`;
-    p += `TAREFA:\n1. Leia os testes E o codigo que eles testam\n`;
-    p += `2. Identifique:\n   - Testes que nao testam nada util (testes fracos)\n   - Caminhos felizes e tristes nao cobertos\n   - Mocks incorretos ou excessivos\n   - Testes faceis (quebram por mudancas irrelevantes)\n   - Inconsistencia com o padrao de testes do projeto\n`;
-    p += `3. Compare com outros testes do projeto para seguir o MESMO estilo\n\n`;
-    if (fw !== 'deixe descobrir') p += `Framework de testes: ${fw}\n\n`;
-    if (prob) p += `Problemas que percebo:\n${bulletList(prob)}\n\n`;
-    p += `FORMATO DE RESPOSTA:\n1. Coverage: o que esta coberto e o que falta\n2. Problemas nos testes atuais\n3. Diff completo dos testes melhorados\n4. Novos testes adicionados (com justificativa do que cobrem)`;
-    return p;
-  },
-
-  'diff-performance'() {
-    const repo   = val('dp-repo');
-    const file   = val('dp-arquivo');
-    const freq   = sel('dp-freq');
-    const vol    = val('dp-volume');
-    const garg   = val('dp-gargalo');
-    let p = `Analise o arquivo ${file} no repositorio ${repo} com FOCO EM PERFORMANCE.\n\n`;
-    p += `CONTEXTO:\n- Execucao: ${freq}\n`;
-    if (vol) p += `- Volume esperado: ${vol}\n`;
-    if (garg) p += `- Gargalo percebido: ${garg}\n`;
-    p += `\nTAREFA:\n1. Identifique gargalos de performance\n`;
-    p += `2. Para cada gargalo:\n   - Causa raiz\n   - Impacto estimado\n   - Solucao proposta\n   - Codigo antes → depois\n`;
-    p += `3. Gere diffs completos para aplicacao imediata\n\n`;
-    p += `REGRAS:\n- Nao sacrificar legibilidade por micro-otimizacoes\n- Manter compatibilidade com a interface existente\n- Priorizar mudancas com maior impacto/complexidade\n\n`;
-    p += `FORMATO DE RESPOSTA:\n1. Gargalos identificados (ranked por impacto)\n2. Para cada mudanca: causa raiz, solucao, estimativa de ganho, diff\n3. Mudancas que exigem mais investigacao`;
-    return p;
-  },
-
-  'diff-canivete'() {
-    const repo = val('dc-repo');
-    const esc  = val('dc-escopo');
-    const tipo = sel('dc-tipo');
-    const ctx  = val('dc-contexto');
-    let p = `Faça uma analise completa e gere diffs prontos para aplicar no repositorio ${repo}.\n\n`;
-    p += `ESCOPO:\n- Arquivos/Diretorios: ${esc || 'repo inteiro'}\n`;
-    p += `- Tipo de melhoria: ${tipo}\n`;
-    if (ctx) p += `\nCONTEXTO:\n${ctx}\n`;
-    p += `\nTAREFA:\n1. Analisar profundamente o codigo E a arquitetura ao redor\n`;
-    p += `2. Entender os padroes do projeto lendo arquivos vizinhos e configs\n`;
-    p += `3. Identificar TODOS os problemas na area solicitada\n`;
-    p += `4. Gerar diffs COMPLETOS para cada arquivo que precisa mudar\n`;
-    p += `5. Garantir que o codigo gerado seja COERENTE com o restante do projeto\n\n`;
-    p += `OBRIGATORIO NA RESPOSTA:\n[x] Resumo executivo das mudancas\n[x] Justificativa para CADA mudanca\n[x] Diff completo de CADA arquivo (pronto para git apply)\n[x] Novos arquivos que precisam ser criados (com conteudo completo)\n[x] Arquivos que precisam ser deletados (se houver)\n[x] Dependencias novas (se houver, com justificativa)\n[x] Riscos e cuidados ao aplicar\n[x] Comandos para aplicar as mudancas\n\n`;
-    p += `NAO FAZER:\n[ ] Mudancas sem justificativa\n[ ] Breaking changes sem aviso explicito\n[ ] Introduzir padroes diferentes do restante do projeto\n[ ] Adicionar dependencias desnecessarias`;
-    return p;
-  },
-
-  // ═══ DOMINIOS AVANCADOS ═══
-
-  'cloud-review'() {
-    const repo = val('cl-repo');
-    const arquivo = val('cl-arquivo');
-    const provider = sel('cl-provider');
-    const ctx = val('cl-contexto');
-    const aspects = checkedItems(['cl-sec','cl-model','cl-mig','cl-comp','cl-iac','cl-cont']).map(id => {
-      const map = { 'cl-sec':'Seguranca (IAM, criptografia, flags)', 'cl-model':'Modelo de servico (SaaS/PaaS/IaaS)',
-        'cl-mig':'Preparacao para migracao', 'cl-comp':'Compliance (LGPD, NIST, BACEN)',
-        'cl-iac':'Infra as Code (Terraform/CloudFormation)', 'cl-cont':'Containers (Docker/K8s)' };
-      return map[id];
-    });
-    let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arquivo}.\n\n`;
-    p += `CONTEXTO: ${ctx}\n`;
-    if (provider) p += `PROVEDOR DE NUVEM: ${provider}\n`;
-    p += `\nDOMINIO: Cloud Computing\n`;
-    p += `Verifique os seguintes aspectos:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nREGRAS OBRIGATORIAS:\n`;
-    p += `- Avalie o modelo de responsabilidade compartilhada da nuvem (Shared Responsibility Model)\n`;
-    p += `- Verifique configuracoes de seguranca (IAM policies, security groups, flags inseguras)\n`;
-    p += `- Verifique conformidade com LGPD, NIST CSF e BACEN 4.658 (se aplicavel)\n`;
-    p += `- Identifique se recursos estao provisionados de forma otimizada (cost optimization)\n`;
-    p += `- Verifique se ha hardcoding de secrets, chaves ou credenciais\n`;
-    p += `- Avalie a estrategia de backup e disaster recovery\n`;
-    p += `- Verifique se os logs e monitoramento estao configurados adequadamente\n`;
-    p += `- Para IaC: valide idempotencia, modularizacao e seguranca dos templates\n\n`;
-    p += `FORMATO DE RESPOSTA:\n`;
-    p += `1. Diagnostico com severidade (critica | alta | media | baixa)\n`;
-    p += `2. Recomendacoes por area (seguranca, custo, performance, compliance)\n`;
-    p += `3. Diff completo para cada correcao (se aplicavel)\n`;
-    p += `4. Riscos cloud-specific e mitigacoes\n`;
-    p += `5. Roadmap de melhorias priorizado por impacto`;
-    return p;
-  },
-
-  'requisitos-review'() {
-    const repo = val('rq-repo');
-    const arquivo = val('rq-arquivo');
-    const ctx = val('rq-contexto');
-    const aspects = checkedItems(['rq-inv','rq-nf','rq-back','rq-proto','rq-sla']).map(id => {
-      const map = { 'rq-inv':'Historias de Usuario (INVEST)', 'rq-nf':'Requisitos Nao Funcionais',
-        'rq-back':'Alinhamento com Backlog', 'rq-proto':'Prototipos e Especificacoes',
-        'rq-sla':'SLAs e Metricas de Aceite' };
-      return map[id];
-    });
-    let p = `Analise o repositorio ${repo}, com foco em ${arquivo}, verificando a implementacao de requisitos.\n\n`;
-    p += `REQUISITO ORIGINAL / CONTEXTO:\n${ctx}\n\n`;
-    p += `DOMINIO: Engenharia de Requisitos\n`;
-    p += `Verifique os seguintes aspectos:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nREGRAS OBRIGATORIAS:\n`;
-    p += `- Compare o requisito original com o codigo implementado linha a linha\n`;
-    p += `- Identifique gaps entre especificacao e implementacao\n`;
-    p += `- Verifique se historias de usuario seguem o criterio INVEST (Independent, Negotiable, Valuable, Estimable, Small, Testable)\n`;
-    p += `- Liste requisitos nao funcionais (performance, seguranca, usabilidade, disponibilidade) e se foram atendidos\n`;
-    p += `- Verifique se os criterios de aceite estao cobertos por testes\n`;
-    p += `- Identifique requisitos implicitos que nao foram especificados mas sao necessarios\n`;
-    p += `- Avalie a rastreabilidade: cada requisito deve ter codigo + teste correspondente\n\n`;
-    p += `FORMATO DE RESPOSTA:\n`;
-    p += `1. Matriz de rastreabilidade (requisito → codigo → teste)\n`;
-    p += `2. Gaps identificados com severidade\n`;
-    p += `3. Historias de usuario avaliadas pelo criterio INVEST\n`;
-    p += `4. Recomendacoes de melhoria na especificacao\n`;
-    p += `5. Diffs de correcao para gaps criticos`;
-    return p;
-  },
-
-  'agile-review'() {
-    const repo = val('agl-repo');
-    const arquivo = val('agl-arquivo');
-    const framework = sel('agl-framework');
-    const ctx = val('agl-contexto');
-    const aspects = checkedItems(['agl-bdd','agl-art','agl-fluxo','agl-wsjf','agl-dod']).map(id => {
-      const map = { 'agl-bdd':'BDD (Given-When-Then)', 'agl-art':'Artefatos Scrum (Burndown, DoD)',
-        'agl-fluxo':'Metricas de Fluxo (Lead Time)', 'agl-wsjf':'Priorizacao por Valor (WSJF)',
-        'agl-dod':'Definition of Done' };
-      return map[id];
-    });
-    let p = `Revise o repositorio ${repo} com foco em ${arquivo}, sob a perspectiva de metodos ageis.\n\n`;
-    p += `CONTEXTO DA SPRINT/PROJETO: ${ctx}\n`;
-    if (framework) p += `FRAMEWORK AGIL: ${framework}\n`;
-    p += `\nDOMINIO: Metodos Ageis\n`;
-    p += `Verifique os seguintes aspectos:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nREGRAS OBRIGATORIAS:\n`;
-    p += `- Verifique se testes seguem o padrao BDD (Given-When-Then) quando aplicavel\n`;
-    p += `- Avalie se os artefatos Scrum estao presentes e atualizados\n`;
-    p += `- Analise metricas de fluxo: Lead Time, Throughput, Cycle Time, WIP\n`;
-    p += `- Verifique se a priorizacao segue WSJF (Weighted Shortest Job First)\n`;
-    p += `- Confirme se a Definition of Done esta sendo respeitada\n`;
-    p += `- Identifique se ha deviation do framework agil escolhido\n`;
-    p += `- Avalie a qualidade dos commits e mensagens (conexao com historias de usuario)\n\n`;
-    p += `FORMATO DE RESPOSTA:\n`;
-    p += `1. Avaliacao da maturidade agil do repositorio\n`;
-    p += `2. Problemas identificados com severidade\n`;
-    p += `3. Metricas de fluxo calculaveis a partir do git history\n`;
-    p += `4. Recomendacoes de melhoria nos processos ageis\n`;
-    p += `5. Diffs para correcoes de testes/artefatos`;
-    return p;
-  },
-
-  'ia-ml-review'() {
-    const repo = val('ia-repo');
-    const arquivo = val('ia-arquivo');
-    const tipo = sel('ia-tipo');
-    const ctx = val('ia-contexto');
-    const aspects = checkedItems(['ia-vies','ia-qual','ia-over','ia-sec','ia-exp','ia-lgpd']).map(id => {
-      const map = { 'ia-vies':'Vies e Etica nos Dados', 'ia-qual':'Qualidade dos Dados',
-        'ia-over':'Overfitting / Generalizacao', 'ia-sec':'Seguranca Adversarial',
-        'ia-exp':'Explicabilidade (XAI)', 'ia-lgpd':'Conformidade LGPD' };
-      return map[id];
-    });
-    let p = `Revise o codigo do repositorio ${repo}, com foco em ${arquivo}, sob a perspectiva de IA/ML.\n\n`;
-    p += `CONTEXTO: ${ctx}\n`;
-    if (tipo) p += `TIPO DE MODELO: ${tipo}\n`;
-    p += `\nDOMINIO: Inteligencia Artificial / Machine Learning\n`;
-    p += `Verifique os seguintes aspectos:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nREGRAS OBRIGATORIAS:\n`;
-    p += `- Vies e Etica: analise representatividade dos dados, vies de selecao, vies de atributo\n`;
-    p += `- Qualidade dos Dados: integridade, completude, consistencia, atualizacao, duplicidade\n`;
-    p += `- Overfitting: verifique separacao treino/teste, cross-validation, regularizacao, early stopping\n`;
-    p += `- Generalizacao: avalie se o modelo generaliza para dados fora da distribuicao de treino\n`;
-    p += `- Seguranca Adversarial: testes de robustez contra perturbacoes, data poisoning, model inversion\n`;
-    p += `- Explicabilidade: verifique uso de SHAP, LIME, feature importance, decisoes auditaveis\n`;
-    p += `- LGPD: consentimento para uso de dados, direito ao esquecimento, portabilidade, anonimizacao\n`;
-    p += `- Pipeline de ML: validacao de etapas (coleta → preprocessamento → treino → avaliacao → deploy)\n`;
-    p += `- Monitoramento: drift detection, performance degradation, retraining triggers\n\n`;
-    p += `FORMATO DE RESPOSTA:\n`;
-    p += `1. Diagnostico completo do pipeline de ML com severidade\n`;
-    p += `2. Analise de vies e etica com metricas especificas\n`;
-    p += `3. Matriz de qualidade dos dados\n`;
-    p += `4. Recomendacoes de mitigacao para cada risco identificado\n`;
-    p += `5. Diffs de correcao para problemas criticos`;
-    return p;
-  },
-
-  'dados-pipeline'() {
-    const repo = val('dl-repo');
-    const arquivo = val('dl-arquivo');
-    const tech = sel('dl-tech');
-    const ctx = val('dl-contexto');
-    const aspects = checkedItems(['dl-5v','dl-etl','dl-ms','dl-ciclo','dl-ml']).map(id => {
-      const map = { 'dl-5v':'Big Data (5 Vs)', 'dl-etl':'Qualidade ETL',
-        'dl-ms':'Microsservicos de Dados', 'dl-ciclo':'Ciclo Analise Completo',
-        'dl-ml':'ML Aplicado' };
-      return map[id];
-    });
-    let p = `Revise o repositorio ${repo}, com foco em ${arquivo}, sob a perspectiva de dados intensivos.\n\n`;
-    p += `CONTEXTO: ${ctx}\n`;
-    if (tech) p += `TECNOLOGIA PRINCIPAL: ${tech}\n`;
-    p += `\nDOMINIO: Big Data e Analise de Dados\n`;
-    p += `Verifique os seguintes aspectos:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nREGRAS OBRIGATORIAS:\n`;
-    p += `- 5 Vs do Big Data: avalie Volume, Velocidade, Variedade, Veracidade e Valor\n`;
-    p += `- ETL Quality: valide extração (fontes), transformação (regras) e carga (destino)\n`;
-    p += `- Verifique tratamento de dados duplicados, nulos e outliers\n`;
-    p += `- Avalie idempotencia e reprocessabilidade dos pipelines\n`;
-    p += `- Microsservicos de Dados: verifique boundaries, contratos, versionamento de schemas\n`;
-    p += `- Ciclo SMART de Analise: Specular → Medir → Analisar → Refinar → Transformar\n`;
-    p += `- Verifique monitoramento de pipelines (alertas, SLAs, retry logic)\n`;
-    p += `- Governança: linhagem de dados, catalogo de dados, qualidade automatizada\n`;
-    p += `- Para ML aplicado: valide data splits, feature engineering, model drift\n\n`;
-    p += `FORMATO DE RESPOSTA:\n`;
-    p += `1. Arquitetura de dados atual (diagrama textual)\n`;
-    p += `2. Problemas identificados com severidade\n`;
-    p += `3. Avaliacao dos 5 Vs com gaps\n`;
-    p += `4. Recomendacoes de melhoria no pipeline\n`;
-    p += `5. Diffs de correcao para problemas criticos`;
-    return p;
-  },
-
-  'gestao-projeto'() {
-    const repo = val('gp-repo');
-    const modelo = sel('gp-modelo');
-    const ctx = val('gp-contexto');
-    const aspects = checkedItems(['gp-escopo','gp-risco','gp-stake','gp-charter','gp-aqui']).map(id => {
-      const map = { 'gp-escopo':'Escopo e EAP', 'gp-risco':'Gerenciamento de Riscos',
-        'gp-stake':'Stakeholders e Comunicacao', 'gp-charter':'Project Charter',
-        'gp-aqui':'Gestao de Aquisicoes' };
-      return map[id];
-    });
-    let p = `Analise o projeto no repositorio ${repo} sob a perspectiva de gestao de projetos.\n\n`;
-    p += `CONTEXTO DO PROJETO: ${ctx}\n`;
-    if (modelo) p += `MODELO DE GESTAO: ${modelo}\n`;
-    p += `\nDOMINIO: Gestao de Projetos (PMBOK / Hibrido)\n`;
-    p += `Verifique os seguintes aspectos:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nREGRAS OBRIGATORIAS:\n`;
-    p += `- Escopo: verifique se a EAP (Estrutura Analitica do Projeto) esta refletida na estrutura do repositorio\n`;
-    p += `- Riscos: identifique riscos tecnicos usando probabilidade x impacto, proponha mitigacoes\n`;
-    p += `- Stakeholders: mapeie usando matriz Poder/Interesse, identifique gaps de comunicacao\n`;
-    p += `- Project Charter: verifique se objetivos, escopo, entregas e restricoes estao documentados\n`;
-    p += `- Cronograma: analise git history para identificar cadencia real de entregas\n`;
-    p += `- Qualidade: verifique se ha processos de QA, code review e criterios de aceite\n`;
-    p += `- Governanca: identifique pontos de decisao, gates e aprovacoes necessarias\n`;
-    p += `- Comunicacao: avalie se a documentacao do repo suporta a comunicacao com stakeholders\n\n`;
-    p += `FORMATO DE RESPOSTA:\n`;
-    p += `1. Diagnostico de maturidade em gestao de projetos\n`;
-    p += `2. Matriz de riscos (probabilidade x impacto)\n`;
-    p += `3. Mapa de stakeholders com recomendacoes\n`;
-    p += `4. Plano de acao priorizado por urgencia\n`;
-    p += `5. Artefatos que devem ser criados/atualizados`;
-    return p;
-  },
-
-  'metricas-okr'() {
-    const repo = val('mo-repo');
-    const ctx = val('mo-contexto');
-    const aspects = checkedItems(['mo-okr','mo-fluxo','mo-eff','mo-prev','mo-little']).map(id => {
-      const map = { 'mo-okr':'OKR (Output vs Outcome)', 'mo-fluxo':'Fluxo (Lead Time, Throughput, WIP)',
-        'mo-eff':'Eficiencia vs Eficacia', 'mo-prev':'Previsibilidade (Monte Carlo)',
-        'mo-little':'Lei de Little' };
-      return map[id];
-    });
-    let p = `Analise o repositorio ${repo} sob a lente de metricas e OKRs.\n\n`;
-    p += `CONTEXTO / OKRs DO TIME: ${ctx}\n\n`;
-    p += `DOMINIO: Metricas e OKRs para Times de Tecnologia\n`;
-    p += `Verifique as seguintes metricas:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nREGRAS OBRIGATORIAS:\n`;
-    p += `- OKR: diferencie outputs (atividades) de outcomes (resultados de negocio)\n`;
-    p += `- Verifique se os Key Results sao mensuraveis e have um numero e prazo definido\n`;
-    p += `- Fluxo: calcule Lead Time, Throughput, Cycle Time e WIP a partir do git history\n`;
-    p += `- Eficiencia vs Eficacia: identifique se o time esta fazendo as coisas certas vs fazendo as coisas direito\n`;
-    p += `- Lei de Little: L = W x (WIP/LT), use para estimar tempo de entrega\n`;
-    p += `- Previsibilidade: analise se as estimativas historicas sao confiaveis (simulacao Monte Carlo)\n`;
-    p += `- Identifique gargalos e ineficiencias no fluxo de entrega\n`;
-    p += `- Avalie se ha metricas de qualidade de codigo associadas aos OKRs\n\n`;
-    p += `FORMATO DE RESPOSTA:\n`;
-    p += `1. Dashboard de metricas calculadas (a partir do repositorio)\n`;
-    p += `2. Avaliacao dos OKRs (estao bem definidos? mensuraveis? alinhados?)\n`;
-    p += `3. Analise de fluxo com identificacao de gargalos\n`;
-    p += `4. Recomendacoes de melhoria nas metricas e processos\n`;
-    p += `5. Sugestao de OKRs refinados baseados na realidade do repositorio`;
-    return p;
-  },
-
-  'squads-review'() {
-    const repo = val('sq-repo');
-    const tam = sel('sq-tam');
-    const ctx = val('sq-contexto');
-    const aspects = checkedItems(['sq-okr','sq-estrut','sq-comp','sq-tuck','sq-lider']).map(id => {
-      const map = { 'sq-okr':'OKRs do Time', 'sq-estrut':'Estrutura Multifuncional',
-        'sq-comp':'Competencias e Skills', 'sq-tuck':'Modelo de Tuckman',
-        'sq-lider':'Lideranca Positiva' };
-      return map[id];
-    });
-    let p = `Revise o repositorio ${repo} sob a perspectiva de dinamica de squads.\n\n`;
-    p += `CONTEXTO / PERFIL DO TIME: ${ctx}\n`;
-    if (tam) p += `TAMANHO DO SQUAD: ${tam}\n`;
-    p += `\nDOMINIO: Tech Squads e Dinamica de Times\n`;
-    p += `Verifique os seguintes aspectos:\n`;
-    aspects.forEach((a, i) => p += `${i+1}. ${a}\n`);
-    p += `\nREGRAS OBRIGATORIAS:\n`;
-    p += `- Estrutura Multifuncional: verifique se o repo demonstra skills compativeis com um squad completo (frontend, backend, QA, design)\n`;
-    p += `- OKRs do Time: analise se as entregas no git estao alinhadas com OKRs tipicos de squads de produto\n`;
-    p += `- Competencias: mapeie as tecnologias e skills necessarias vs utilizadas no repositorio\n`;
-    p += `- Modelo de Tuckman: identifique a fase do time (Forming, Storming, Norming, Performing) baseado nos padroes de commit, PR reviews e documentacao\n`;
-    p += `- Lideranca Positiva: avalie se ha mentorias, documentacao compartilhada, code reviews construtivos e conhecimento distribuido\n`;
-    p += `- Identifique silos de conhecimento (concentracao de commits em poucas pessoas)\n`;
-    p += `- Verifique se ha onboarding documentation e conhecimento compartilhado\n`;
-    p += `- Analise a diversidade de contribuicoes (quem faz o que no repo)\n\n`;
-    p += `FORMATO DE RESPOSTA:\n`;
-    p += `1. Perfil do squad baseado na analise do repositorio\n`;
-    p += `2. Mapa de competencias (existentes vs necessarias)\n`;
-    p += `3. Diagnostico da fase do time (Tuckman)\n`;
-    p += `4. Riscos organizacionais identificados\n`;
-    p += `5. Recomendacoes para amadurecimento do squad`;
-    return p;
-  },
-};
-
 // ─── GENERATE ───
+// A lógica de cada template vive em assets/js/generators.js (exposto via
+// window.PE). Aqui apenas coletamos os valores brutos dos campos declarados e
+// delegamos a construção do prompt a buildPrompt(), mantendo uma única fonte
+// de verdade (sem duplicar os 25 builders neste HTML).
 function generatePrompt(id) {
-  const gen = generators[id];
-  if (!gen) return;
-  const prompt = gen();
+  if (!window.PE || typeof window.PE.buildPrompt !== 'function') return;
+  let prompt;
+  try {
+    const data = window.PE.collectFormData ? window.PE.collectFormData(id) : {};
+    prompt = window.PE.buildPrompt(id, data);
+  } catch (e) {
+    return;
+  }
   const container = document.getElementById('output-' + id);
   container.innerHTML = `
     <div class="output-header">
@@ -2230,6 +1202,7 @@ function generatePrompt(id) {
   document.getElementById('prompt-text-' + id).textContent = prompt;
   container.classList.add('visible');
   container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (window.PE.track) window.PE.track('generate', { template: id });
 }
 
 // ─── COPY ───

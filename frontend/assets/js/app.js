@@ -4,18 +4,26 @@
 
 import { initTheme } from './theme.js';
 import { initI18n, t } from './i18n.js';
-import { enhanceNavigation, injectTopbarControls, copyText } from './common.js';
+import {
+  enhanceNavigation,
+  injectTopbarControls,
+  copyText,
+  injectOfflineBanner,
+} from './common.js';
 import { track, flush } from './telemetry.js';
-import { buildPrompt, generatorTemplates } from './generators.js';
+import { buildPrompt, generatorTemplates, collectFormData } from './generators.js';
 import { askLLM } from './llmClient.js';
 import { initAuth } from './auth.js';
 import { initChat } from './chat.js';
+import { isConfigured } from './supabaseClient.js';
 
 function mountManualPlayground() {
   const host = document.getElementById('pe-playground');
   if (!host) return;
 
-  const keys = Object.keys(generatorTemplates);
+  // Apenas os exemplos marcados como playground entram no seletor do manual;
+  // os 25 templates do gerador têm campos próprios e não se aplicam aqui.
+  const keys = Object.keys(generatorTemplates).filter((k) => generatorTemplates[k].playground);
   const options = keys
     .map((k) => `<option value="${k}">${generatorTemplates[k].name}</option>`)
     .join('');
@@ -59,6 +67,11 @@ function init() {
   initAuth();
   initChat();
   mountManualPlayground();
+
+  // Degradação graciosa (#M8): sem backend configurado, avisa o usuário. A
+  // geração de prompts pelos templates segue funcionando (é 100% client-side).
+  if (!isConfigured()) injectOfflineBanner();
+
   track('pageview', { path: location.pathname });
 
   // Envia a fila de telemetria: no load, periodicamente e ao sair da página.
@@ -69,7 +82,8 @@ function init() {
   });
 
   // exposto para depuração/uso futuro por scripts inline das páginas
-  window.PE = { copyText, buildPrompt, track, flush, askLLM };
+  // (generator.html usa buildPrompt + generatorTemplates para o dispatch).
+  window.PE = { copyText, buildPrompt, generatorTemplates, collectFormData, track, flush, askLLM };
 }
 
 if (document.readyState === 'loading') {

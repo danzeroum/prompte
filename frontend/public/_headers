@@ -1,4 +1,14 @@
 # Cache-Control para deploy em hosting estático (Netlify / similares).
+
+# Cabeçalhos de segurança em todas as respostas (recomendação M4).
+# Complementam a CSP definida via <meta http-equiv> nos HTMLs.
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
 # Assets com hash (gerados pelo Vite) podem ser cacheados para sempre.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
