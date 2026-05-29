@@ -669,12 +669,12 @@ FORMATO DE RESPOSTA:
 `;
 
 exports[`generators — snapshots gen-review snapshot 1`] = `
-"Analise detalhadamente o repositorio linha-um rq-repo
-  linha-dois rq-repo, com foco em linha-um rq-arq
-  linha-dois rq-arq.
+"Analise detalhadamente o repositorio linha-um grv-repo
+  linha-dois grv-repo, com foco em linha-um grv-arq
+  linha-dois grv-arq.
 
-CONTEXTO: linha-um rq-ctx
-  linha-dois rq-ctx
+CONTEXTO: linha-um grv-ctx
+  linha-dois grv-ctx
 
 INSTRUCAO DE DOMINIO:
 Verifique os seguintes aspectos de qualidade do codigo aplicando frameworks e principios reconhecidos de engenharia de software:

@@ -39,7 +39,8 @@ describe('Rec 5 — resultado como região aria-live focável (WCAG 4.1.3)', () 
     const containers = [...generator.matchAll(/<div class="output-container"[^>]*>/g)].map(
       (m) => m[0],
     );
-    expect(containers.length).toBe(25);
+    // 25 templates originais + gen-review migrado do index (Fase 4).
+    expect(containers.length).toBe(26);
     for (const c of containers) {
       expect(c).toContain('role="region"');
       expect(c).toContain('aria-live="polite"');

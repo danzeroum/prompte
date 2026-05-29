@@ -990,53 +990,53 @@ Formato da resposta: especificação de endpoints + exemplos de request/response
   'gen-review': {
     name: 'Revisão + Qualidade',
     fields: [
-      { id: 'rq-repo', type: 'text' },
-      { id: 'rq-arq', type: 'text' },
-      { id: 'rq-ctx', type: 'textarea' },
-      { id: 'rq-verif', type: 'checkbox' },
-      { id: 'rq-test', type: 'checkbox' },
-      { id: 'rq-sast', type: 'checkbox' },
-      { id: 'rq-rev', type: 'checkbox' },
-      { id: 'rq-qual', type: 'checkbox' },
-      { id: 'rq-solid', type: 'checkbox' },
-      { id: 'rq-clean', type: 'checkbox' },
-      { id: 'rq-arqcb', type: 'checkbox' },
-      { id: 'rq-devops', type: 'checkbox' },
-      { id: 'rq-perf', type: 'checkbox' },
+      { id: 'grv-repo', type: 'text' },
+      { id: 'grv-arq', type: 'text' },
+      { id: 'grv-ctx', type: 'textarea' },
+      { id: 'grv-verif', type: 'checkbox' },
+      { id: 'grv-test', type: 'checkbox' },
+      { id: 'grv-sast', type: 'checkbox' },
+      { id: 'grv-rev', type: 'checkbox' },
+      { id: 'grv-qual', type: 'checkbox' },
+      { id: 'grv-solid', type: 'checkbox' },
+      { id: 'grv-clean', type: 'checkbox' },
+      { id: 'grv-arqcb', type: 'checkbox' },
+      { id: 'grv-devops', type: 'checkbox' },
+      { id: 'grv-perf', type: 'checkbox' },
     ],
     build(d) {
       const v = (id) => d[id];
       const checkedItems = (ids) => ids.filter((id) => d[id]);
 
-      const repo = v('rq-repo'),
-        arq = v('rq-arq'),
-        ctx = v('rq-ctx');
+      const repo = v('grv-repo'),
+        arq = v('grv-arq'),
+        ctx = v('grv-ctx');
       const domains = checkedItems([
-        'rq-verif',
-        'rq-test',
-        'rq-sast',
-        'rq-rev',
-        'rq-qual',
-        'rq-solid',
-        'rq-clean',
-        'rq-arqcb',
-        'rq-devops',
-        'rq-perf',
+        'grv-verif',
+        'grv-test',
+        'grv-sast',
+        'grv-rev',
+        'grv-qual',
+        'grv-solid',
+        'grv-clean',
+        'grv-arqcb',
+        'grv-devops',
+        'grv-perf',
       ]);
       const domainLabels = {
-        'rq-verif': 'Verificacao e Validacao (shift-left testing)',
-        'rq-test': 'Testes em todos os niveis (unidade, integracao, sistema, aceitacao)',
-        'rq-sast': 'Analise estatica automatizada (SAST) para code smells e vulnerabilidades',
-        'rq-rev': 'Revisao de codigo por pares (detectar oportunidades de melhoria mutua)',
-        'rq-qual':
+        'grv-verif': 'Verificacao e Validacao (shift-left testing)',
+        'grv-test': 'Testes em todos os niveis (unidade, integracao, sistema, aceitacao)',
+        'grv-sast': 'Analise estatica automatizada (SAST) para code smells e vulnerabilidades',
+        'grv-rev': 'Revisao de codigo por pares (detectar oportunidades de melhoria mutua)',
+        'grv-qual':
           'Atributos de qualidade: escalabilidade, performance, seguranca, disponibilidade, manutenibilidade',
-        'rq-solid':
+        'grv-solid':
           'Principios SOLID (Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion)',
-        'rq-clean':
+        'grv-clean':
           'Clean Code (nomes descritivos, funcoes curtas, sem duplicacao) + 12-Factor App',
-        'rq-arqcb': 'Arquitetura (C4, 4+1), refatoracao e evolucao modular',
-        'rq-devops': 'DevOps / CI-CD pipeline, automacao de build e deploy',
-        'rq-perf':
+        'grv-arqcb': 'Arquitetura (C4, 4+1), refatoracao e evolucao modular',
+        'grv-devops': 'DevOps / CI-CD pipeline, automacao de build e deploy',
+        'grv-perf':
           'Performance e escalabilidade horizontal/vertical, metricas e balanceamento de carga',
       };
       let p = `Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;

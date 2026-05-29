@@ -721,19 +721,19 @@ export const originalGenerators = {
   'gen-review'(data) {
     const { val: v, checkedItems } = makeHelpers(data);
 
-    const repo=v('rq-repo'),arq=v('rq-arq'),ctx=v('rq-ctx');
-    const domains=checkedItems(['rq-verif','rq-test','rq-sast','rq-rev','rq-qual','rq-solid','rq-clean','rq-arqcb','rq-devops','rq-perf']);
+    const repo=v('grv-repo'),arq=v('grv-arq'),ctx=v('grv-ctx');
+    const domains=checkedItems(['grv-verif','grv-test','grv-sast','grv-rev','grv-qual','grv-solid','grv-clean','grv-arqcb','grv-devops','grv-perf']);
     const domainLabels={
-      'rq-verif':'Verificacao e Validacao (shift-left testing)',
-      'rq-test':'Testes em todos os niveis (unidade, integracao, sistema, aceitacao)',
-      'rq-sast':'Analise estatica automatizada (SAST) para code smells e vulnerabilidades',
-      'rq-rev':'Revisao de codigo por pares (detectar oportunidades de melhoria mutua)',
-      'rq-qual':'Atributos de qualidade: escalabilidade, performance, seguranca, disponibilidade, manutenibilidade',
-      'rq-solid':'Principios SOLID (Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion)',
-      'rq-clean':'Clean Code (nomes descritivos, funcoes curtas, sem duplicacao) + 12-Factor App',
-      'rq-arqcb':'Arquitetura (C4, 4+1), refatoracao e evolucao modular',
-      'rq-devops':'DevOps / CI-CD pipeline, automacao de build e deploy',
-      'rq-perf':'Performance e escalabilidade horizontal/vertical, metricas e balanceamento de carga'
+      'grv-verif':'Verificacao e Validacao (shift-left testing)',
+      'grv-test':'Testes em todos os niveis (unidade, integracao, sistema, aceitacao)',
+      'grv-sast':'Analise estatica automatizada (SAST) para code smells e vulnerabilidades',
+      'grv-rev':'Revisao de codigo por pares (detectar oportunidades de melhoria mutua)',
+      'grv-qual':'Atributos de qualidade: escalabilidade, performance, seguranca, disponibilidade, manutenibilidade',
+      'grv-solid':'Principios SOLID (Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion)',
+      'grv-clean':'Clean Code (nomes descritivos, funcoes curtas, sem duplicacao) + 12-Factor App',
+      'grv-arqcb':'Arquitetura (C4, 4+1), refatoracao e evolucao modular',
+      'grv-devops':'DevOps / CI-CD pipeline, automacao de build e deploy',
+      'grv-perf':'Performance e escalabilidade horizontal/vertical, metricas e balanceamento de carga'
     };
     let p=`Analise detalhadamente o repositorio ${repo}, com foco em ${arq}.\n\n`;
     p+=`CONTEXTO: ${ctx}\n\n`;

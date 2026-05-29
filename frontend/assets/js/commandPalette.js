@@ -64,12 +64,16 @@ export function buildIndex(root = document) {
       });
   });
 
+  // Geradores avançados (gen-*) já migrados para o generator.html (fusão
+  // incremental); os ainda não migrados continuam no index.html.
+  const MIGRATED_GEN = new Set(['gen-review']);
+
   // Templates do gerador não presentes nesta página → deep-link cross-page.
   Object.keys(generatorTemplates).forEach((key) => {
     const tpl = generatorTemplates[key];
     if (tpl.playground || onPageTemplates.has(key)) return;
-    // Os geradores avançados (gen-*) vivem no index.html; os demais no generator.html.
-    const page = key.startsWith('gen-') ? '/index.html' : '/generator.html';
+    const onIndex = key.startsWith('gen-') && !MIGRATED_GEN.has(key);
+    const page = onIndex ? '/index.html' : '/generator.html';
     items.push({
       label: tpl.name,
       hint: t('palette.template'),
