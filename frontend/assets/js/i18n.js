@@ -63,11 +63,11 @@ export const DICT = {
       'Sem conexão com o backend: o chat e as respostas com IA estão indisponíveis. A geração de prompts pelos templates continua funcionando normalmente.',
     'banner.dismiss': 'Dispensar',
     // Conteúdo do gerador (#M6): seções da sidebar e descrições dos templates.
-    'gen.section.nav': 'Navegacao',
-    'gen.section.codigo': 'Codigo Direto',
-    'gen.section.repo': 'Analise de Repositorio',
+    'gen.section.nav': 'Navegação',
+    'gen.section.codigo': 'Código Direto',
+    'gen.section.repo': 'Análise de Repositório',
     'gen.section.diff': 'Melhoria com Diff',
-    'gen.section.avancado': 'Dominios Avancados',
+    'gen.section.avancado': 'Domínios Avançados',
     'gen.desc.revisao-correcao':
       'Revise e corrija um codigo, identificando bugs, problemas de logica e sugerindo correcoes prontas para aplicar.',
     'gen.desc.melhoria-refatoracao':

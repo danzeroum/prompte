@@ -29,7 +29,8 @@
   --border-focus: #58a6ff;
   --text: #e6edf3;
   --text2: #8b949e;
-  --muted: #6e7681;
+  /* #M-UX2 (WCAG 1.4.3): subido de #6e7681 (4.12:1, reprovava AA) p/ 7.5:1 */
+  --muted: #9aa4b1;
   --accent: #58a6ff;
   --accent-h: #79c0ff;
   --green: #3fb950;
@@ -76,7 +77,8 @@
   --border-focus: #0969da;
   --text: #1f2328;
   --text2: #57606a;
-  --muted: #6e7781;
+  /* #M-UX2 (WCAG 1.4.3): subido de #6e7781 (4.55:1, no limite) p/ 6.4:1 */
+  --muted: #57606a;
   --accent: #0969da;
   --accent-h: #0550ae;
   --green: #1a7f37;
