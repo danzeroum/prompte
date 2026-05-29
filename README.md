@@ -15,6 +15,7 @@ engenharia de software, composta por três páginas:
 - [`docs/EXPLICACAO-CODIGO.md`](docs/EXPLICACAO-CODIGO.md) — explicação didática **ligada ao código**.
 - [`docs/DEPLOY-VPS.md`](docs/DEPLOY-VPS.md) — **deploy na VPS** (frontend + domínio + HTTPS via Docker/Caddy).
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) — fases e decisões de backend.
+- [`docs/AUDITORIA-UX-APLICADA.md`](docs/AUDITORIA-UX-APLICADA.md) — **auditoria de UX**: o que foi validado, aplicado e a simulação de testes com usuários.
 
 ## Arquitetura do frontend
 

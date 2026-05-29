@@ -29,7 +29,8 @@
   --border-focus: #58a6ff;
   --text: #e6edf3;
   --text2: #8b949e;
-  --muted: #6e7681;
+  /* #M-UX2 (WCAG 1.4.3): subido de #6e7681 (4.12:1, reprovava AA) p/ 7.5:1 */
+  --muted: #9aa4b1;
   --accent: #58a6ff;
   --accent-h: #79c0ff;
   --green: #3fb950;
@@ -76,7 +77,8 @@
   --border-focus: #0969da;
   --text: #1f2328;
   --text2: #57606a;
-  --muted: #6e7781;
+  /* #M-UX2 (WCAG 1.4.3): subido de #6e7781 (4.55:1, no limite) p/ 6.4:1 */
+  --muted: #57606a;
   --accent: #0969da;
   --accent-h: #0550ae;
   --green: #1a7f37;
@@ -615,4 +617,135 @@
 .pe-history-footer {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Confirmação inline da ação destrutiva (#M-UX3) */
+.pe-history-confirm-msg {
+  flex: 1;
+  min-width: 180px;
+  font-size: 13px;
+  color: var(--text2);
+}
+.pe-btn-danger {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+.pe-btn-danger:hover {
+  filter: brightness(1.08);
+}
+
+/* Emoji decorativo dentro de botões de ícone (#M-UX7): herda tudo do botão. */
+.pe-emoji {
+  font: inherit;
+  line-height: 1;
+}
+
+/* ---------- Paleta de comando global (#M-UX4) ---------- */
+.pe-cp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+}
+.pe-cp-box {
+  width: min(620px, 92vw);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+.pe-cp-input {
+  width: 100%;
+  padding: 16px 18px;
+  font-size: 15px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text);
+  outline: none;
+}
+.pe-cp-input:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: -2px;
+}
+.pe-cp-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.pe-cp-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text);
+}
+.pe-cp-item.active {
+  background: var(--bg3);
+}
+.pe-cp-label {
+  font-size: 14px;
+}
+.pe-cp-hint {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+/* ---------- Glossário inline (#M-UX6) ---------- */
+.pe-gloss-wrap {
+  position: relative;
+  display: inline-block;
+}
+.pe-gloss {
+  font: inherit;
+  color: var(--accent);
+  background: none;
+  border: none;
+  border-bottom: 1px dotted var(--accent);
+  padding: 0 1px;
+  cursor: help;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.pe-gloss-mark {
+  font-size: 0.8em;
+}
+.pe-gloss:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+.pe-gloss-pop {
+  position: absolute;
+  left: 0;
+  top: 1.6em;
+  z-index: 50;
+  width: max-content;
+  max-width: 280px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }

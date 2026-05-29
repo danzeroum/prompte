@@ -127,15 +127,59 @@ export async function copyText(text) {
 }
 
 // ---- Controles de topbar (tema + preferências) ----
+// Define/atualiza o emoji do botão dentro de um <span aria-hidden> para que o
+// leitor de tela anuncie só o aria-label, não o nome do emoji (#M-UX7).
+function setIconEmoji(btn, emoji) {
+  let span = btn.querySelector('.pe-emoji');
+  if (!span) {
+    span = document.createElement('span');
+    span.className = 'pe-emoji';
+    span.setAttribute('aria-hidden', 'true');
+    btn.textContent = '';
+    btn.appendChild(span);
+  }
+  span.textContent = emoji;
+}
+
 function buildIconButton(label, emoji, onClick) {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'pe-icon-btn';
-  btn.textContent = emoji;
   btn.setAttribute('aria-label', label);
   btn.title = label;
+  setIconEmoji(btn, emoji);
   btn.addEventListener('click', onClick);
   return btn;
+}
+
+// Aprisiona o foco dentro de um modal e devolve um "destrutor" (#M-UX7).
+// Tab/Shift+Tab circulam entre os focáveis; Escape chama onEscape se fornecido.
+export function trapFocus(container, onEscape) {
+  const SEL =
+    'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  function handle(e) {
+    if (e.key === 'Escape') {
+      if (onEscape) {
+        e.preventDefault();
+        onEscape();
+      }
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    const items = Array.from(container.querySelectorAll(SEL));
+    if (!items.length) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+  container.addEventListener('keydown', handle);
+  return () => container.removeEventListener('keydown', handle);
 }
 
 export function injectTopbarControls(root = document) {
@@ -151,7 +195,7 @@ export function injectTopbarControls(root = document) {
     currentTheme() === 'light' ? '🌙' : '☀️',
     () => {
       const next = toggleTheme();
-      themeBtn.textContent = next === 'light' ? '🌙' : '☀️';
+      setIconEmoji(themeBtn, next === 'light' ? '🌙' : '☀️');
     },
   );
 
@@ -310,11 +354,34 @@ function buildPreferencesMenu() {
 
 // ---- Modal de histórico de prompts (#M14) ----
 let _historyModal = null;
+let _historyTrap = null;
+let _historyReturnFocus = null;
 function openHistoryModal() {
   if (_historyModal) _historyModal.remove();
+  _historyReturnFocus =
+    document.activeElement && document.activeElement.focus ? document.activeElement : null;
   _historyModal = buildHistoryModal();
   document.body.appendChild(_historyModal);
   _historyModal.hidden = false;
+  _historyTrap = trapFocus(_historyModal, closeHistoryModal);
+  const firstBtn = _historyModal.querySelector('button');
+  if (firstBtn) firstBtn.focus();
+}
+
+// Fecha o histórico e devolve o foco ao gatilho que o abriu (#M-UX7).
+function closeHistoryModal() {
+  if (_historyTrap) {
+    _historyTrap();
+    _historyTrap = null;
+  }
+  if (_historyModal) {
+    _historyModal.remove();
+    _historyModal = null;
+  }
+  if (_historyReturnFocus) {
+    _historyReturnFocus.focus();
+    _historyReturnFocus = null;
+  }
 }
 
 function buildHistoryModal() {
@@ -324,7 +391,7 @@ function buildHistoryModal() {
   overlay.setAttribute('aria-modal', 'true');
   overlay.setAttribute('aria-label', t('history.title'));
   overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.remove();
+    if (e.target === overlay) closeHistoryModal();
   });
 
   const modal = document.createElement('div');
@@ -334,7 +401,7 @@ function buildHistoryModal() {
   head.className = 'pe-history-head';
   const h = document.createElement('h2');
   h.textContent = t('history.title');
-  const close = buildIconButton(t('auth.close'), '✕', () => overlay.remove());
+  const close = buildIconButton(t('auth.close'), '✕', () => closeHistoryModal());
   head.append(h, close);
   modal.append(head);
 
@@ -369,17 +436,51 @@ function buildHistoryModal() {
   }
   modal.append(list);
 
+  // Footer com confirmação inline em dois passos para a ação destrutiva (#M-UX3,
+  // Nielsen H3): o 1º clique pede confirmação; só o 2º apaga de fato.
   const footer = document.createElement('div');
   footer.className = 'pe-history-footer';
+
   const clearBtn = document.createElement('button');
   clearBtn.type = 'button';
   clearBtn.className = 'pe-btn';
   clearBtn.textContent = t('history.clear');
   clearBtn.disabled = !items.length;
-  clearBtn.addEventListener('click', () => {
-    clearPromptHistory();
-    overlay.remove();
-  });
+
+  function renderConfirm() {
+    footer.textContent = '';
+    const msg = document.createElement('span');
+    msg.className = 'pe-history-confirm-msg';
+    msg.setAttribute('role', 'alert');
+    msg.textContent = t('history.clear.q').replace('{n}', String(items.length));
+
+    const confirmBtn = document.createElement('button');
+    confirmBtn.type = 'button';
+    confirmBtn.className = 'pe-btn pe-btn-danger';
+    confirmBtn.textContent = t('history.clear.confirm');
+    confirmBtn.addEventListener('click', () => {
+      clearPromptHistory();
+      showToast(t('history.clear.done'), '', 'success');
+      closeHistoryModal();
+    });
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'pe-btn-secondary';
+    cancelBtn.textContent = t('history.clear.cancel');
+    cancelBtn.addEventListener('click', renderClear);
+
+    footer.append(msg, cancelBtn, confirmBtn);
+    confirmBtn.focus();
+  }
+
+  function renderClear() {
+    footer.textContent = '';
+    footer.append(clearBtn);
+    clearBtn.focus();
+  }
+
+  clearBtn.addEventListener('click', renderConfirm);
   footer.append(clearBtn);
   modal.append(footer);
 
@@ -389,12 +490,17 @@ function buildHistoryModal() {
 
 // ---- Modal de login (magic link) ----
 let _authModal = null;
+let _authTrap = null;
+let _authReturnFocus = null;
 function openAuthModal() {
   // #M12: inicializa a auth sob demanda (carrega o SDK só agora) e detecta
   // sessão persistida de quem volta logado.
   if (typeof window !== 'undefined' && window.PE && window.PE.ensureAuth) window.PE.ensureAuth();
   if (!_authModal) _authModal = buildAuthModal();
+  _authReturnFocus =
+    document.activeElement && document.activeElement.focus ? document.activeElement : null;
   _authModal.hidden = false;
+  _authTrap = trapFocus(_authModal, () => _authModal.querySelector('.pe-btn-secondary').click());
   const input = _authModal.querySelector('input');
   if (input) input.focus();
 }
@@ -406,8 +512,17 @@ function buildAuthModal() {
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
 
+  // Fecha, libera o focus-trap e devolve o foco ao gatilho (#M-UX7).
   const close = () => {
     overlay.hidden = true;
+    if (_authTrap) {
+      _authTrap();
+      _authTrap = null;
+    }
+    if (_authReturnFocus) {
+      _authReturnFocus.focus();
+      _authReturnFocus = null;
+    }
   };
 
   const card = document.createElement('div');
