@@ -780,3 +780,122 @@
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
+
+/* =================================================================
+   Componentes de layout compartilhados — devem ficar aqui porque
+   theme.css é o único CSS carregado por TODAS as páginas.
+   index.css e generator.css sobrescrevem as regras locais deles.
+   ================================================================= */
+
+/* Topbar base */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-2);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-brand {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+/* Botão primário base (acento). Modais sobrescrevem via .pe-modal .pe-btn. */
+.pe-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 18px;
+  background: var(--accent);
+  color: var(--accent-ink, #17160d);
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: var(--r-sm, 9px);
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.pe-btn:hover {
+  filter: brightness(1.06);
+}
+
+.pe-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Botão secundário base */
+.pe-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 18px;
+  background: transparent;
+  color: var(--text-2, var(--text2));
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm, 9px);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.pe-btn-secondary:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+/* Nav primária injetada por common.js em todas as topbars */
+.pe-primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pe-nav-link {
+  padding: 5px 12px;
+  border-radius: var(--r-sm, 9px);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-2, var(--text2));
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.pe-nav-link:hover {
+  background: var(--bg-2, var(--bg2));
+  color: var(--text);
+}
+
+.pe-nav-link[aria-current='page'],
+.pe-nav-link.active {
+  background: var(--accent-soft, color-mix(in oklch, var(--accent) 12%, transparent));
+  color: var(--text);
+  font-weight: 600;
+}
+
+@media (max-width: 680px) {
+  .topbar {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .pe-primary-nav {
+    display: none;
+  }
+}
