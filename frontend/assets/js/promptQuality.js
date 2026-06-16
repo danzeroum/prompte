@@ -6,9 +6,21 @@
 import { t } from './i18n.js';
 
 const VAGUE_TERMS = [
-  'melhor', 'bom', 'boa', 'rápido', 'rapido', 'eficiente', 'otimizado',
-  'moderno', 'robusto', 'escalável', 'escalavel', 'limpo', 'simples',
-  'adequado', 'legal',
+  'melhor',
+  'bom',
+  'boa',
+  'rápido',
+  'rapido',
+  'eficiente',
+  'otimizado',
+  'moderno',
+  'robusto',
+  'escalável',
+  'escalavel',
+  'limpo',
+  'simples',
+  'adequado',
+  'legal',
 ];
 
 // Padrões de id que sinalizam campos de contexto e entrada concreta.
@@ -27,7 +39,7 @@ const INPUT_ID_RE = /-(codigo|arquivo|repo|comp|erro|escopo|dir|caminho|trecho|d
 export function analyzePrompt(template, formData, builtText) {
   const text = builtText || '';
   const empty = !text.trim();
-  const fields = (template && Array.isArray(template.fields)) ? template.fields : [];
+  const fields = template && Array.isArray(template.fields) ? template.fields : [];
 
   const textFields = fields.filter((f) => f.type !== 'checkbox');
   const checkboxes = fields.filter((f) => f.type === 'checkbox');
@@ -50,10 +62,8 @@ export function analyzePrompt(template, formData, builtText) {
   // 2. Contexto suficiente — casamento por id do campo (CORREÇÃO 1)
   const ctxFields = filled.filter((x) => CTX_ID_RE.test(x.f.id));
   const ctxChars = ctxFields.reduce((s, x) => s + x.v.length, 0);
-  const ctxStatus = ctxFields.length === 0 ? 'pass'
-    : ctxChars >= 60 ? 'pass'
-    : ctxChars >= 15 ? 'warn'
-    : 'fail';
+  const ctxStatus =
+    ctxFields.length === 0 ? 'pass' : ctxChars >= 60 ? 'pass' : ctxChars >= 15 ? 'warn' : 'fail';
   checks.push({
     id: 'context',
     label: t('q.context.label'),
@@ -75,8 +85,9 @@ export function analyzePrompt(template, formData, builtText) {
   });
 
   // 4. Formato de saída especificado
-  const hasFormat = /(formato de resposta|entregue|entregar|fa[çc]a:|fazer:|formato|entregue:)/i.test(text)
-    || /\n\s*\d+\./.test(text);
+  const hasFormat =
+    /(formato de resposta|entregue|entregar|fa[çc]a:|fazer:|formato|entregue:)/i.test(text) ||
+    /\n\s*\d+\./.test(text);
   const formatStatus = empty ? 'fail' : hasFormat ? 'pass' : 'warn';
   checks.push({
     id: 'format',
@@ -87,8 +98,11 @@ export function analyzePrompt(template, formData, builtText) {
   });
 
   // 5. Restrições & critérios
-  const hasConstraints = checkedCount > 0
-    || /(restri|regras|obrigat|n[ãa]o sacrific|sla|crit[ée]rio|severidade|priorize|priorizar|mantenha|mantendo|evite|compatib)/i.test(text);
+  const hasConstraints =
+    checkedCount > 0 ||
+    /(restri|regras|obrigat|n[ãa]o sacrific|sla|crit[ée]rio|severidade|priorize|priorizar|mantenha|mantendo|evite|compatib)/i.test(
+      text,
+    );
   const constraintsStatus = empty ? 'fail' : hasConstraints ? 'pass' : 'warn';
   checks.push({
     id: 'constraints',
@@ -101,18 +115,17 @@ export function analyzePrompt(template, formData, builtText) {
   // 6. Anti-ambiguidade — termos vagos nos campos do usuário
   const vagueRe = new RegExp(`\\b(${VAGUE_TERMS.join('|')})\\b`, 'gi');
   const found = [
-    ...new Set(
-      (allInputs.toLowerCase().match(vagueRe) || []).map((v) => v.toLowerCase()),
-    ),
+    ...new Set((allInputs.toLowerCase().match(vagueRe) || []).map((v) => v.toLowerCase())),
   ];
   checks.push({
     id: 'specific',
     label: t('q.specific.label'),
     ref: t('q.specific.ref'),
     status: found.length === 0 ? 'pass' : 'warn',
-    tip: found.length === 0
-      ? t('q.specific.pass')
-      : t('q.specific.warn').replace('{terms}', found.slice(0, 3).join('", "')),
+    tip:
+      found.length === 0
+        ? t('q.specific.pass')
+        : t('q.specific.warn').replace('{terms}', found.slice(0, 3).join('", "')),
   });
 
   // 7. Detalhamento adequado — nº de palavras do texto gerado
@@ -184,26 +197,22 @@ export function renderQualityFooter(container, analysis) {
     hd.setAttribute('aria-label', t('quality.expand'));
     hd.innerHTML = `
       <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" class="score-ring" aria-hidden="true">
-        <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--line-2,#333)" stroke-width="3.5"/>
-        <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="3.5"
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--line-2,#333)" stroke-width="3.5"/>
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="3.5"
           stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${off}"
-          transform="rotate(-90 ${size/2} ${size/2})"
+          transform="rotate(-90 ${size / 2} ${size / 2})"
           style="transition:stroke-dashoffset .4s ease,stroke .3s"/>
         <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle"
-          style="font-size:${size*0.3}px;font-weight:700;fill:var(--text);font-family:var(--font-mono,monospace)">${displayScore}</text>
+          style="font-size:${size * 0.3}px;font-weight:700;fill:var(--text);font-family:var(--font-mono,monospace)">${displayScore}</text>
       </svg>
       <span class="q-sum">
         <strong style="color:${col}">${t('quality.title')}: ${grade}</strong>
         <span class="q-line">${
-          empty ? t('quality.empty')
-          : topTip ? topTip.tip
-          : t('quality.all.pass')
+          empty ? t('quality.empty') : topTip ? topTip.tip : t('quality.all.pass')
         }</span>
       </span>
       <span class="q-meta">
-        ${!empty && issues > 0
-          ? `<span class="q-count">${issues}</span>`
-          : ''}
+        ${!empty && issues > 0 ? `<span class="q-count">${issues}</span>` : ''}
         <span class="q-chev" aria-hidden="true">${expanded ? '▲' : '▼'}</span>
       </span>
     `;

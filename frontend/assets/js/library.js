@@ -21,10 +21,10 @@ import { renderResultPanel } from './resultPanel.js';
 const state = {
   prompts: [],
   collections: [],
-  view: 'all',      // 'all' | 'fav' | <collectionId>
+  view: 'all', // 'all' | 'fav' | <collectionId>
   activeTag: null,
   query: '',
-  sort: 'recent',   // 'recent' | 'name'
+  sort: 'recent', // 'recent' | 'name'
 };
 
 // ---- Utilitários ----
@@ -66,9 +66,7 @@ function filteredPrompts() {
   }
 
   if (state.activeTag) {
-    list = list.filter((p) =>
-      Array.isArray(p.tags) && p.tags.includes(state.activeTag),
-    );
+    list = list.filter((p) => Array.isArray(p.tags) && p.tags.includes(state.activeTag));
   }
 
   if (state.query.trim()) {
@@ -101,7 +99,9 @@ function counters() {
   const all = state.prompts.length;
   const fav = state.prompts.filter((p) => p.favorite).length;
   const byCol = {};
-  state.collections.forEach((c) => { byCol[c.id] = 0; });
+  state.collections.forEach((c) => {
+    byCol[c.id] = 0;
+  });
   state.prompts.forEach((p) => {
     if (p.collection && byCol[p.collection] !== undefined) byCol[p.collection]++;
   });
@@ -119,10 +119,7 @@ export async function initLibrary(container) {
 }
 
 async function reload() {
-  [state.prompts, state.collections] = await Promise.all([
-    listSavedPrompts(),
-    listCollections(),
-  ]);
+  [state.prompts, state.collections] = await Promise.all([listSavedPrompts(), listCollections()]);
 }
 
 function render() {
@@ -276,7 +273,10 @@ function startNewCollection(parent, afterEl) {
 
   const confirm = async () => {
     const name = input.value.trim();
-    if (!name) { input.focus(); return; }
+    if (!name) {
+      input.focus();
+      return;
+    }
     const res = await createCollection(name);
     if (res.ok) {
       showToast(t('lib.col.created'), '', 'success');
@@ -289,7 +289,10 @@ function startNewCollection(parent, afterEl) {
 
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') confirm();
-    if (e.key === 'Escape') { wrap.remove(); render(); }
+    if (e.key === 'Escape') {
+      wrap.remove();
+      render();
+    }
   });
 
   wrap.appendChild(input);
@@ -306,7 +309,10 @@ async function startRenameCollection(id, currentName, itemEl) {
 
   const confirm = async () => {
     const name = input.value.trim();
-    if (!name) { input.focus(); return; }
+    if (!name) {
+      input.focus();
+      return;
+    }
     await renameCollection(id, name);
     showToast(t('lib.col.renamed'), '', 'success');
     track('lib_rename_collection', { id });
@@ -317,7 +323,10 @@ async function startRenameCollection(id, currentName, itemEl) {
 
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') confirm();
-    if (e.key === 'Escape') { input.remove(); render(); }
+    if (e.key === 'Escape') {
+      input.remove();
+      render();
+    }
   });
   input.addEventListener('blur', confirm);
 
@@ -343,8 +352,8 @@ function buildMain() {
   const subtitle = document.createElement('p');
   subtitle.className = 'lib-main-subtitle';
   const cnt = filteredPrompts().length;
-  subtitle.textContent = t('lib.prompts.count').replace('{n}', cnt) +
-    (state.activeTag ? ` · #${state.activeTag}` : '');
+  subtitle.textContent =
+    t('lib.prompts.count').replace('{n}', cnt) + (state.activeTag ? ` · #${state.activeTag}` : '');
 
   titleWrap.append(title, subtitle);
 
@@ -498,7 +507,10 @@ function buildCard(prompt) {
   body.append(name, snippet);
   body.addEventListener('click', () => openPromptView(prompt));
   body.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPromptView(prompt); }
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openPromptView(prompt);
+    }
   });
 
   // Tags
@@ -635,9 +647,13 @@ function buildMoveMenu(prompt) {
   });
 
   // Fechar ao clicar fora
-  document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target)) menu.hidden = true;
-  }, { capture: false });
+  document.addEventListener(
+    'click',
+    (e) => {
+      if (!menu.contains(e.target)) menu.hidden = true;
+    },
+    { capture: false },
+  );
 
   return menu;
 }
@@ -663,7 +679,10 @@ function openPromptView(prompt) {
   closeBtn.className = 'pe-icon-btn';
   closeBtn.textContent = '✕';
   closeBtn.setAttribute('aria-label', 'Fechar');
-  const close = () => { overlay.remove(); if (trap) trap(); };
+  const close = () => {
+    overlay.remove();
+    if (trap) trap();
+  };
   closeBtn.addEventListener('click', close);
   head.append(h, closeBtn);
 
@@ -678,7 +697,9 @@ function openPromptView(prompt) {
 
   modal.append(head, panelHost);
   overlay.appendChild(modal);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
   document.body.appendChild(overlay);
 
   const trap = trapFocus(overlay, close);
@@ -712,7 +733,10 @@ function openConfirmDialog({ title, body, confirmLabel, danger, onConfirm }) {
   cancelBtn.type = 'button';
   cancelBtn.className = 'pe-btn-secondary';
   cancelBtn.textContent = t('lib.delete.cancel');
-  const close = () => { overlay.remove(); if (trap) trap(); };
+  const close = () => {
+    overlay.remove();
+    if (trap) trap();
+  };
   cancelBtn.addEventListener('click', close);
 
   const confirmBtn = document.createElement('button');
@@ -727,7 +751,9 @@ function openConfirmDialog({ title, body, confirmLabel, danger, onConfirm }) {
   actions.append(cancelBtn, confirmBtn);
   modal.append(h, p, actions);
   overlay.appendChild(modal);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
   document.body.appendChild(overlay);
 
   const trap = trapFocus(overlay, close);
@@ -763,9 +789,7 @@ export async function renderLibraryBanner(container) {
   const strong = document.createElement('strong');
   strong.textContent = t('home.lib.banner');
   const sub = document.createElement('span');
-  sub.textContent = n > 0
-    ? t('home.lib.banner.sub').replace('{n}', n)
-    : t('home.lib.banner.empty');
+  sub.textContent = n > 0 ? t('home.lib.banner.sub').replace('{n}', n) : t('home.lib.banner.empty');
   text.append(strong, ' ', sub);
 
   const cta = document.createElement('span');

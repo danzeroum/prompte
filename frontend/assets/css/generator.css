@@ -808,11 +808,23 @@ html.mode-avancado .sidebar-section[data-mode='direto'] {
   margin-top: 1px;
 }
 
-.q-ic.pass { background: color-mix(in oklch, var(--accent) 15%, transparent); color: var(--accent); }
-.q-ic.warn { background: oklch(0.94 0.08 80); color: oklch(0.55 0.13 80); }
-.q-ic.fail { background: oklch(0.94 0.06 28); color: oklch(0.56 0.19 28); }
+.q-ic.pass {
+  background: color-mix(in oklch, var(--accent) 15%, transparent);
+  color: var(--accent);
+}
+.q-ic.warn {
+  background: oklch(0.94 0.08 80);
+  color: oklch(0.55 0.13 80);
+}
+.q-ic.fail {
+  background: oklch(0.94 0.06 28);
+  color: oklch(0.56 0.19 28);
+}
 
-.q-txt { flex: 1; min-width: 0; }
+.q-txt {
+  flex: 1;
+  min-width: 0;
+}
 
 .q-label {
   font-size: 13px;

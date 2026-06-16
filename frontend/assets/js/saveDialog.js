@@ -8,13 +8,6 @@ import { showToast } from './validation.js';
 import { trapFocus } from './common.js';
 import { savePrompt, listCollections, createCollection } from './savedPrompts.js';
 
-function esc(s) {
-  return String(s || '').replace(
-    /[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
-  );
-}
-
 // Abre o diálogo. Retorna uma Promise que resolve { ok } após confirmar ou cancela.
 export function openSaveDialog({ template, content, defaultTitle } = {}) {
   return new Promise((resolve) => {
@@ -23,7 +16,10 @@ export function openSaveDialog({ template, content, defaultTitle } = {}) {
       document.activeElement && document.activeElement.focus ? document.activeElement : null;
 
     const close = (result = { ok: false }) => {
-      if (trap) { trap(); trap = null; }
+      if (trap) {
+        trap();
+        trap = null;
+      }
       overlay.remove();
       if (returnFocus) returnFocus.focus();
       resolve(result);
@@ -35,7 +31,9 @@ export function openSaveDialog({ template, content, defaultTitle } = {}) {
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-label', t('save.dialog.title'));
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close();
+    });
 
     // ---- Modal ----
     const modal = document.createElement('div');
@@ -123,7 +121,17 @@ export function openSaveDialog({ template, content, defaultTitle } = {}) {
     saveBtn.textContent = t('save.dialog.save');
 
     actions.append(cancelBtn, saveBtn);
-    modal.append(titleEl, nameLabel, nameInput, colLabel, colRow, tagsLabel, tagsInput, tagsHelp, actions);
+    modal.append(
+      titleEl,
+      nameLabel,
+      nameInput,
+      colLabel,
+      colRow,
+      tagsLabel,
+      tagsInput,
+      tagsHelp,
+      actions,
+    );
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
     trap = trapFocus(overlay, () => close());
@@ -162,7 +170,10 @@ export function openSaveDialog({ template, content, defaultTitle } = {}) {
 
     async function confirmNewCol() {
       const name = newColInput.value.trim();
-      if (!name) { newColInput.focus(); return; }
+      if (!name) {
+        newColInput.focus();
+        return;
+      }
       const res = await createCollection(name);
       if (res.ok) {
         const opt = document.createElement('option');
@@ -179,7 +190,10 @@ export function openSaveDialog({ template, content, defaultTitle } = {}) {
     }
 
     newColInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); confirmNewCol(); }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        confirmNewCol();
+      }
       if (e.key === 'Escape') {
         colSelect.style.display = '';
         newColInput.style.display = 'none';
@@ -191,7 +205,10 @@ export function openSaveDialog({ template, content, defaultTitle } = {}) {
 
     // ---- Enter no campo Nome salva ----
     nameInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); doSave(); }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        doSave();
+      }
     });
 
     // ---- Ação de salvar ----
@@ -199,7 +216,10 @@ export function openSaveDialog({ template, content, defaultTitle } = {}) {
 
     async function doSave() {
       const name = nameInput.value.trim();
-      if (!name) { nameInput.focus(); return; }
+      if (!name) {
+        nameInput.focus();
+        return;
+      }
 
       const tags = tagsInput.value
         .split(',')

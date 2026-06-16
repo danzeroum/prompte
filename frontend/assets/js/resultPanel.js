@@ -3,7 +3,6 @@
 // Abrir na IA (+ Exportar .md / Limpar). Os builders de URL são funções puras,
 // testáveis isoladamente.
 
-import { showToast } from './validation.js';
 import { copyText } from './common.js';
 import { t } from './i18n.js';
 import { track } from './telemetry.js';
@@ -52,9 +51,7 @@ export function renderResultPanel(container, { id, prompt, title, skipHistory, a
     (p) => `<button type="button" role="menuitem" data-ai="${p.id}">${esc(p.label)}</button>`,
   ).join('');
 
-  const scoreChipHtml = analysis
-    ? buildScoreChipHtml(analysis)
-    : '';
+  const scoreChipHtml = analysis ? buildScoreChipHtml(analysis) : '';
 
   container.innerHTML = `
     <div class="output-header">
@@ -177,13 +174,13 @@ function buildScoreChipHtml(analysis) {
   return `
     <span class="score-chip" title="${esc(t('quality.chip.title'))}">
       <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true" style="flex-shrink:0">
-        <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--line-2,#333)" stroke-width="3"/>
-        <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="3"
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--line-2,#333)" stroke-width="3"/>
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="3"
           stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"
-          transform="rotate(-90 ${size/2} ${size/2})"
+          transform="rotate(-90 ${size / 2} ${size / 2})"
           style="transition:stroke-dashoffset .4s ease,stroke .3s"/>
         <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle"
-          style="font-size:${size*0.3}px;font-weight:700;fill:var(--text);font-family:var(--font-mono,monospace)">${displayScore}</text>
+          style="font-size:${size * 0.3}px;font-weight:700;fill:var(--text);font-family:var(--font-mono,monospace)">${displayScore}</text>
       </svg>
       <span style="color:${col};font-weight:600;font-size:13px">${esc(grade)}</span>
     </span>`;

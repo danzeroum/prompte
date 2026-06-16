@@ -74,8 +74,10 @@ export const DICT = {
     'q.context.label': 'Contexto suficiente',
     'q.context.ref': 'Dar contexto',
     'q.context.pass': 'Há background suficiente para a IA situar a resposta.',
-    'q.context.warn': 'Descreva o que o código faz e onde roda — modelos respondem melhor com contexto.',
-    'q.context.fail': 'Descreva o que o código faz e onde roda — modelos respondem melhor com contexto.',
+    'q.context.warn':
+      'Descreva o que o código faz e onde roda — modelos respondem melhor com contexto.',
+    'q.context.fail':
+      'Descreva o que o código faz e onde roda — modelos respondem melhor com contexto.',
     'q.input.label': 'Entrada concreta fornecida',
     'q.input.ref': 'Dados, não suposições',
     'q.input.pass': 'A IA tem código/arquivo/repo real para trabalhar.',
@@ -91,7 +93,8 @@ export const DICT = {
     'q.specific.label': 'Sem termos vagos',
     'q.specific.ref': 'Evitar ambiguidade',
     'q.specific.pass': 'Sem adjetivos vagos soltos nos seus campos.',
-    'q.specific.warn': 'Termos vagos: "{terms}". Troque por critérios mensuráveis (ex.: "< 100ms", "sem N+1").',
+    'q.specific.warn':
+      'Termos vagos: "{terms}". Troque por critérios mensuráveis (ex.: "< 100ms", "sem N+1").',
     'q.depth.label': 'Detalhamento adequado',
     'q.depth.ref': 'Especificar reduz suposição',
     'q.depth.pass': 'Prompt bem detalhado.',
@@ -668,12 +671,15 @@ export const DICT = {
     'q.context.label': 'Sufficient context',
     'q.context.ref': 'Provide context',
     'q.context.pass': 'Enough background for the AI to frame the response.',
-    'q.context.warn': 'Describe what the code does and where it runs — models respond better with context.',
-    'q.context.fail': 'Describe what the code does and where it runs — models respond better with context.',
+    'q.context.warn':
+      'Describe what the code does and where it runs — models respond better with context.',
+    'q.context.fail':
+      'Describe what the code does and where it runs — models respond better with context.',
     'q.input.label': 'Concrete input provided',
     'q.input.ref': 'Data, not assumptions',
     'q.input.pass': 'The AI has real code/file/repo to work with.',
-    'q.input.fail': 'Paste the code or point to the file/repo — without it the answer will be generic.',
+    'q.input.fail':
+      'Paste the code or point to the file/repo — without it the answer will be generic.',
     'q.format.label': 'Output format specified',
     'q.format.ref': 'Define the format',
     'q.format.pass': 'Asks for clear deliverables and structure (list, diff, table…).',
@@ -685,7 +691,8 @@ export const DICT = {
     'q.specific.label': 'No vague terms',
     'q.specific.ref': 'Avoid ambiguity',
     'q.specific.pass': 'No loose vague adjectives in your fields.',
-    'q.specific.warn': 'Vague terms: "{terms}". Replace with measurable criteria (e.g.: "< 100ms", "no N+1").',
+    'q.specific.warn':
+      'Vague terms: "{terms}". Replace with measurable criteria (e.g.: "< 100ms", "no N+1").',
     'q.depth.label': 'Adequate detail',
     'q.depth.ref': 'Specifying reduces assumptions',
     'q.depth.pass': 'Well-detailed prompt.',

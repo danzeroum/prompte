@@ -22,7 +22,15 @@ import { initChat } from './chat.js';
 import { isConfigured } from './supabaseClient.js';
 import { addPromptToHistory } from './promptHistory.js';
 import { renderResultPanel } from './resultPanel.js';
-import { listSavedPrompts, deleteSavedPrompt, updateSavedPrompt, listCollections, createCollection, renameCollection, deleteCollection } from './savedPrompts.js';
+import {
+  listSavedPrompts,
+  deleteSavedPrompt,
+  updateSavedPrompt,
+  listCollections,
+  createCollection,
+  renameCollection,
+  deleteCollection,
+} from './savedPrompts.js';
 import { analyzePrompt, renderQualityFooter } from './promptQuality.js';
 import { renderLibraryBanner } from './library.js';
 

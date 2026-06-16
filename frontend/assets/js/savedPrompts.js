@@ -51,7 +51,9 @@ function localColsList() {
 function localColsWrite(list) {
   try {
     localStorage.setItem(LS_COLS_KEY, JSON.stringify(list));
-  } catch { /* ignora */ }
+  } catch {
+    /* ignora */
+  }
 }
 
 // ---- Supabase helper ----
@@ -108,10 +110,7 @@ export async function savePrompt({ template, content, title, collection, tags, f
 export async function updateSavedPrompt(id, patch = {}) {
   const { supabase, user } = await userClient();
   if (supabase && user) {
-    const { error } = await supabase
-      .from('saved_prompts')
-      .update(patch)
-      .eq('id', id);
+    const { error } = await supabase.from('saved_prompts').update(patch).eq('id', id);
     return !error;
   }
   const list = localList();
@@ -130,12 +129,14 @@ export async function listSavedPrompts() {
       .from('saved_prompts')
       .select('id, template, title, content, created_at, collection, tags, favorite')
       .order('created_at', { ascending: false });
-    return error ? [] : (data || []).map((x) => ({
-      collection: null,
-      tags: [],
-      favorite: false,
-      ...x,
-    }));
+    return error
+      ? []
+      : (data || []).map((x) => ({
+          collection: null,
+          tags: [],
+          favorite: false,
+          ...x,
+        }));
   }
   return localList();
 }
@@ -196,10 +197,7 @@ export async function renameCollection(id, name) {
 
   const { supabase, user } = await userClient();
   if (supabase && user) {
-    const { error } = await supabase
-      .from('collections')
-      .update({ name: n })
-      .eq('id', id);
+    const { error } = await supabase.from('collections').update({ name: n }).eq('id', id);
     return !error;
   }
   const cols = localColsList();
