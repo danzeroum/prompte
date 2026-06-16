@@ -22,7 +22,9 @@ import { initChat } from './chat.js';
 import { isConfigured } from './supabaseClient.js';
 import { addPromptToHistory } from './promptHistory.js';
 import { renderResultPanel } from './resultPanel.js';
-import { listSavedPrompts, deleteSavedPrompt } from './savedPrompts.js';
+import { listSavedPrompts, deleteSavedPrompt, updateSavedPrompt, listCollections, createCollection, renameCollection, deleteCollection } from './savedPrompts.js';
+import { analyzePrompt, renderQualityFooter } from './promptQuality.js';
+import { renderLibraryBanner } from './library.js';
 
 // #KB: carregador lazy com cache do módulo da base de conhecimento. A promessa
 // do import() é memoizada, então knowledgeBase.js é baixado e avaliado uma única
@@ -102,6 +104,10 @@ function init() {
   // geração de prompts pelos templates segue funcionando (é 100% client-side).
   if (!isConfigured()) injectOfflineBanner();
 
+  // Banner da Biblioteca na Home
+  const libBannerHost = document.getElementById('lib-banner-host');
+  if (libBannerHost) renderLibraryBanner(libBannerHost);
+
   track('pageview', { path: location.pathname });
 
   // Envia a fila de telemetria: no load, periodicamente e ao sair da página.
@@ -132,6 +138,13 @@ function init() {
     renderResultPanel,
     listSavedPrompts,
     deleteSavedPrompt,
+    updateSavedPrompt,
+    listCollections,
+    createCollection,
+    renameCollection,
+    deleteCollection,
+    analyzePrompt,
+    renderQualityFooter,
   };
 }
 

@@ -186,6 +186,32 @@ export function injectTopbarControls(root = document) {
   const topbar = root.querySelector('.topbar');
   if (!topbar || topbar.querySelector('.pe-topbar-controls')) return;
 
+  // Nav primária: Início · Gerador · Biblioteca
+  if (!topbar.querySelector('.pe-primary-nav')) {
+    const nav = document.createElement('nav');
+    nav.className = 'pe-primary-nav';
+    nav.setAttribute('aria-label', t('nav.primary'));
+    const links = [
+      { href: '/index.html', label: t('nav.home'), paths: ['/', '/index.html'] },
+      { href: '/generator.html', label: t('nav.generator'), paths: ['/generator.html'] },
+      { href: '/library.html', label: t('nav.library'), paths: ['/library.html'] },
+    ];
+    const currentPath = location.pathname.replace(/\/$/, '') || '/index.html';
+    links.forEach(({ href, label, paths }) => {
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = label;
+      a.className = 'pe-nav-link';
+      const active = paths.some((p) => currentPath === p || (p === '/' && currentPath === ''));
+      if (active) {
+        a.classList.add('active');
+        a.setAttribute('aria-current', 'page');
+      }
+      nav.appendChild(a);
+    });
+    topbar.insertBefore(nav, topbar.firstChild);
+  }
+
   const controls = document.createElement('div');
   controls.className = 'pe-topbar-controls';
 
