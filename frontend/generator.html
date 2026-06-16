@@ -1823,12 +1823,32 @@ async function generatePrompt(id) {
   // O painel de resultado (Copiar/Editar/Salvar/Abrir na IA) vive em
   // assets/js/resultPanel.js, exposto via window.PE — fonte única usada também
   // pela home. Fallback simples caso o módulo não esteja disponível.
+  // Assistente de Qualidade: calcula o score no momento do Gerar.
+  let analysis = null;
+  if (typeof window.PE.analyzePrompt === 'function') {
+    const tpl = window.PE.generatorTemplates && window.PE.generatorTemplates[id];
+    if (tpl) {
+      const panel = document.getElementById('panel-' + id) || document;
+      const formData = window.PE.collectFormData ? window.PE.collectFormData(id, panel) : {};
+      analysis = window.PE.analyzePrompt(tpl, formData, prompt);
+    }
+  }
+
   if (typeof window.PE.renderResultPanel === 'function') {
-    window.PE.renderResultPanel(container, { id, prompt, title });
+    window.PE.renderResultPanel(container, { id, prompt, title, analysis });
   } else {
     container.innerHTML = '<div class="output-box"><div class="output-content"></div></div>';
     container.querySelector('.output-content').textContent = prompt;
   }
+
+  // Rodapé de qualidade expansível (abaixo do painel de resultado).
+  if (analysis && typeof window.PE.renderQualityFooter === 'function') {
+    let qFooter = container.querySelector('.quality');
+    if (qFooter) qFooter.remove();
+    window.PE.renderQualityFooter(container, analysis);
+    if (window.PE.track) window.PE.track('prompt_quality', { template: id, score: analysis.score, grade: analysis.grade });
+  }
+
   container.classList.add('visible');
   container.scrollIntoView({ behavior: 'smooth', block: 'start' });
   // Rec 5: leva o foco ao resultado (região aria-live) para teclado/leitor de tela.

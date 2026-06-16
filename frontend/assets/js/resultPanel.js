@@ -3,12 +3,11 @@
 // Abrir na IA (+ Exportar .md / Limpar). Os builders de URL são funções puras,
 // testáveis isoladamente.
 
-import { showToast } from './validation.js';
 import { copyText } from './common.js';
 import { t } from './i18n.js';
 import { track } from './telemetry.js';
 import { addPromptToHistory } from './promptHistory.js';
-import { savePrompt } from './savedPrompts.js';
+import { openSaveDialog } from './saveDialog.js';
 
 // ─── Builders de URL para abrir o prompt na IA (puros) ───
 // Prefill é best-effort: ChatGPT e Claude honram ?q=; Gemini não tem parâmetro
@@ -44,16 +43,19 @@ function esc(s) {
 // Renderiza o painel dentro de `container`, para o prompt `prompt` do template
 // `id` (com `title` opcional para export/salvar). Mantém as classes visuais
 // existentes (output-header/box/content, btn-copy/btn-clear).
-export function renderResultPanel(container, { id, prompt, title } = {}) {
+// `skipHistory`: não registra no histórico efêmero (usado ao abrir da Biblioteca).
+export function renderResultPanel(container, { id, prompt, title, skipHistory, analysis } = {}) {
   if (!container) return;
   const state = { text: String(prompt || ''), editing: false };
   const aiOptions = AI_PROVIDERS.map(
     (p) => `<button type="button" role="menuitem" data-ai="${p.id}">${esc(p.label)}</button>`,
   ).join('');
 
+  const scoreChipHtml = analysis ? buildScoreChipHtml(analysis) : '';
+
   container.innerHTML = `
     <div class="output-header">
-      <h3>&#x2705; <span data-i18n="result.title">${esc(t('result.title'))}</span></h3>
+      <h3>&#x2705; <span data-i18n="result.title">${esc(t('result.title'))}</span>${scoreChipHtml}</h3>
       <div class="btn-row result-actions" style="margin-top:0;">
         <button type="button" class="btn-copy" data-act="copy">&#x1f4cb; <span data-i18n="result.copy">${esc(t('result.copy'))}</span></button>
         <button type="button" class="btn-copy" data-act="edit" aria-pressed="false">&#x270f;&#xfe0f; <span data-i18n="result.edit">${esc(t('result.edit'))}</span></button>
@@ -129,20 +131,7 @@ export function renderResultPanel(container, { id, prompt, title } = {}) {
         setEditing(!state.editing);
         break;
       case 'save': {
-        const res = await savePrompt({ template: id, title, content: currentText() });
-        if (res.ok) {
-          showToast(
-            t(res.where === 'cloud' ? 'result.saved.cloud' : 'result.saved.local'),
-            '',
-            'success',
-          );
-          track('save_prompt', { template: id, where: res.where });
-        } else if (res.needsAuth) {
-          showToast(t('result.save.auth'), '', 'info');
-          if (window.PE && window.PE.ensureAuth) window.PE.ensureAuth();
-        } else if (res.error !== 'empty') {
-          showToast(t('result.save.error'), res.error || '', 'error');
-        }
+        openSaveDialog({ template: id, content: currentText(), defaultTitle: title });
         break;
       }
       case 'ai-toggle': {
@@ -161,9 +150,40 @@ export function renderResultPanel(container, { id, prompt, title } = {}) {
     }
   });
 
-  // histórico local (#M14): registra o prompt gerado, como antes.
-  addPromptToHistory(id, state.text);
+  // histórico local (#M14): registra o prompt gerado. Pula ao reabrir da Biblioteca.
+  if (!skipHistory) addPromptToHistory(id, state.text);
   return { getText: currentText };
+}
+
+function gradeColor(grade) {
+  if (grade === 'Forte' || grade === 'Strong') return 'var(--accent)';
+  if (grade === 'Bom' || grade === 'Good') return 'oklch(0.8 0.13 80)';
+  if (grade === 'Fraco' || grade === 'Weak') return 'oklch(0.66 0.19 28)';
+  return 'var(--text-3)';
+}
+
+function buildScoreChipHtml(analysis) {
+  if (!analysis) return '';
+  const { score, grade } = analysis;
+  const size = 28;
+  const r = (size - 6) / 2;
+  const c = 2 * Math.PI * r;
+  const off = c * (1 - (score || 0) / 100);
+  const col = gradeColor(grade);
+  const displayScore = grade === '—' ? '–' : score;
+  return `
+    <span class="score-chip" title="${esc(t('quality.chip.title'))}">
+      <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true" style="flex-shrink:0">
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--line-2,#333)" stroke-width="3"/>
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="3"
+          stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"
+          transform="rotate(-90 ${size / 2} ${size / 2})"
+          style="transition:stroke-dashoffset .4s ease,stroke .3s"/>
+        <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle"
+          style="font-size:${size * 0.3}px;font-weight:700;fill:var(--text);font-family:var(--font-mono,monospace)">${displayScore}</text>
+      </svg>
+      <span style="color:${col};font-weight:600;font-size:13px">${esc(grade)}</span>
+    </span>`;
 }
 
 function exportMd(id, title, text) {

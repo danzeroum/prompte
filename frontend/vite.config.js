@@ -13,6 +13,7 @@ export default defineConfig({
         generator: resolve(__dirname, 'generator.html'),
         manual: resolve(__dirname, 'manual.html'),
         admin: resolve(__dirname, 'admin.html'),
+        library: resolve(__dirname, 'library.html'),
       },
     },
   },

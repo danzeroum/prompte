@@ -67,13 +67,16 @@ describe('resultPanel — renderResultPanel', () => {
     expect(opened.startsWith('https://claude.ai/new?q=')).toBe(true);
   });
 
-  it('Salvar (offline) grava no localStorage', async () => {
+  it('Salvar abre o diálogo de salvar na biblioteca', async () => {
     const c = document.getElementById('out');
     renderResultPanel(c, { id: 'tpl', prompt: 'para salvar' });
     c.querySelector('[data-act="save"]').click();
     await new Promise((r) => setTimeout(r, 0));
-    const saved = JSON.parse(localStorage.getItem('pe:saved-prompts') || '[]');
-    expect(saved[0].content).toBe('para salvar');
-    expect(saved[0].template).toBe('tpl');
+    // O diálogo substitui o save direto — deve aparecer no DOM
+    const dialog = document.querySelector('.save-dialog');
+    expect(dialog).not.toBeNull();
+    // Campo nome pré-preenchido com o defaultTitle (undefined → vazio)
+    const nameInput = dialog && dialog.querySelector('input[type="text"]');
+    expect(nameInput).not.toBeNull();
   });
 });
