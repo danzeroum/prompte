@@ -2,9 +2,12 @@
 import Fastify from 'fastify';
 import { config } from './config.js';
 import { pool } from './db.js';
+import authRoutes from './routes/auth.js';
 
 export function build() {
   const app = Fastify({ logger: { level: config.nodeEnv === 'production' ? 'info' : 'debug' } });
+
+  app.register(authRoutes);
 
   // Healthcheck: confirma que a API sobe e o banco responde.
   app.get('/api/health', async (_req, reply) => {

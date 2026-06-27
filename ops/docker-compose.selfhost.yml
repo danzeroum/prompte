@@ -34,7 +34,9 @@ services:
     environment:
       API_PORT: 8787
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-prompte}
-      # Segredos de JWT/LLM/ADMIN entram nos PRs C/E.
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no ops/.env.selfhost}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-}
+      # Chaves de LLM (DEEPSEEK/OPENAI) entram no PR-E.
     depends_on:
       db:
         condition: service_healthy
