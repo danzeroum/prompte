@@ -62,3 +62,22 @@ O **schema do banco é aplicado automaticamente** no primeiro boot (scripts em
 
 > Dev local (sem Docker): `cd api && npm i && DATABASE_URL=... JWT_SECRET=dev npm start`
 > e `cd frontend && npm run dev` (o Vite proxia `/api` → `http://localhost:8787`).
+
+## Backup e restore
+
+O serviço `db-backup` roda `pg_dump` comprimido a cada `BACKUP_INTERVAL_SECONDS`
+(default 1 dia), mantendo os últimos `BACKUP_KEEP` (default 7) no volume `db_backups`.
+
+```bash
+# listar/baixar backups
+docker compose -f ops/docker-compose.selfhost.yml exec db-backup ls -1t /backups
+docker compose -f ops/docker-compose.selfhost.yml cp db-backup:/backups/<arquivo>.sql.gz ./
+
+# restaurar um dump (recria o schema e reaplica)
+gunzip -c <arquivo>.sql.gz | \
+  docker compose -f ops/docker-compose.selfhost.yml exec -T db \
+  psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+```
+
+> Para forçar um backup imediato: `docker compose ... restart db-backup` (ele dumpa ao subir).
+

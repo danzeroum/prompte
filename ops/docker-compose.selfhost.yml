@@ -56,11 +56,50 @@ services:
       - '80'
     networks: [internal]
 
+  # Backup do Postgres: pg_dump comprimido a cada BACKUP_INTERVAL_SECONDS, mantendo
+  # os últimos BACKUP_KEEP no volume db_backups. Restore: ver docs/SELF-HOST.md.
+  db-backup:
+    image: postgres:16-alpine
+    container_name: prompte-db-backup
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB:-prompte}
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-86400}
+      BACKUP_KEEP: ${BACKUP_KEEP:-7}
+    volumes:
+      - db_backups:/backups
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        echo "[backup] intervalo $${BACKUP_INTERVAL_SECONDS}s, retenção $${BACKUP_KEEP}";
+        while true; do
+          ts=$$(date +%Y%m%d-%H%M%S);
+          f="/backups/prompte-$${ts}.sql.gz";
+          if pg_dump | gzip > "$${f}.tmp" && mv "$${f}.tmp" "$${f}"; then
+            echo "[backup] ok $${f}";
+          else
+            echo "[backup] FALHOU em $${ts}"; rm -f "$${f}.tmp";
+          fi;
+          ls -1t /backups/prompte-*.sql.gz 2>/dev/null | tail -n +$$(( BACKUP_KEEP + 1 )) | xargs -r rm -f;
+          sleep "$${BACKUP_INTERVAL_SECONDS}";
+        done
+    networks: [internal]
+
   caddy:
     image: caddy:2-alpine
     container_name: prompte-caddy
     restart: unless-stopped
-    depends_on: [frontend, api]
+    depends_on:
+      frontend:
+        condition: service_healthy
+      api:
+        condition: service_healthy
     ports:
       - '80:80'
       - '443:443'
@@ -78,5 +117,6 @@ networks:
 
 volumes:
   db_data: # dados do Postgres persistidos entre deploys (não apagar = não perder dados)
+  db_backups: # dumps periódicos do pg_dump
   caddy_data: # certificados TLS persistidos
   caddy_config:
