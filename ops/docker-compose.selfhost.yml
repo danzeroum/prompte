@@ -36,7 +36,8 @@ services:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-prompte}
       JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no ops/.env.selfhost}
       ADMIN_EMAILS: ${ADMIN_EMAILS:-}
-      # Chaves de LLM (DEEPSEEK/OPENAI) entram no PR-E.
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
     depends_on:
       db:
         condition: service_healthy

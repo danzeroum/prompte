@@ -34,4 +34,26 @@ export const config = {
     .split(',')
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean),
+  llm: {
+    requestTimeoutMs: Number(process.env.LLM_TIMEOUT_MS || 20000),
+    cacheTtlMs: Number(process.env.LLM_CACHE_TTL_MS || 3600000),
+    rateWindow: process.env.LLM_RATE_WINDOW || '10 minutes',
+    limitAnon: Number(process.env.LLM_LIMIT_ANON || 15),
+    limitAuth: Number(process.env.LLM_LIMIT_AUTH || 60),
+    // URLs são sobrescrevíveis (útil em testes/self-host). Sem key, o provedor é ignorado.
+    providers: [
+      {
+        name: 'deepseek',
+        url: process.env.DEEPSEEK_URL || 'https://api.deepseek.com/v1/chat/completions',
+        model: process.env.DEEPSEEK_MODEL || 'deepseek-chat',
+        key: process.env.DEEPSEEK_API_KEY || '',
+      },
+      {
+        name: 'openai',
+        url: process.env.OPENAI_URL || 'https://api.openai.com/v1/chat/completions',
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+        key: process.env.OPENAI_API_KEY || '',
+      },
+    ],
+  },
 };
