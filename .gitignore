@@ -14,6 +14,9 @@ frontend/dev-dist/
 !.env.example
 !.env.harness.example
 
+# QA visual (saída de screenshots)
+scripts/visual/out/
+
 # Logs e SO
 *.log
 .DS_Store
