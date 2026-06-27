@@ -1,5 +1,9 @@
 # Deploy na VPS — frontend + domínio + HTTPS
 
+> ⚠️ **Obsoleto.** Este guia descrevia o deploy com **Supabase na nuvem**. O projeto
+> migrou para **self-host completo** (Postgres puro + backend próprio, tudo via Docker).
+> Use **[`SELF-HOST.md`](./SELF-HOST.md)**. Mantido só como referência histórica.
+
 Serve o **frontend estático** na sua VPS com **HTTPS automático** (Caddy + Let's
 Encrypt). O **Supabase continua na nuvem** — nenhum backend roda na VPS; o
 navegador fala direto com o Supabase. Por isso o deploy é só "servir arquivos".

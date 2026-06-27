@@ -1,0 +1,27 @@
+# Caddy: HTTPS automático (Let's Encrypt) + roteia para frontend e API.
+# Tudo na mesma origem: / → frontend estático; /api/* → backend próprio.
+# DOMAIN e ACME_EMAIL vêm do ambiente (ops/.env.selfhost).
+{$DOMAIN} {
+	encode zstd gzip
+	tls {$ACME_EMAIL}
+
+	# Cabeçalhos de segurança (Caddy termina o TLS).
+	header {
+		X-Frame-Options "DENY"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(), camera=(), microphone=()"
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+
+	# API própria — o backend já usa o prefixo /api, então NÃO removemos o prefixo.
+	handle /api/* {
+		reverse_proxy api:8787
+	}
+
+	# Frontend estático (nginx) para todo o resto.
+	handle {
+		reverse_proxy frontend:80
+	}
+}

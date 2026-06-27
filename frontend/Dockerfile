@@ -6,15 +6,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-# Usa os valores públicos versionados em .env.example (URL + anon key).
-# Para customizar: docker build --build-arg VITE_SUPABASE_URL=... --build-arg VITE_SUPABASE_ANON_KEY=...
-ARG VITE_SUPABASE_URL
-ARG VITE_SUPABASE_ANON_KEY
-RUN if [ -n "$VITE_SUPABASE_URL" ]; then \
-      printf 'VITE_SUPABASE_URL=%s\nVITE_SUPABASE_ANON_KEY=%s\n' "$VITE_SUPABASE_URL" "$VITE_SUPABASE_ANON_KEY" > .env; \
-    else \
-      cp -n .env.example .env || true; \
-    fi
+# A API é mesma origem (/api por padrão). Sobrescreva com --build-arg se preciso.
+ARG VITE_API_URL=/api
+RUN printf 'VITE_API_URL=%s\n' "$VITE_API_URL" > .env
 RUN npm run build
 
 FROM nginx:alpine
