@@ -38,6 +38,13 @@ services:
       ADMIN_EMAILS: ${ADMIN_EMAILS:-}
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      # Conexão GitHub (opcional; vazio = desligada).
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      GITHUB_CALLBACK_URL: ${GITHUB_CALLBACK_URL:-}
+      GITHUB_APP_BASE_URL: ${GITHUB_APP_BASE_URL:-}
+      GITHUB_SCOPE: ${GITHUB_SCOPE:-repo}
+      GITHUB_TOKEN_KEY: ${GITHUB_TOKEN_KEY:-}
     depends_on:
       db:
         condition: service_healthy

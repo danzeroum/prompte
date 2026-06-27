@@ -34,6 +34,23 @@ export const config = {
     .split(',')
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean),
+  // Conexão GitHub (OAuth App do BuildToValue). Sem clientId/secret a feature
+  // fica desligada (rotas respondem 503) — o resto da API segue normal.
+  github: {
+    clientId: process.env.GITHUB_CLIENT_ID || '',
+    clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+    // URL absoluta do callback (deve bater com a registrada na OAuth App).
+    // Ex.: https://prompte.buildtovalue.cloud/api/github/callback
+    callbackUrl: process.env.GITHUB_CALLBACK_URL || '',
+    // Para onde o callback redireciona o navegador ao terminar (página do gerador).
+    appBaseUrl: (process.env.GITHUB_APP_BASE_URL || '').replace(/\/$/, ''),
+    // 'repo' lê repositórios privados; 'public_repo' só públicos.
+    scope: process.env.GITHUB_SCOPE || 'repo',
+    apiBase: process.env.GITHUB_API_URL || 'https://api.github.com',
+    authBase: process.env.GITHUB_AUTH_URL || 'https://github.com/login/oauth',
+    // Chave dedicada p/ cifrar o token em repouso (fallback: JWT_SECRET).
+    tokenKey: process.env.GITHUB_TOKEN_KEY || '',
+  },
   llm: {
     requestTimeoutMs: Number(process.env.LLM_TIMEOUT_MS || 20000),
     cacheTtlMs: Number(process.env.LLM_CACHE_TTL_MS || 3600000),

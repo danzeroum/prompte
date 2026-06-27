@@ -33,6 +33,7 @@ import {
 } from './savedPrompts.js';
 import { analyzePrompt, renderQualityFooter } from './promptQuality.js';
 import { renderLibraryBanner } from './library.js';
+import { initGithubFields, handleGithubCallbackParam } from './githubPicker.js';
 
 // #KB: carregador lazy com cache do módulo da base de conhecimento. A promessa
 // do import() é memoizada, então knowledgeBase.js é baixado e avaliado uma única
@@ -111,6 +112,12 @@ function init() {
   // Banner da Biblioteca na Home
   const libBannerHost = document.getElementById('lib-banner-host');
   if (libBannerHost) renderLibraryBanner(libBannerHost);
+
+  // Conexão GitHub: aumenta os campos de caminho/repo no gerador com um seletor
+  // de repositórios/arquivos e trata o retorno do OAuth (?github=...). Aditivo:
+  // se não houver painéis de template, initGithubFields é no-op.
+  initGithubFields();
+  handleGithubCallbackParam();
 
   track('pageview', { path: location.pathname });
 

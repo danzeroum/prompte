@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js';
 import dataRoutes from './routes/data.js';
 import llmRoutes from './routes/llm.js';
 import metricsRoutes from './routes/metrics.js';
+import githubRoutes from './routes/github.js';
 
 export function build() {
   const app = Fastify({ logger: { level: config.nodeEnv === 'production' ? 'info' : 'debug' } });
@@ -14,6 +15,7 @@ export function build() {
   app.register(dataRoutes);
   app.register(llmRoutes);
   app.register(metricsRoutes);
+  app.register(githubRoutes);
 
   // Healthcheck: confirma que a API sobe e o banco responde.
   app.get('/api/health', async (_req, reply) => {
