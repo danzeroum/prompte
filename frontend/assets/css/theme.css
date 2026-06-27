@@ -893,13 +893,18 @@
   font-weight: 600;
 }
 
+/* A nav primária da topbar não cabe ao lado do título + controles enquanto a
+   sidebar das páginas internas continua visível (~768–900px) → esconde antes de
+   estourar a largura. A navegação segue acessível pela sidebar/menu de cada página. */
+@media (max-width: 900px) {
+  .pe-primary-nav {
+    display: none;
+  }
+}
+
 @media (max-width: 680px) {
   .topbar {
     padding: 12px 16px;
     gap: 8px;
-  }
-
-  .pe-primary-nav {
-    display: none;
   }
 }

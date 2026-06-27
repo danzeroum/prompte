@@ -119,6 +119,7 @@ a.sb-item::after {
 .main {
   margin-left: var(--sidebar-w);
   flex: 1;
+  min-width: 0; /* flex item encolhe abaixo do conteúdo → evita overflow horizontal */
   min-height: 100vh;
 }
 .topbar {
@@ -515,6 +516,7 @@ pre code {
 .comp-box {
   border-radius: 10px;
   padding: 18px;
+  min-width: 0; /* item do grid encolhe → o <pre> interno rola em vez de esticar a coluna */
 }
 .comp-bad {
   background: rgba(248, 81, 73, 0.06);

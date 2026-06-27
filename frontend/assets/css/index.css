@@ -257,6 +257,7 @@ a.sb-item::after {
 .main {
   margin-left: var(--sidebar-w);
   flex: 1;
+  min-width: 0; /* flex item encolhe abaixo do conteúdo → evita overflow horizontal */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
