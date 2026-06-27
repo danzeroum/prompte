@@ -13,6 +13,7 @@ frontend/dev-dist/
 .env.*
 !.env.example
 !.env.harness.example
+!.env.selfhost.example
 
 # QA visual (saída de screenshots)
 scripts/visual/out/

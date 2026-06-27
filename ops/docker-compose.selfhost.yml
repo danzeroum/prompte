@@ -1,0 +1,33 @@
+# Self-host completo na VPS: Postgres puro + backend próprio + frontend + Caddy.
+# Construído incrementalmente (PR-A: db). PRs seguintes acrescentam api/frontend/caddy.
+#
+# Uso (quando completo):
+#   cp ops/.env.selfhost.example ops/.env.selfhost   # preencha
+#   docker compose --env-file ops/.env.selfhost -f ops/docker-compose.selfhost.yml up -d --build
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: prompte-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?defina POSTGRES_USER no ops/.env.selfhost}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no ops/.env.selfhost}
+      POSTGRES_DB: ${POSTGRES_DB:-prompte}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # Os scripts em db/init rodam UMA vez, quando o volume está vazio (banco limpo).
+      - ../db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Sem `ports`: o banco fica acessível só na rede interna do compose (a api fala com db:5432).
+    networks: [internal]
+
+networks:
+  internal:
+
+volumes:
+  db_data: # dados do Postgres persistidos entre deploys (não apagar = não perder dados)
