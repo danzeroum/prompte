@@ -1,0 +1,96 @@
+/* ============================================================
+   sistema.css — componentes .pe-* + telas sistêmicas (parte 1: base + componentes)
+   Consome tokens.css. Vocabulário .pe-* alinhado ao stack real (Vite vanilla).
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; }
+::selection { background: var(--accent-soft); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 5px; }
+svg.ic { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+/* ---------- botões ---------- */
+.pe-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 42px; padding: 0 20px; border: none; border-radius: var(--r-sm);
+  background: var(--accent); color: var(--accent-ink);
+  font-family: var(--font-display); font-weight: 600; font-size: 14.5px;
+  transition: filter var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.pe-btn:hover { filter: brightness(1.06); }
+.pe-btn:active { transform: translateY(1px); }
+.pe-btn .ic { font-size: 17px; }
+.pe-btn[disabled], .pe-btn.is-loading { opacity: .6; pointer-events: none; }
+.pe-btn-block { width: 100%; }
+
+.pe-btn-secondary {
+  background: var(--bg-3); color: var(--text); border: 1px solid var(--line);
+}
+.pe-btn-secondary:hover { filter: none; border-color: var(--line-2); background: var(--bg-2); }
+.pe-btn-ghost { background: transparent; color: var(--text-2); }
+.pe-btn-ghost:hover { filter: none; color: var(--text); background: var(--bg-2); }
+.pe-btn-danger { background: oklch(0.55 0.18 25); color: #fff; }
+
+.pe-icon-btn {
+  width: 38px; height: 38px; display: inline-grid; place-items: center;
+  background: transparent; color: var(--text-2);
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  transition: color var(--dur), border-color var(--dur), background var(--dur);
+}
+.pe-icon-btn:hover { color: var(--text); border-color: var(--line-2); background: var(--bg-2); }
+.pe-icon-btn .ic { font-size: 18px; }
+
+/* ---------- spinner ---------- */
+.pe-spinner {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--accent-line); border-top-color: var(--accent);
+  animation: pe-spin .7s linear infinite;
+}
+.pe-spinner.lg { width: 34px; height: 34px; border-width: 3px; }
+@keyframes pe-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .pe-spinner { animation-duration: 1.6s; } }
+
+/* ---------- inputs ---------- */
+.pe-field { display: flex; flex-direction: column; gap: 7px; }
+.pe-label { font-size: var(--fs-sm); font-weight: 600; color: var(--text); display: flex; gap: 6px; align-items: center; }
+.pe-label .req { color: var(--accent); }
+.pe-help { font-size: 12.5px; color: var(--text-3); }
+.pe-input {
+  width: 100%; height: 44px; padding: 0 14px; appearance: none; -webkit-appearance: none;
+  background: var(--bg-inset); border: 1px solid var(--line); border-radius: var(--r-sm);
+  color: var(--text); font-family: var(--font-ui); font-size: 14.5px;
+  transition: border-color var(--dur), box-shadow var(--dur);
+}
+.pe-input::placeholder { color: var(--text-3); }
+.pe-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.pe-input.pe-invalid { border-color: oklch(0.62 0.2 25); }
+.pe-invalid-msg { font-size: 12.5px; color: oklch(0.7 0.18 25); display: flex; align-items: center; gap: 6px; }
+
+/* ---------- card base ---------- */
+.pe-card {
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- badges / chips ---------- */
+.pe-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 11.5px; font-weight: 600;
+  padding: 4px 10px; border-radius: var(--r-pill);
+  border: 1px solid var(--line); color: var(--text-2); background: var(--bg-3);
+}
+.pe-chip.accent { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+.pe-chip.warn { color: oklch(0.78 0.15 70); border-color: oklch(0.5 0.12 70); background: oklch(0.3 0.06 70 / .4); }
+.pe-chip.danger { color: oklch(0.72 0.16 25); border-color: oklch(0.5 0.14 25); background: oklch(0.3 0.08 25 / .4); }
+.pe-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }

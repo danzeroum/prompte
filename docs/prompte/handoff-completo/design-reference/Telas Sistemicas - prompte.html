@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Telas Sistêmicas — prompte</title>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#1a1812" />
+  <rect x="22" y="30" width="56" height="40" rx="7" fill="none" stroke="#C9F24D" stroke-width="3" />
+  <circle cx="50" cy="50" r="9" fill="#C9F24D" />
+</svg>
+</template>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="telas-sistemicas/tokens.css" />
+<link rel="stylesheet" href="telas-sistemicas/sistema.css" />
+<link rel="stylesheet" href="telas-sistemicas/shell.css" />
+<link rel="stylesheet" href="telas-sistemicas/telas2.css" />
+<link rel="stylesheet" href="telas-sistemicas/telas3.css" />
+</head>
+<body>
+
+<!-- ===================== SPRITE DE ÍCONES SVG ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 10v4m0 3.5h.01"/></symbol>
+  <symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></symbol>
+  <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M2 4 22 20"/><path d="M5 12.5a11 11 0 0 1 4-2.5m4-.4a11 11 0 0 1 6 2.9"/><path d="M8.5 16a6 6 0 0 1 3-1.6m4 .8a6 6 0 0 1 1 .8"/><path d="M12 20h.01"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 3v5h5"/><path d="M3.5 13a9 9 0 1 0 2.5-8L3 8"/></symbol>
+  <symbol id="i-library" viewBox="0 0 24 24"><rect x="3" y="4" width="6" height="16" rx="1.5"/><rect x="11" y="4" width="6" height="16" rx="1.5"/><path d="m20 6 1.6 13.6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17 4 12l6-5m-6 5h11"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4 3 7 7 9 4-2 7-5 7-9V6l-7-3Z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5m6 6-6-6 6-6"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 14 4-4"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L12 17.8 6.2 21.4l1.6-6.6L2.6 9.8l6.8-.5L12 3Z"/></symbol>
+  <symbol id="i-star-fill" viewBox="0 0 24 24"><path d="m12 3 2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L12 17.8 6.2 21.4l1.6-6.6L2.6 9.8l6.8-.5L12 3Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 11.5V5a2 2 0 0 1 2-2h6.5L21 12.5 12.5 21 3 11.5Z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M5 21h14"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 21V9m-5 5 5-5 5 5"/><path d="M5 3h14"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-1 2-2 0-1.5 1-2 2-2h1a4 4 0 0 0 4-4c0-5-4-8-9-8Z"/><circle cx="7.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="16.5" cy="11" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5.5a3.5 3.5 0 0 1 0 6.8M21 20a6 6 0 0 0-4-5.6"/></symbol>
+  <symbol id="i-trending" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8"/><path d="M17 7h4v4"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5A2.5 2.5 0 0 0 4 20.5V4.5Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v4H6.5A2.5 2.5 0 0 1 4 19.5"/></symbol>
+  <symbol id="i-message" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5Z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 3 11l7 2 2 7 9-17Z"/><path d="m10 13 4-4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5 10.1 11.9 4.5 10l5.6-1.4L12 3Z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4v16l13-8L7 4Z"/></symbol>
+</svg>
+
+<div class="app">
+  <!-- ÍNDICE -->
+  <aside class="idx">
+    <div class="idx-brand">
+      <span class="idx-mark">p</span>
+      <div><b>prompte</b><span>telas sistêmicas</span></div>
+    </div>
+
+    <div class="idx-sec">Telas novas</div>
+    <button class="idx-item" data-screen="prompt-detail"><svg class="ic"><use href="#i-library"/></svg> Detalhe do prompt</button>
+    <button class="idx-item" data-screen="onboarding"><svg class="ic"><use href="#i-bolt"/></svg> Onboarding</button>
+    <button class="idx-item" data-screen="prefs"><svg class="ic"><use href="#i-sliders"/></svg> Preferências</button>
+    <button class="idx-item" data-screen="admin"><svg class="ic"><use href="#i-chart"/></svg> Admin (dashboard)</button>
+    <button class="idx-item" data-screen="manual"><svg class="ic"><use href="#i-book"/></svg> Manual (refino)</button>
+    <button class="idx-item" data-screen="navmobile"><svg class="ic"><use href="#i-phone"/></svg> Nav mobile</button>
+    <button class="idx-item" data-screen="chat"><svg class="ic"><use href="#i-message"/></svg> Chat / assistente</button>
+
+    <div class="idx-sec">Conta / Perfil</div>
+    <button class="idx-item on" data-screen="auth-out"><svg class="ic"><use href="#i-mail"/></svg> Entrar (deslogado)</button>
+    <button class="idx-item" data-screen="auth-sent"><svg class="ic"><use href="#i-check-circle"/></svg> Link enviado</button>
+    <button class="idx-item" data-screen="auth-verify"><svg class="ic"><use href="#i-clock"/></svg> Verificando</button>
+    <button class="idx-item" data-screen="auth-in"><svg class="ic"><use href="#i-user"/></svg> Logado</button>
+    <button class="idx-item" data-screen="auth-expired"><svg class="ic"><use href="#i-shield"/></svg> Sessão expirada</button>
+
+    <div class="idx-sec">Kit de estados</div>
+    <button class="idx-item" data-screen="st-empty"><svg class="ic"><use href="#i-library"/></svg> Vazio (empty)</button>
+    <button class="idx-item" data-screen="st-loading"><svg class="ic"><use href="#i-gauge"/></svg> Carregando (skeleton)</button>
+    <button class="idx-item" data-screen="st-error"><svg class="ic"><use href="#i-alert"/></svg> Erro + retry</button>
+    <button class="idx-item" data-screen="st-404"><svg class="ic"><use href="#i-compass"/></svg> 404 / rota inválida</button>
+    <button class="idx-item" data-screen="st-offline"><svg class="ic"><use href="#i-wifi-off"/></svg> Offline</button>
+    <button class="idx-item" data-screen="st-rate"><svg class="ic"><use href="#i-clock"/></svg> Rate limit (429)</button>
+    <button class="idx-item" data-screen="st-toasts"><svg class="ic"><use href="#i-info"/></svg> Toasts</button>
+  </aside>
+
+  <!-- CANVAS -->
+  <main class="canvas">
+    <div class="canvas-bar">
+      <div class="canvas-title">
+        <h1 id="cTitle">Entrar</h1>
+        <p id="cDesc">Conta / Perfil · estado deslogado</p>
+      </div>
+      <div class="canvas-tools">
+        <div class="seg" id="device">
+          <button data-dev="desktop" class="on"><svg class="ic"><use href="#i-monitor"/></svg> Desktop</button>
+          <button data-dev="mobile"><svg class="ic"><use href="#i-phone"/></svg> Mobile</button>
+        </div>
+        <button class="pe-icon-btn" id="themeBtn" aria-label="Alternar tema"><svg class="ic"><use href="#i-sun"/></svg></button>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="frame">
+        <div class="fr-top">
+          <span class="mk">p</span><b>prompte</b><span class="sp"></span>
+          <button class="pe-icon-btn" aria-label="tema"><svg class="ic"><use href="#i-moon"/></svg></button>
+          <span class="pe-chip" id="frChip" style="display:none"></span>
+        </div>
+        <div class="fr-body" id="frBody"><!-- screens injected --></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="telas-sistemicas/screens.js"></script>
+</body>
+</html>

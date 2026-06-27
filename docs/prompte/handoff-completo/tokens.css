@@ -1,0 +1,111 @@
+/* ============================================================
+   tokens.css — Design tokens do prompte (proposta de layout)
+   Fonte da verdade: assets/prompte.css do protótipo.
+   Uso: importar ANTES das folhas de página no Vite/HTML existente.
+        <link rel="stylesheet" href="assets/css/tokens.css">
+   Cores em oklch (P3-safe, degrada bem). Troca de tema = classe
+   .theme-light na raiz. Acento e tipografia são overridáveis em runtime
+   (era o que os Tweaks faziam no protótipo) — basta sobrescrever
+   --accent / --font-display / --font-ui.
+   ============================================================ */
+
+:root {
+  color-scheme: dark;
+
+  /* ---------- Tipografia ---------- */
+  --font-display: 'Space Grotesk', system-ui, sans-serif; /* títulos, wordmark, CTAs */
+  --font-ui:      'Space Grotesk', system-ui, sans-serif; /* corpo / interface       */
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', monospace; /* prompt, rótulos técnicos, kbd */
+
+  /* Escala de tamanho (fluida onde faz sentido). Piso de 12px p/ texto funcional. */
+  --fs-display: clamp(32px, 5.2vw, 56px);  /* hero da home            */
+  --fs-h2:      clamp(24px, 3.2vw, 38px);  /* títulos de seção/template */
+  --fs-h3:      20px;                       /* subtítulos              */
+  --fs-lg:      17px;                       /* lead                    */
+  --fs-base:    15px;                       /* corpo / interface       */
+  --fs-sm:      13px;                       /* labels, ajuda           */
+  --fs-xs:      12px;                       /* eyebrows, meta          */
+  --fs-mono:    13px;                       /* prévia/resultado do prompt */
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+
+  --lh-tight:  1.1;   /* títulos       */
+  --lh-snug:   1.4;   /* labels        */
+  --lh-base:   1.55;  /* corpo         */
+  --lh-mono:   1.72;  /* prompt        */
+  --tracking-tight: -0.02em;
+
+  /* ---------- Acento (sinal único) ---------- */
+  --accent:      oklch(0.86 0.185 128);                            /* lime — padrão */
+  --accent-ink:  #17160d;                                          /* texto sobre o acento */
+  --accent-soft: color-mix(in oklch, var(--accent) 16%, transparent); /* fills de estado ativo */
+  --accent-line: color-mix(in oklch, var(--accent) 42%, transparent); /* bordas/sublinhados   */
+
+  /* Opções de acento (curadas — mesmo papel, hue diferente).
+     Trocar = redefinir --accent com um destes valores. */
+  --accent-lime:   #C9F24D;
+  --accent-amber:  #FBBF45;
+  --accent-coral:  #FF8264;
+  --accent-violet: #C9A6FF;
+  --accent-teal:   #6FE3D2;
+
+  /* ---------- Superfícies & texto (tema escuro — tinta quente) ---------- */
+  --bg:        oklch(0.165 0.006 70);  /* fundo da aplicação      */
+  --bg-2:      oklch(0.205 0.007 70);  /* painéis / cards          */
+  --bg-3:      oklch(0.25 0.008 70);   /* elementos elevados       */
+  --bg-inset:  oklch(0.13 0.006 70);   /* inputs, blocos de código */
+  --line:      oklch(0.30 0.008 70);   /* bordas / divisores       */
+  --line-2:    oklch(0.40 0.010 70);   /* bordas de ênfase         */
+  --text:      oklch(0.95 0.005 85);   /* texto primário           */
+  --text-2:    oklch(0.745 0.008 85);  /* texto secundário (AA)    */
+  --text-3:    oklch(0.58 0.008 85);   /* texto terciário / dicas  */
+
+  /* ---------- Espaçamento (escala de 4px) ---------- */
+  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 20px;  --sp-6: 24px;  --sp-8: 32px;  --sp-10: 40px;
+  --sp-14: 56px;
+
+  /* ---------- Raios ---------- */
+  --r-sm:   9px;    /* inputs, chips, botões pequenos */
+  --r:      14px;   /* cards, painéis                 */
+  --r-lg:   18px;   /* modais                         */
+  --r-pill: 999px;  /* badges, toggles                */
+
+  /* ---------- Sombras ---------- */
+  --shadow:    0 18px 50px -16px rgba(0, 0, 0, 0.65);
+  --shadow-sm: 0 4px 16px -6px rgba(0, 0, 0, 0.5);
+
+  /* ---------- Layout ---------- */
+  --maxw:      1320px;  /* largura máxima do conteúdo */
+  --topbar-h:  60px;    /* altura da barra de topo    */
+  --rail-w:    264px;   /* largura da navegação lateral */
+
+  /* ---------- Motion ---------- */
+  --dur-fast: 0.12s;
+  --dur:      0.15s;
+  --ease:     ease;
+  /* NB: nunca anime `background` via `transition: all` quando o valor vier de
+     custom property — use listas explícitas (ex.: color, border-color, box-shadow).
+     E em controles de formulário use appearance:none p/ repaint confiável na troca de tema. */
+}
+
+/* ---------- Tema claro ---------- */
+.theme-light {
+  color-scheme: light;
+
+  --accent-ink: #17160d;
+  --bg:        oklch(0.985 0.004 90);
+  --bg-2:      oklch(0.965 0.006 90);
+  --bg-3:      oklch(0.93 0.008 90);
+  --bg-inset:  oklch(1 0 0);
+  --line:      oklch(0.89 0.008 90);
+  --line-2:    oklch(0.80 0.012 90);
+  --text:      oklch(0.24 0.012 80);
+  --text-2:    oklch(0.46 0.012 80);
+  --text-3:    oklch(0.60 0.012 80);
+  --shadow:    0 18px 50px -18px rgba(40, 36, 24, 0.22);
+  --shadow-sm: 0 4px 16px -6px rgba(40, 36, 24, 0.14);
+}
