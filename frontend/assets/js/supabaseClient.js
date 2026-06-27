@@ -6,10 +6,24 @@
 let _client;
 let _resolved = false;
 
+// Resolve a URL configurada. Aceita um caminho relativo (ex.: "/sb") e o ancora
+// em location.origin, de modo que o cliente fale sempre com a MESMA ORIGEM (o
+// servidor interno) e o proxy reverso encaminhe ao Supabase — nunca *.supabase.co
+// direto. URLs absolutas (https://...) seguem sendo usadas como estão.
+function resolveUrl(raw) {
+  const value = String(raw || '').trim();
+  if (!value) return '';
+  if (/^https?:\/\//i.test(value)) return value;
+  if (value.startsWith('/') && typeof location !== 'undefined') {
+    return location.origin + value.replace(/\/+$/, '');
+  }
+  return value;
+}
+
 export function supabaseConfig() {
   const env = (typeof import.meta !== 'undefined' && import.meta.env) || {};
   return {
-    url: env.VITE_SUPABASE_URL || '',
+    url: resolveUrl(env.VITE_SUPABASE_URL),
     key: env.VITE_SUPABASE_ANON_KEY || '',
   };
 }

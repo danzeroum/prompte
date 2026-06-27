@@ -16,5 +16,15 @@
 		-Server
 	}
 
+	# Proxy interno para o Supabase (auth/rest/functions). O navegador fala só com
+	# este domínio (mesma origem); o Caddy encaminha para o Supabase reescrevendo o
+	# Host para o gateway roteá-lo. Assim nenhuma requisição vai direto a *.supabase.co.
+	# SUPABASE_HOST vem do ambiente (ops/.env), ex.: tqohthmeneaweuozuref.supabase.co.
+	handle_path /sb/* {
+		reverse_proxy https://{$SUPABASE_HOST} {
+			header_up Host {$SUPABASE_HOST}
+		}
+	}
+
 	reverse_proxy frontend:80
 }
