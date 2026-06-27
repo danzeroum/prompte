@@ -104,6 +104,7 @@
   align-items: center;
   gap: 8px;
   margin-left: auto;
+  flex-shrink: 0; /* nunca encolher/cortar os controles (bug da topbar na library) */
 }
 .pe-icon-btn {
   display: inline-flex;
@@ -807,6 +808,9 @@
   color: var(--text);
   white-space: nowrap;
   text-decoration: none;
+  min-width: 0; /* permite truncar em vez de empurrar os controles para fora */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Botão primário base (acento). Modais sobrescrevem via .pe-modal .pe-btn. */
