@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 0 80 64" width="160" height="128" role="img" aria-label="Danzeroum">
+  <g fill="none" stroke="#e8772f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-8 21 L1 26"></path><path d="M1 26 L10 31"></path>
+    <path d="M-8 43 L1 38"></path><path d="M1 38 L10 33"></path>
+    <path d="M49 32 L60 19"></path><path d="M49 32 H62"></path><path d="M49 32 L60 45"></path>
+  </g>
+  <g fill="#e8772f">
+    <circle cx="-9" cy="20" r="2.4"></circle><circle cx="-9" cy="44" r="2.4"></circle>
+    <circle cx="62" cy="18" r="2.6"></circle><circle cx="64" cy="32" r="2.6"></circle><circle cx="62" cy="46" r="2.6"></circle>
+  </g>
+  <path d="M10 11 H28 C41 11 49 20.5 49 32 C49 43.5 40 53 28 53 H10 Z" fill="#e8772f"></path>
+  <path d="M27 18 L37 21.6 V31 C37 38 32.5 42.4 27 45 C21.5 42.4 17 38 17 31 V21.6 Z" fill="#fbf7f1" stroke="#24324a" stroke-width="2.4" stroke-linejoin="round"></path>
+  <path d="M21.8 31 L25.2 34.4 L31 28" fill="none" stroke="#24324a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

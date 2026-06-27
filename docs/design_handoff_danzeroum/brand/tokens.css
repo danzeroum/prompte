@@ -1,0 +1,75 @@
+/* ============================================================
+   Danzeroum — Design Tokens
+   Paleta "golden hour": terracota + marinho sobre neutros quentes.
+   Use estes valores ao recriar o portfólio no seu ambiente.
+   ============================================================ */
+
+:root {
+  /* ---- Neutros quentes (modo claro) ---- */
+  --bg:        #fbf7f1; /* fundo da página */
+  --bg-2:      #f4ece1; /* superfícies / cartões alt */
+  --ink:       #231a14; /* títulos / texto forte */
+  --text:      #4a3d33; /* corpo */
+  --muted:     #7a6a5b; /* texto secundário */
+  --faint:     #9c8a78; /* rótulos / mono */
+  --line:      #e6dccd; /* divisórias */
+  --line-2:    #d3c4ae; /* bordas mais fortes */
+
+  /* ---- Marca ---- */
+  --brand:     #bd4e1c; /* terracota (botões, D do logo) */
+  --brand-ink: #b3470f; /* terracota p/ texto — contraste AA sobre creme */
+  --accent:    #0f7d6b; /* teal de mar (badges, status) */
+  --on-brand:  #fff8f1; /* texto sobre a cor de marca */
+
+  /* ---- Logo (adaptável ao tema) ---- */
+  --logo-d:       #bd4e1c; /* corpo do D */
+  --logo-shield:  #24324a; /* escudo (frente) */
+  --logo-circuit: #24324a; /* trilhas + nós */
+  --logo-ink:     #fbf7f1; /* contorno do escudo + check */
+
+  /* ---- Métricas ---- */
+  --maxw: 1080px;
+  --gut:  clamp(22px, 5vw, 40px);
+  --ease: cubic-bezier(.2,.7,.3,1);
+
+  /* ---- Raios ---- */
+  --radius-sm: 5px;
+  --radius:    12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+/* ---- Modo escuro (marrom-carvão quente) ---- */
+html.dark {
+  --bg:        #141009;
+  --bg-2:      #1d160e;
+  --ink:       #f6ede1;
+  --text:      #d6c6b4;
+  --muted:     #a8957f;
+  --faint:     #82705d;
+  --line:      #2e2418;
+  --line-2:    #41331f;
+
+  --brand:     #e8772f;
+  --brand-ink: #f0934d;
+  --accent:    #36c0a4;
+  --on-brand:  #1a1106;
+
+  --logo-d:       #e8772f;
+  --logo-shield:  #fbf7f1;
+  --logo-circuit: #e8772f;
+  --logo-ink:     #24324a;
+}
+
+/* ============================================================
+   TIPOGRAFIA
+   Família: IBM Plex Sans (corpo/títulos) + IBM Plex Mono (rótulos)
+   Google Fonts: IBM+Plex+Sans:wght@400;500;600;700 / IBM+Plex+Mono:wght@400;500
+   ------------------------------------------------------------
+   Escala usada (clamp = fluido mobile→desktop):
+     h1 hero ....... clamp(2.3rem, 6.4vw, 3.8rem) / 600 / -0.03em / line 1.06
+     h2 seção ...... clamp(1.6rem, 3.6vw, 2.2rem) / 600 / -0.025em / line 1.12
+     h3 card ....... 1.28rem / 600 / -0.015em
+     corpo ......... 1rem–1.08rem / 400 / line 1.65
+     rótulo (mono) . 0.72rem / 500 / letter 0.14em / UPPERCASE
+   ============================================================ */

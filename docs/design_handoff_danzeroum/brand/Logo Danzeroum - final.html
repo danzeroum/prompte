@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="design_doc_mode" content="canvas">
+<title>Danzeroum — Logo final</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf7f1; --ink:#231a14; --muted:#7a6a5b; --faint:#9c8a78;
+    --line:#e6dccd; --brand:#bd4e1c; --navy:#24324a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'IBM Plex Sans',sans-serif;background:#efe7da;color:var(--ink)}
+  .frame{position:absolute;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:36px 38px;box-shadow:0 30px 70px -40px rgba(60,40,20,.5)}
+  .ftitle{font-family:'IBM Plex Mono',monospace;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+  .fname{font-size:1.4rem;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+  .fdesc{font-size:.93rem;color:var(--muted);max-width:540px;line-height:1.55;margin-bottom:26px}
+  .row{display:flex;align-items:center;gap:34px;flex-wrap:wrap}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .clabel{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .box{display:grid;place-items:center;overflow:hidden}
+  .lockup{display:flex;align-items:center;gap:14px}
+  .wordmark{font-size:1.9rem;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+  .wordmark .z{color:var(--brand)}
+  h1.page{position:absolute;font-size:2.2rem;font-weight:700;letter-spacing:-.03em}
+  .page-sub{position:absolute;font-size:1rem;color:var(--muted);max-width:680px;line-height:1.6}
+  .reco{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#0f7d6b;border:1px solid #0f7d6b55;background:#0f7d6b14;padding:3px 8px;border-radius:5px;margin-left:8px;vertical-align:middle}
+</style>
+</head>
+<body>
+
+<h1 class="page" style="left:60px;top:48px">Danzeroum — logo final</h1>
+<p class="page-sub" style="left:62px;top:96px">Híbrido: <b>entrada simétrica</b> (duas fontes convergem à esquerda) → <b>escudo-D</b> processa → <b>leque de 3 caminhos</b> à direita. D terracota, escudo marinho.</p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- claro: circuito + escudo marinho, D terracota, check creme -->
+  <symbol id="logo" viewBox="-10 0 80 64">
+    <g stroke="#24324a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <!-- entrada simétrica (esquerda) -->
+      <path d="M-8 21 L1 26 M-8 43 L1 38"/>
+      <path d="M1 26 L10 31 M1 38 L10 33"/>
+      <!-- leque de saída (direita) -->
+      <path d="M49 32 L60 19 M49 32 H62 M49 32 L60 45"/>
+    </g>
+    <g fill="#24324a">
+      <circle cx="-9" cy="20" r="2.4"/><circle cx="-9" cy="44" r="2.4"/>
+      <circle cx="62" cy="18" r="2.6"/><circle cx="64" cy="32" r="2.6"/><circle cx="62" cy="46" r="2.6"/>
+    </g>
+    <!-- D terracota -->
+    <path d="M10 11 H28 C41 11 49 20.5 49 32 C49 43.5 40 53 28 53 H10 Z" fill="#bd4e1c"/>
+    <!-- escudo marinho (frente) -->
+    <path d="M27 18 L37 21.6 V31 C37 38 32.5 42.4 27 45 C21.5 42.4 17 38 17 31 V21.6 Z" fill="#24324a" stroke="#fbf7f1" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M21.8 31 L25.2 34.4 L31 28" fill="none" stroke="#fbf7f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- escuro (avatar marinho / header dark): tudo terracota claro, escudo creme -->
+  <symbol id="logoDark" viewBox="-10 0 80 64">
+    <g stroke="#e8772f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M-8 21 L1 26 M-8 43 L1 38"/>
+      <path d="M1 26 L10 31 M1 38 L10 33"/>
+      <path d="M49 32 L60 19 M49 32 H62 M49 32 L60 45"/>
+    </g>
+    <g fill="#e8772f">
+      <circle cx="-9" cy="20" r="2.4"/><circle cx="-9" cy="44" r="2.4"/>
+      <circle cx="62" cy="18" r="2.6"/><circle cx="64" cy="32" r="2.6"/><circle cx="62" cy="46" r="2.6"/>
+    </g>
+    <path d="M10 11 H28 C41 11 49 20.5 49 32 C49 43.5 40 53 28 53 H10 Z" fill="#e8772f"/>
+    <path d="M27 18 L37 21.6 V31 C37 38 32.5 42.4 27 45 C21.5 42.4 17 38 17 31 V21.6 Z" fill="#fbf7f1" stroke="#24324a" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M21.8 31 L25.2 34.4 L31 28" fill="none" stroke="#24324a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+</svg>
+
+<!-- ===== ESCALAS ===== -->
+<div class="frame" style="left:60px;top:188px;width:760px">
+  <div class="ftitle">Logo principal</div>
+  <div class="fname">Entrada simétrica + leque <span class="reco">final</span></div>
+  <div class="fdesc">Duas fontes convergem à esquerda, o escudo-D processa/protege, e a requisição se ramifica em 3 caminhos à direita. Funciona de 96px ao favicon de 24px, em fundo claro e escuro.</div>
+  <div class="row">
+    <div class="cell"><div class="box" style="width:120px;height:96px;background:#f4ece1;border-radius:18px"><svg width="116" height="84" viewBox="-10 0 80 64"><use href="#logo"/></svg></div><span class="clabel">96px</span></div>
+    <div class="cell"><div class="box" style="width:64px;height:64px;background:#24324a;border-radius:50%"><svg width="58" height="46" viewBox="-10 0 80 64"><use href="#logoDark"/></svg></div><span class="clabel">Avatar</span></div>
+    <div class="cell"><div class="box" style="width:36px;height:24px;background:#f4ece1;border-radius:5px"><svg width="34" height="22" viewBox="-10 0 80 64"><use href="#logo"/></svg></div><span class="clabel">24px</span></div>
+    <div class="cell"><div class="box" style="width:64px;height:64px;background:#bd4e1c;border-radius:14px"><svg width="58" height="46" viewBox="-10 0 80 64"><use href="#logoDark"/></svg></div><span class="clabel">Selo</span></div>
+  </div>
+</div>
+
+<!-- ===== LOCKUP ===== -->
+<div class="frame" style="left:60px;top:476px;width:760px">
+  <div class="ftitle">Lockup horizontal</div>
+  <div class="fname" style="margin-bottom:22px">Logo + nome</div>
+  <div style="display:flex;flex-direction:column;gap:22px">
+    <div class="lockup"><svg width="58" height="46" viewBox="-10 0 80 64"><use href="#logo"/></svg><span class="wordmark">dan<span class="z">zero</span>um</span></div>
+    <div class="lockup" style="background:#1a130b;padding:18px 24px;border-radius:14px"><svg width="58" height="46" viewBox="-10 0 80 64"><use href="#logoDark"/></svg><span class="wordmark" style="color:#f6ede1">dan<span class="z">zero</span>um</span></div>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<div class="frame" style="left:860px;top:188px;width:300px">
+  <div class="ftitle">No header</div>
+  <div class="fname" style="margin-bottom:18px">Preview</div>
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff">
+      <svg width="46" height="34" viewBox="-10 0 80 64"><use href="#logo"/></svg><b style="font-size:1.05rem">danzeroum</b>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #3a2c1c;border-radius:12px;background:#1a130b;color:#f6ede1">
+      <svg width="46" height="34" viewBox="-10 0 80 64"><use href="#logoDark"/></svg><b style="font-size:1.05rem">danzeroum</b>
+    </div>
+  </div>
+  <p class="clabel" style="margin-top:14px;line-height:1.5">A entrada → escudo → saídas vira uma animação de roteamento em loop no mobile.</p>
+</div>
+
+<!-- ===== PALETA ===== -->
+<div class="frame" style="left:860px;top:452px;width:300px">
+  <div class="ftitle">Paleta</div>
+  <div class="fname" style="margin-bottom:18px">Marca</div>
+  <div style="display:flex;flex-direction:column;gap:13px">
+    <div style="display:flex;align-items:center;gap:12px"><span style="width:30px;height:30px;border-radius:7px;background:#bd4e1c"></span><div><div style="font-weight:600">Terracota · D</div><div class="clabel">#bd4e1c</div></div></div>
+    <div style="display:flex;align-items:center;gap:12px"><span style="width:30px;height:30px;border-radius:7px;background:#24324a"></span><div><div style="font-weight:600">Marinho · escudo + circuito</div><div class="clabel">#24324a</div></div></div>
+    <div style="display:flex;align-items:center;gap:12px"><span style="width:30px;height:30px;border-radius:7px;background:#fbf7f1;border:1px solid #e6dccd"></span><div><div style="font-weight:600">Creme · check</div><div class="clabel">#fbf7f1</div></div></div>
+  </div>
+</div>
+
+</body>
+</html>
