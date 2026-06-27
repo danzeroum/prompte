@@ -12,6 +12,11 @@ frontend/dev-dist/
 .env
 .env.*
 !.env.example
+!.env.harness.example
+!.env.selfhost.example
+
+# QA visual (saída de screenshots)
+scripts/visual/out/
 
 # Logs e SO
 *.log

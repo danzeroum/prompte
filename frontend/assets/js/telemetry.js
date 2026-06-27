@@ -1,9 +1,8 @@
 // telemetry.js — telemetria offline-first.
-// Eventos são enfileirados em localStorage e enviados em lote à tabela
-// `events` do Supabase via flush(). Sem configuração de Supabase (ou offline),
-// a fila simplesmente persiste — a ferramenta continua funcionando.
+// Eventos são enfileirados em localStorage e enviados em lote para /api/events.
+// Offline (rede caída), a fila persiste — a ferramenta continua funcionando.
 
-import { getSupabase } from './supabaseClient.js';
+import { request } from './apiClient.js';
 
 const QUEUE_KEY = 'pe-telemetry-queue';
 const SESSION_KEY = 'pe-session-id';
@@ -32,27 +31,8 @@ function readQueue() {
   }
 }
 
-// type: string (ex.: 'pageview', 'generate', 'copy'); payload: objeto livre.
-// Id do usuário logado, se houver. auth.js publica o usuário em window.PE.user
-// (sem acoplar telemetry a auth/SDK). Retorna null quando anônimo.
-function currentUserId() {
-  try {
-    return (
-      (typeof window !== 'undefined' && window.PE && window.PE.user && window.PE.user.id) || null
-    );
-  } catch {
-    return null;
-  }
-}
-
 export function track(type, payload = {}) {
-  const event = {
-    type,
-    sessionId: getSessionId(),
-    userId: currentUserId(), // #M20: preenchido quando há sessão autenticada
-    payload,
-    ts: new Date().toISOString(),
-  };
+  const event = { type, sessionId: getSessionId(), payload, ts: new Date().toISOString() };
   try {
     const queue = readQueue();
     queue.push(event);
@@ -76,38 +56,25 @@ export function clearQueue() {
   }
 }
 
-// Mapeia o evento da fila para a linha da tabela `events`.
-function toRow(event) {
-  return {
-    type: event.type,
-    session_id: event.sessionId,
-    user_id: event.userId,
-    payload: event.payload,
-    created_at: event.ts,
-  };
-}
-
-// Envia a fila para o Supabase em lote. Em caso de sucesso remove os eventos
-// enviados (preservando os que chegaram durante o envio). Sem cliente
-// configurado, retorna os pendentes sem erro.
+// Envia a fila para /api/events em lote. O user_id é derivado pelo servidor a
+// partir do JWT (auth:true anexa o Bearer se houver sessão). Em sucesso, remove
+// só os enviados (preserva os que chegaram durante o envio).
 let _flushing = false;
 export async function flush() {
   if (_flushing) return { sent: 0, pending: readQueue().length };
   const queue = readQueue();
   if (!queue.length) return { sent: 0, pending: 0 };
 
-  const client = await getSupabase();
-  if (!client) return { sent: 0, pending: queue.length };
-
   _flushing = true;
   try {
-    // #M20: eventos enfileirados antes do login ficam com userId null; ao enviar,
-    // preenche com o usuário atual (a sessão já foi resolvida nesse ponto).
-    const uid = currentUserId();
-    const batch = queue.map((e) => (e.userId == null && uid ? { ...e, userId: uid } : e));
-    const { error } = await client.from('events').insert(batch.map(toRow));
-    if (error) return { sent: 0, pending: queue.length, error: error.message };
-    // Remove apenas os que foram enviados; mantém eventos novos.
+    const batch = queue.map((e) => ({ type: e.type, session_id: e.sessionId, payload: e.payload }));
+    let res;
+    try {
+      res = await request('/events', { method: 'POST', auth: true, body: { events: batch } });
+    } catch {
+      return { sent: 0, pending: queue.length };
+    }
+    if (!res.ok) return { sent: 0, pending: queue.length, error: res.data && res.data.error };
     const remaining = readQueue().slice(batch.length);
     try {
       localStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));

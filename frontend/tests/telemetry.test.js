@@ -1,13 +1,15 @@
-import { track, getQueue, clearQueue, flush } from '../assets/js/telemetry.js';
+import { jest } from '@jest/globals';
+
+const request = jest.fn();
+jest.unstable_mockModule('../assets/js/apiClient.js', () => ({ request }));
+
+const { track, getQueue, clearQueue, flush } = await import('../assets/js/telemetry.js');
 
 describe('telemetry', () => {
   beforeEach(() => {
     localStorage.clear();
     clearQueue();
-  });
-
-  afterEach(() => {
-    if (typeof window !== 'undefined' && window.PE) delete window.PE.user;
+    request.mockReset();
   });
 
   it('enfileira um evento com o formato esperado', () => {
@@ -18,14 +20,26 @@ describe('telemetry', () => {
     expect(getQueue()).toHaveLength(1);
   });
 
-  it('userId é null quando anônimo e preenchido quando há sessão (#M20)', () => {
-    expect(track('pageview', {}).userId).toBeNull();
-    window.PE = { user: { id: 'user-123' } };
-    expect(track('pageview', {}).userId).toBe('user-123');
+  it('flush envia para /api/events e remove os enviados', async () => {
+    track('pageview', {});
+    track('generate', { k: 1 });
+    request.mockResolvedValue({ ok: true, status: 200, data: { sent: 2 } });
+    const res = await flush();
+    expect(request).toHaveBeenCalledWith(
+      '/events',
+      expect.objectContaining({
+        method: 'POST',
+        auth: true,
+        body: expect.objectContaining({ events: expect.any(Array) }),
+      }),
+    );
+    expect(res.sent).toBe(2);
+    expect(getQueue()).toHaveLength(0);
   });
 
-  it('sem Supabase configurado, flush mantém a fila pendente', async () => {
+  it('quando a rede falha, flush mantém a fila pendente', async () => {
     track('pageview', {});
+    request.mockRejectedValue(new Error('network'));
     const res = await flush();
     expect(res.sent).toBe(0);
     expect(res.pending).toBe(1);
@@ -35,5 +49,6 @@ describe('telemetry', () => {
   it('flush vazio não envia nada', async () => {
     const res = await flush();
     expect(res).toEqual({ sent: 0, pending: 0 });
+    expect(request).not.toHaveBeenCalled();
   });
 });

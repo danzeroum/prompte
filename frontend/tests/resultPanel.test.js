@@ -39,7 +39,9 @@ describe('resultPanel — renderResultPanel', () => {
     const c = document.getElementById('out');
     renderResultPanel(c, { id: 'revisao-correcao', prompt: 'meu prompt', title: 'Revisão' });
     const acts = [...c.querySelectorAll('[data-act]')].map((b) => b.dataset.act);
-    expect(acts).toEqual(expect.arrayContaining(['copy', 'edit', 'save', 'ai-toggle', 'export', 'clear']));
+    expect(acts).toEqual(
+      expect.arrayContaining(['copy', 'edit', 'save', 'ai-toggle', 'export', 'clear']),
+    );
     expect(c.querySelector('[data-role="text"]').textContent).toBe('meu prompt');
     expect(c.querySelectorAll('.ai-menu [data-ai]')).toHaveLength(3);
   });
@@ -59,7 +61,10 @@ describe('resultPanel — renderResultPanel', () => {
   it('Abrir na IA copia e abre a URL do provedor', async () => {
     const c = document.getElementById('out');
     let opened = null;
-    window.open = (url) => { opened = url; return null; };
+    window.open = (url) => {
+      opened = url;
+      return null;
+    };
     renderResultPanel(c, { id: 't', prompt: 'p' });
     c.querySelector('[data-act="ai-toggle"]').click();
     c.querySelector('[data-ai="claude"]').click();

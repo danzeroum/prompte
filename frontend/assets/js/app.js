@@ -19,7 +19,7 @@ import { buildPrompt, generatorTemplates, collectFormData } from './generators.j
 import { askLLM } from './llmClient.js';
 import { initAuth } from './auth.js';
 import { initChat } from './chat.js';
-import { isConfigured } from './supabaseClient.js';
+import { isConfigured } from './apiClient.js';
 import { addPromptToHistory } from './promptHistory.js';
 import { renderResultPanel } from './resultPanel.js';
 import {
@@ -93,14 +93,10 @@ function init() {
   initCommandPalette();
   // Gate do link Admin/Métricas: oculto por padrão, revelado só p/ admin (#M-UX-D).
   gateAdminLink();
-  // #M12: adia o carregamento do SDK do Supabase. initAuth() (que importa o SDK)
-  // só roda no load quando há um retorno de magic link na URL; caso contrário é
-  // acionado sob demanda (abrir login/chat) via window.PE.ensureAuth.
-  if (
-    /(access_token|refresh_token|[?&]code=|error_description)/.test(location.hash + location.search)
-  ) {
-    initAuth();
-  }
+  // Restaura a sessão (e-mail+senha) se houver token salvo. Leve: lê o
+  // localStorage e valida via /api/auth/me. Idempotente; também acionável sob
+  // demanda (abrir login/chat) via window.PE.ensureAuth.
+  initAuth();
   initChat();
   mountManualPlayground();
   // Glossário inline (#M-UX6): roda após o i18n para não ser sobrescrito ao

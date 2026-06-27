@@ -12,6 +12,7 @@ export default [
         sessionStorage: 'readonly',
         navigator: 'readonly',
         location: 'readonly',
+        fetch: 'readonly',
         crypto: 'readonly',
         TextEncoder: 'readonly',
         Blob: 'readonly',

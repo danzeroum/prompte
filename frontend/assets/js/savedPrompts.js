@@ -1,16 +1,12 @@
-// savedPrompts.js — persistência de prompts salvos pelo usuário.
-// Estratégia: nuvem-primeiro quando o Supabase está configurado e há sessão
-// (tabela public.saved_prompts com RLS por user_id); caso contrário, fallback
-// local em localStorage (offline-first), espelhando o padrão de promptHistory.
-// O insert SEMPRE envia user_id explícito — a RLS valida no insert, mas o valor
-// precisa vir do cliente, senão a policy rejeita.
+// savedPrompts.js — persistência de prompts salvos.
+// Logado → nuvem (API /api/prompts, escopado ao usuário do JWT); deslogado →
+// fallback local em localStorage (offline-first).
 
-import { getSupabase, isConfigured } from './supabaseClient.js';
+import { isLoggedIn } from './auth.js';
+import { request } from './apiClient.js';
 
 const LS_KEY = 'pe:saved-prompts';
 const LS_COLS_KEY = 'pe:collections';
-// Diferente do histórico (MAX=20, efêmero): prompts salvos são intencionais.
-// Mantemos um teto generoso no fallback local para não crescer sem limite.
 const MAX_LOCAL = 50;
 
 // ---- localStorage helpers ----
@@ -19,26 +15,18 @@ function localList() {
   try {
     const raw = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
     const arr = Array.isArray(raw) ? raw : [];
-    // Migração defensiva: adiciona campos novos com defaults para itens antigos.
-    return arr.map((x) => ({
-      collection: null,
-      tags: [],
-      favorite: false,
-      ...x,
-    }));
+    return arr.map((x) => ({ collection: null, tags: [], favorite: false, ...x }));
   } catch {
     return [];
   }
 }
-
 function localWrite(list) {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify(list.slice(0, MAX_LOCAL)));
   } catch {
-    /* sem storage: ignora */
+    /* sem storage */
   }
 }
-
 function localColsList() {
   try {
     const raw = JSON.parse(localStorage.getItem(LS_COLS_KEY) || '[]');
@@ -47,25 +35,12 @@ function localColsList() {
     return [];
   }
 }
-
 function localColsWrite(list) {
   try {
     localStorage.setItem(LS_COLS_KEY, JSON.stringify(list));
   } catch {
     /* ignora */
   }
-}
-
-// ---- Supabase helper ----
-
-async function userClient() {
-  if (!isConfigured()) return { supabase: null, user: null };
-  const supabase = await getSupabase();
-  if (!supabase) return { supabase: null, user: null };
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return { supabase, user: user || null };
 }
 
 // ---- Prompts salvos ----
@@ -75,20 +50,26 @@ export async function savePrompt({ template, content, title, collection, tags, f
   const text = String(content || '').trim();
   if (!text) return { ok: false, error: 'empty' };
 
-  const { supabase, user } = await userClient();
-  if (supabase) {
-    if (!user) return { ok: false, error: 'auth', needsAuth: true };
-    const { error } = await supabase.from('saved_prompts').insert({
-      user_id: user.id,
-      template: template || null,
-      title: title || null,
-      content: text,
-      collection: collection || null,
-      tags: tags || [],
-      favorite: favorite || false,
-    });
-    if (error) return { ok: false, error: error.message };
-    return { ok: true, where: 'cloud' };
+  if (isLoggedIn()) {
+    try {
+      const { status, data } = await request('/prompts', {
+        method: 'POST',
+        auth: true,
+        body: {
+          template: template || null,
+          title: title || null,
+          content: text,
+          collection: collection || null,
+          tags: tags || [],
+          favorite: favorite || false,
+        },
+      });
+      if (status === 201) return { ok: true, where: 'cloud' };
+      if (status === 401) return { ok: false, error: 'auth', needsAuth: true };
+      return { ok: false, error: (data && data.error) || 'Falha ao salvar' };
+    } catch {
+      /* rede caiu: cai no fallback local abaixo */
+    }
   }
 
   const list = localList();
@@ -106,12 +87,14 @@ export async function savePrompt({ template, content, title, collection, tags, f
 }
 
 // Atualiza campos de um prompt salvo (patch parcial).
-// Na nuvem: UPDATE por id. No local: reescrita do item por ts.
 export async function updateSavedPrompt(id, patch = {}) {
-  const { supabase, user } = await userClient();
-  if (supabase && user) {
-    const { error } = await supabase.from('saved_prompts').update(patch).eq('id', id);
-    return !error;
+  if (isLoggedIn()) {
+    try {
+      const { ok } = await request(`/prompts/${id}`, { method: 'PATCH', auth: true, body: patch });
+      return ok;
+    } catch {
+      return false;
+    }
   }
   const list = localList();
   const idx = list.findIndex((x) => x.ts === id);
@@ -123,30 +106,32 @@ export async function updateSavedPrompt(id, patch = {}) {
 
 // Lista os prompts salvos (nuvem se logado, senão local). Sempre array.
 export async function listSavedPrompts() {
-  const { supabase, user } = await userClient();
-  if (supabase && user) {
-    const { data, error } = await supabase
-      .from('saved_prompts')
-      .select('id, template, title, content, created_at, collection, tags, favorite')
-      .order('created_at', { ascending: false });
-    return error
-      ? []
-      : (data || []).map((x) => ({
-          collection: null,
-          tags: [],
-          favorite: false,
-          ...x,
-        }));
+  if (isLoggedIn()) {
+    try {
+      const { status, data } = await request('/prompts', { auth: true });
+      if (status !== 200) return [];
+      return (data.prompts || []).map((x) => ({
+        collection: null,
+        tags: [],
+        favorite: false,
+        ...x,
+      }));
+    } catch {
+      return [];
+    }
   }
   return localList();
 }
 
-// Remove um prompt salvo. Na nuvem usa o id (uuid); no local usa o ts.
+// Remove um prompt salvo (id uuid na nuvem; ts no local).
 export async function deleteSavedPrompt(id) {
-  const { supabase, user } = await userClient();
-  if (supabase && user) {
-    const { error } = await supabase.from('saved_prompts').delete().eq('id', id);
-    return !error;
+  if (isLoggedIn()) {
+    try {
+      const { ok } = await request(`/prompts/${id}`, { method: 'DELETE', auth: true });
+      return ok;
+    } catch {
+      return false;
+    }
   }
   localWrite(localList().filter((x) => x.ts !== id));
   return true;
@@ -154,33 +139,34 @@ export async function deleteSavedPrompt(id) {
 
 // ---- Coleções ----
 
-// Lista coleções do usuário. Retorna [{ id, name }].
 export async function listCollections() {
-  const { supabase, user } = await userClient();
-  if (supabase && user) {
-    const { data, error } = await supabase
-      .from('collections')
-      .select('id, name')
-      .order('created_at', { ascending: true });
-    return error ? [] : data || [];
+  if (isLoggedIn()) {
+    try {
+      const { status, data } = await request('/collections', { auth: true });
+      return status === 200 ? data.collections || [] : [];
+    } catch {
+      return [];
+    }
   }
   return localColsList().map(({ id, name }) => ({ id, name }));
 }
 
-// Cria uma coleção. Retorna { ok, id }.
 export async function createCollection(name) {
   const n = String(name || '').trim();
   if (!n) return { ok: false, error: 'empty' };
 
-  const { supabase, user } = await userClient();
-  if (supabase && user) {
-    const { data, error } = await supabase
-      .from('collections')
-      .insert({ user_id: user.id, name: n })
-      .select('id')
-      .single();
-    if (error) return { ok: false, error: error.message };
-    return { ok: true, id: data.id };
+  if (isLoggedIn()) {
+    try {
+      const { status, data } = await request('/collections', {
+        method: 'POST',
+        auth: true,
+        body: { name: n },
+      });
+      if (status === 201) return { ok: true, id: data.collection.id };
+      return { ok: false, error: (data && data.error) || 'Falha ao criar coleção' };
+    } catch {
+      return { ok: false, error: 'offline' };
+    }
   }
 
   const id = `local-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -190,15 +176,21 @@ export async function createCollection(name) {
   return { ok: true, id };
 }
 
-// Renomeia uma coleção.
 export async function renameCollection(id, name) {
   const n = String(name || '').trim();
   if (!n) return false;
 
-  const { supabase, user } = await userClient();
-  if (supabase && user) {
-    const { error } = await supabase.from('collections').update({ name: n }).eq('id', id);
-    return !error;
+  if (isLoggedIn()) {
+    try {
+      const { ok } = await request(`/collections/${id}`, {
+        method: 'PATCH',
+        auth: true,
+        body: { name: n },
+      });
+      return ok;
+    } catch {
+      return false;
+    }
   }
   const cols = localColsList();
   const idx = cols.findIndex((c) => c.id === id);
@@ -210,16 +202,16 @@ export async function renameCollection(id, name) {
 
 // Exclui uma coleção; prompts ficam com collection:null (não apaga prompts).
 export async function deleteCollection(id) {
-  const { supabase, user } = await userClient();
-  if (supabase && user) {
-    // ON DELETE SET NULL no schema cuida dos prompts na nuvem.
-    const { error } = await supabase.from('collections').delete().eq('id', id);
-    return !error;
+  if (isLoggedIn()) {
+    try {
+      const { ok } = await request(`/collections/${id}`, { method: 'DELETE', auth: true });
+      return ok;
+    } catch {
+      return false;
+    }
   }
-  // No local: zerar collection nos prompts que apontavam para ela.
   const prompts = localList();
   localWrite(prompts.map((p) => (p.collection === id ? { ...p, collection: null } : p)));
-  const cols = localColsList();
-  localColsWrite(cols.filter((c) => c.id !== id));
+  localColsWrite(localColsList().filter((c) => c.id !== id));
   return true;
 }

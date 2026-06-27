@@ -1,9 +1,19 @@
 /* library.css — Biblioteca de Prompts */
 
 /* ---- Layout principal ---- */
+/* body em coluna: a topbar (sticky) ocupa a altura natural e a .lib preenche o
+   resto. Evita o número mágico --topbar-h, que não batia com a altura real da
+   topbar (maior por causa dos controles injetados) e gerava scroll fantasma. */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
 .lib {
   display: flex;
-  min-height: calc(100vh - var(--topbar-h, 56px));
+  flex: 1;
+  min-height: 0;
 }
 
 /* ---- Rail esquerdo ---- */

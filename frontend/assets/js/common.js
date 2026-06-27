@@ -13,7 +13,7 @@ import {
   importPreferences,
 } from './preferences.js';
 import { showToast } from './validation.js';
-import { onAuthChange, signInWithEmail, signOut, currentUser } from './auth.js';
+import { onAuthChange, signIn, signUp, signOut, currentUser } from './auth.js';
 import { getPromptHistory, clearPromptHistory } from './promptHistory.js';
 
 const NAV_SELECTOR = '.sb-item, .sidebar-item';
@@ -554,10 +554,10 @@ function buildAuthModal() {
   const card = document.createElement('div');
   card.className = 'pe-modal';
 
+  let mode = 'login'; // 'login' | 'signup'
+
   const title = document.createElement('h3');
-  title.textContent = t('auth.title');
   const desc = document.createElement('p');
-  desc.textContent = t('auth.desc');
 
   const input = document.createElement('input');
   input.type = 'email';
@@ -565,21 +565,51 @@ function buildAuthModal() {
   input.placeholder = t('auth.emailPlaceholder');
   input.setAttribute('aria-label', t('auth.emailPlaceholder'));
 
-  const send = document.createElement('button');
-  send.type = 'button';
-  send.className = 'pe-btn';
-  send.textContent = t('auth.send');
-  send.addEventListener('click', async () => {
-    send.disabled = true;
-    const res = await signInWithEmail(input.value);
-    send.disabled = false;
+  const password = document.createElement('input');
+  password.type = 'password';
+  password.placeholder = t('auth.passwordPlaceholder');
+  password.setAttribute('aria-label', t('auth.passwordPlaceholder'));
+
+  const submit = document.createElement('button');
+  submit.type = 'button';
+  submit.className = 'pe-btn';
+
+  const submitHandler = async () => {
+    submit.disabled = true;
+    const fn = mode === 'login' ? signIn : signUp;
+    const res = await fn(input.value, password.value);
+    submit.disabled = false;
     if (res.ok) {
-      showToast(t('auth.sent'), '', 'success');
+      showToast(t('auth.loggedIn'), '', 'success');
       close();
     } else {
       showToast(t('auth.error'), res.error || '', 'error');
     }
+  };
+  submit.addEventListener('click', submitHandler);
+  password.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitHandler();
   });
+
+  // Alterna entre entrar e criar conta (link discreto).
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.style.cssText =
+    'background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;margin-top:10px;text-decoration:underline;';
+
+  const applyMode = () => {
+    title.textContent = mode === 'login' ? t('auth.title') : t('auth.signupTitle');
+    desc.textContent = t('auth.desc');
+    submit.textContent = mode === 'login' ? t('auth.loginBtn') : t('auth.signupBtn');
+    toggle.textContent = mode === 'login' ? t('auth.toggleToSignup') : t('auth.toggleToLogin');
+    password.autocomplete = mode === 'login' ? 'current-password' : 'new-password';
+  };
+  toggle.addEventListener('click', () => {
+    mode = mode === 'login' ? 'signup' : 'login';
+    applyMode();
+    input.focus();
+  });
+  applyMode();
 
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';
@@ -589,9 +619,9 @@ function buildAuthModal() {
 
   const actions = document.createElement('div');
   actions.className = 'pe-modal-actions';
-  actions.append(send, closeBtn);
+  actions.append(submit, closeBtn);
 
-  card.append(title, desc, input, actions);
+  card.append(title, desc, input, password, actions, toggle);
   overlay.append(card);
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) close();

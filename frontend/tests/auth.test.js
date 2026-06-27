@@ -1,22 +1,18 @@
 import { jest } from '@jest/globals';
 
-const getSupabase = jest.fn();
-jest.unstable_mockModule('../assets/js/supabaseClient.js', () => ({ getSupabase }));
+const request = jest.fn();
+const getSession = jest.fn();
+const setSession = jest.fn();
+const clearSession = jest.fn();
+jest.unstable_mockModule('../assets/js/apiClient.js', () => ({
+  request,
+  getSession,
+  setSession,
+  clearSession,
+}));
 
-const { isValidEmail, signInWithEmail, initAuth, currentUser, isLoggedIn, onAuthChange } =
+const { isValidEmail, signIn, signUp, initAuth, currentUser, isLoggedIn, onAuthChange } =
   await import('../assets/js/auth.js');
-
-function fakeClient(overrides = {}) {
-  return {
-    auth: {
-      signInWithOtp: jest.fn().mockResolvedValue({ error: null }),
-      signOut: jest.fn().mockResolvedValue({}),
-      getSession: jest.fn().mockResolvedValue({ data: { session: null } }),
-      onAuthStateChange: jest.fn(),
-      ...overrides,
-    },
-  };
-}
 
 describe('isValidEmail', () => {
   it('valida formatos', () => {
@@ -26,40 +22,73 @@ describe('isValidEmail', () => {
   });
 });
 
-describe('signInWithEmail', () => {
-  beforeEach(() => getSupabase.mockReset());
+describe('signIn', () => {
+  beforeEach(() => {
+    request.mockReset();
+    setSession.mockReset();
+  });
 
-  it('rejeita e-mail inválido sem chamar o Supabase', async () => {
-    const res = await signInWithEmail('invalido');
+  it('rejeita e-mail inválido sem chamar a API', async () => {
+    const res = await signIn('invalido', 'x');
     expect(res.ok).toBe(false);
-    expect(getSupabase).not.toHaveBeenCalled();
+    expect(request).not.toHaveBeenCalled();
   });
 
-  it('envia o magic link para e-mail válido', async () => {
-    const client = fakeClient();
-    getSupabase.mockResolvedValue(client);
-    const res = await signInWithEmail('user@example.com');
+  it('loga com e-mail e senha válidos e persiste a sessão', async () => {
+    request.mockResolvedValue({
+      status: 200,
+      data: {
+        access_token: 'a',
+        refresh_token: 'r',
+        user: { id: 'u1', email: 'user@example.com' },
+      },
+    });
+    const res = await signIn('user@example.com', 'segredo123');
     expect(res.ok).toBe(true);
-    expect(client.auth.signInWithOtp).toHaveBeenCalledWith(
-      expect.objectContaining({ email: 'user@example.com' }),
+    expect(request).toHaveBeenCalledWith(
+      '/auth/login',
+      expect.objectContaining({ method: 'POST' }),
     );
+    expect(setSession).toHaveBeenCalled();
   });
 
-  it('sem Supabase configurado retorna erro', async () => {
-    getSupabase.mockResolvedValue(null);
-    const res = await signInWithEmail('user@example.com');
+  it('credenciais inválidas retornam erro', async () => {
+    request.mockResolvedValue({ status: 401, data: { error: 'E-mail ou senha inválidos' } });
+    const res = await signIn('user@example.com', 'errada');
     expect(res.ok).toBe(false);
   });
 });
 
-describe('initAuth', () => {
-  beforeEach(() => getSupabase.mockReset());
+describe('signUp', () => {
+  beforeEach(() => {
+    request.mockReset();
+    setSession.mockReset();
+  });
 
-  it('popula o usuário a partir da sessão e notifica listeners', async () => {
-    const user = { email: 'me@example.com', id: 'u1' };
-    getSupabase.mockResolvedValue(
-      fakeClient({ getSession: jest.fn().mockResolvedValue({ data: { session: { user } } }) }),
+  it('cadastra e já loga (201)', async () => {
+    request.mockResolvedValue({
+      status: 201,
+      data: { access_token: 'a', refresh_token: 'r', user: { id: 'u2', email: 'new@example.com' } },
+    });
+    const res = await signUp('new@example.com', 'segredo123');
+    expect(res.ok).toBe(true);
+    expect(request).toHaveBeenCalledWith(
+      '/auth/signup',
+      expect.objectContaining({ method: 'POST' }),
     );
+  });
+});
+
+describe('initAuth', () => {
+  beforeEach(() => {
+    request.mockReset();
+    getSession.mockReset();
+  });
+
+  it('popula o usuário a partir de /auth/me e notifica listeners', async () => {
+    const user = { email: 'me@example.com', id: 'u1' };
+    getSession.mockReturnValue({ access: 'a', refresh: 'r' });
+    request.mockResolvedValue({ status: 200, data: { user } });
     const seen = [];
     onAuthChange((u) => seen.push(u));
     await initAuth();

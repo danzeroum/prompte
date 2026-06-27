@@ -1,0 +1,122 @@
+# Self-host completo na VPS: Postgres puro + backend próprio + frontend + Caddy.
+# Construído incrementalmente (PR-A: db). PRs seguintes acrescentam api/frontend/caddy.
+#
+# Uso (quando completo):
+#   cp ops/.env.selfhost.example ops/.env.selfhost   # preencha
+#   docker compose --env-file ops/.env.selfhost -f ops/docker-compose.selfhost.yml up -d --build
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: prompte-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?defina POSTGRES_USER no ops/.env.selfhost}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no ops/.env.selfhost}
+      POSTGRES_DB: ${POSTGRES_DB:-prompte}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # Os scripts em db/init rodam UMA vez, quando o volume está vazio (banco limpo).
+      - ../db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Sem `ports`: o banco fica acessível só na rede interna do compose (a api fala com db:5432).
+    networks: [internal]
+
+  api:
+    build: ../api
+    image: prompte-api
+    container_name: prompte-api
+    restart: unless-stopped
+    environment:
+      API_PORT: 8787
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-prompte}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no ops/.env.selfhost}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    # Sem `ports`: quem expõe é o Caddy, via /api/*.
+    networks: [internal]
+
+  frontend:
+    build:
+      context: ../frontend
+      args:
+        VITE_API_URL: /api
+    image: prompte-frontend
+    container_name: prompte-frontend
+    restart: unless-stopped
+    expose:
+      - '80'
+    networks: [internal]
+
+  # Backup do Postgres: pg_dump comprimido a cada BACKUP_INTERVAL_SECONDS, mantendo
+  # os últimos BACKUP_KEEP no volume db_backups. Restore: ver docs/SELF-HOST.md.
+  db-backup:
+    image: postgres:16-alpine
+    container_name: prompte-db-backup
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB:-prompte}
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-86400}
+      BACKUP_KEEP: ${BACKUP_KEEP:-7}
+    volumes:
+      - db_backups:/backups
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        echo "[backup] intervalo $${BACKUP_INTERVAL_SECONDS}s, retenção $${BACKUP_KEEP}";
+        while true; do
+          ts=$$(date +%Y%m%d-%H%M%S);
+          f="/backups/prompte-$${ts}.sql.gz";
+          if pg_dump | gzip > "$${f}.tmp" && mv "$${f}.tmp" "$${f}"; then
+            echo "[backup] ok $${f}";
+          else
+            echo "[backup] FALHOU em $${ts}"; rm -f "$${f}.tmp";
+          fi;
+          ls -1t /backups/prompte-*.sql.gz 2>/dev/null | tail -n +$$(( BACKUP_KEEP + 1 )) | xargs -r rm -f;
+          sleep "$${BACKUP_INTERVAL_SECONDS}";
+        done
+    networks: [internal]
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: prompte-caddy
+    restart: unless-stopped
+    depends_on:
+      frontend:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      DOMAIN: ${DOMAIN:?defina DOMAIN no ops/.env.selfhost}
+      ACME_EMAIL: ${ACME_EMAIL:?defina ACME_EMAIL no ops/.env.selfhost}
+    volumes:
+      - ./Caddyfile.selfhost:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [internal]
+
+networks:
+  internal:
+
+volumes:
+  db_data: # dados do Postgres persistidos entre deploys (não apagar = não perder dados)
+  db_backups: # dumps periódicos do pg_dump
+  caddy_data: # certificados TLS persistidos
+  caddy_config:
