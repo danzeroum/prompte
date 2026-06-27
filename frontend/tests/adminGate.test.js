@@ -40,7 +40,10 @@ describe('gateAdminLink', () => {
     let cb;
     const err = new Error('forbidden');
     err.status = 403;
-    gateAdminLink({ onAuthChange: (fn) => (cb = fn), fetchMetrics: jest.fn().mockRejectedValue(err) });
+    gateAdminLink({
+      onAuthChange: (fn) => (cb = fn),
+      fetchMetrics: jest.fn().mockRejectedValue(err),
+    });
     await cb({ email: 'user@x.com' });
     expect(link.hasAttribute('hidden')).toBe(true);
     expect(localStorage.getItem('pe:isAdmin')).toBeNull();

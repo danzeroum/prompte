@@ -37,7 +37,13 @@ describe('savedPrompts — fallback localStorage', () => {
   });
 
   it('salva com campos novos (collection, tags, favorite)', async () => {
-    await savePrompt({ template: 'a', content: 'texto', collection: 'col-1', tags: ['ts', 'refactor'], favorite: true });
+    await savePrompt({
+      template: 'a',
+      content: 'texto',
+      collection: 'col-1',
+      tags: ['ts', 'refactor'],
+      favorite: true,
+    });
     const [item] = await listSavedPrompts();
     expect(item.collection).toBe('col-1');
     expect(item.tags).toEqual(['ts', 'refactor']);
@@ -46,9 +52,12 @@ describe('savedPrompts — fallback localStorage', () => {
 
   it('migração defensiva: itens antigos recebem defaults', async () => {
     // Simula dado antigo sem campos novos
-    localStorage.setItem('pe:saved-prompts', JSON.stringify([
-      { template: 'old', title: 'Old', content: 'texto antigo', ts: '2024-01-01T00:00:00Z' }
-    ]));
+    localStorage.setItem(
+      'pe:saved-prompts',
+      JSON.stringify([
+        { template: 'old', title: 'Old', content: 'texto antigo', ts: '2024-01-01T00:00:00Z' },
+      ]),
+    );
     const [item] = await listSavedPrompts();
     expect(item.collection).toBeNull();
     expect(item.tags).toEqual([]);

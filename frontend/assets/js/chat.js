@@ -5,7 +5,7 @@
 import { askLLM } from './llmClient.js';
 import { track } from './telemetry.js';
 import { t } from './i18n.js';
-import { isConfigured } from './supabaseClient.js';
+import { isConfigured } from './apiClient.js';
 
 const SYSTEM_PROMPT =
   'Você é um assistente de engenharia de prompts. Faça perguntas objetivas para ' +

@@ -2,11 +2,11 @@ import { jest } from '@jest/globals';
 
 // Mocka as dependências de módulo (ESM) antes de importar o llmClient.
 const getCachedResponse = jest.fn();
-const getSupabase = jest.fn();
+const request = jest.fn();
 const track = jest.fn();
 
 jest.unstable_mockModule('../assets/js/promptCache.js', () => ({ getCachedResponse }));
-jest.unstable_mockModule('../assets/js/supabaseClient.js', () => ({ getSupabase }));
+jest.unstable_mockModule('../assets/js/apiClient.js', () => ({ request }));
 jest.unstable_mockModule('../assets/js/telemetry.js', () => ({ track }));
 
 const { askLLM, buildLlmEvent } = await import('../assets/js/llmClient.js');
@@ -37,34 +37,44 @@ describe('buildLlmEvent', () => {
 describe('askLLM', () => {
   beforeEach(() => {
     getCachedResponse.mockReset();
-    getSupabase.mockReset();
+    request.mockReset();
     track.mockReset();
   });
 
-  it('retorna do cache sem invocar a Edge Function', async () => {
+  it('retorna do cache sem chamar a API', async () => {
     getCachedResponse.mockResolvedValue({ content: 'oi', model: 'deepseek-chat' });
     const res = await askLLM([{ role: 'user', content: 'oi' }]);
     expect(res).toEqual({ content: 'oi', model: 'deepseek-chat', cache_hit: true });
-    expect(getSupabase).not.toHaveBeenCalled();
+    expect(request).not.toHaveBeenCalled();
     expect(track).toHaveBeenCalledWith('llm_request', expect.objectContaining({ cache_hit: true }));
   });
 
-  it('invoca a Edge Function em cache miss', async () => {
+  it('chama POST /api/llm em cache miss', async () => {
     getCachedResponse.mockResolvedValue(null);
-    const invoke = jest.fn().mockResolvedValue({
+    request.mockResolvedValue({
+      ok: true,
+      status: 200,
       data: { content: 'resposta', model: 'deepseek-chat', cache_hit: false },
-      error: null,
     });
-    getSupabase.mockResolvedValue({ functions: { invoke } });
-
     const res = await askLLM([{ role: 'user', content: 'oi' }], 0.5);
-    expect(invoke).toHaveBeenCalledWith('prompt-llm', {
-      body: { messages: [{ role: 'user', content: 'oi' }], temperature: 0.5 },
-      headers: { 'x-request-id': expect.any(String) },
-    });
+    expect(request).toHaveBeenCalledWith(
+      '/llm',
+      expect.objectContaining({
+        method: 'POST',
+        auth: true,
+        body: { messages: [{ role: 'user', content: 'oi' }], temperature: 0.5 },
+        headers: { 'x-request-id': expect.any(String) },
+      }),
+    );
     expect(res.content).toBe('resposta');
-    expect(track).toHaveBeenCalledWith('llm_request', expect.objectContaining({ request_id: expect.any(String) }));
-    expect(track).toHaveBeenCalledWith('llm_request', expect.objectContaining({ cache_hit: false }));
+    expect(track).toHaveBeenCalledWith(
+      'llm_request',
+      expect.objectContaining({ request_id: expect.any(String) }),
+    );
+    expect(track).toHaveBeenCalledWith(
+      'llm_request',
+      expect.objectContaining({ cache_hit: false }),
+    );
   });
 
   it('rejeita messages vazio', async () => {
@@ -73,17 +83,19 @@ describe('askLLM', () => {
 
   it('propaga 429 como erro com flag rateLimited', async () => {
     getCachedResponse.mockResolvedValue(null);
-    const context = {
+    request.mockResolvedValue({
+      ok: false,
       status: 429,
-      clone: () => ({ json: async () => ({ error: 'Limite atingido', reset_at: '2026-01-01T00:00:00Z' }) }),
-    };
-    const invoke = jest.fn().mockResolvedValue({ data: null, error: { context, message: 'http error' } });
-    getSupabase.mockResolvedValue({ functions: { invoke } });
-
+      data: { error: 'Limite atingido', reset_at: '2026-01-01T00:00:00Z' },
+    });
     const err = await askLLM([{ role: 'user', content: 'oi' }]).catch((e) => e);
     expect(err.status).toBe(429);
     expect(err.rateLimited).toBe(true);
+    expect(err.resetAt).toBe('2026-01-01T00:00:00Z');
     expect(err.message).toMatch(/Limite/);
-    expect(track).toHaveBeenCalledWith('llm_request', expect.objectContaining({ rate_limited: true }));
+    expect(track).toHaveBeenCalledWith(
+      'llm_request',
+      expect.objectContaining({ rate_limited: true }),
+    );
   });
 });

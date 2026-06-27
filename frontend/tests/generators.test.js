@@ -105,8 +105,7 @@ function makeData(fields, mode) {
       data[id] = mode === 'empty' ? '' : `valor-${id}`;
     } else {
       // text / textarea — inclui espaços ao redor para exercitar o trim
-      data[id] =
-        mode === 'empty' ? '' : `  linha-um ${id}\n  linha-dois ${id}  `;
+      data[id] = mode === 'empty' ? '' : `  linha-um ${id}\n  linha-dois ${id}  `;
     }
   }
   return data;

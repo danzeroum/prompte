@@ -38,7 +38,10 @@ describe('persistência do histórico (#M5)', () => {
   it('loadHistory ignora dados inválidos', () => {
     localStorage.setItem('pe-chat-history', '{not json');
     expect(loadHistory()).toEqual([]);
-    localStorage.setItem('pe-chat-history', JSON.stringify([{ role: 'x' }, null, { role: 'user', content: 'ok' }]));
+    localStorage.setItem(
+      'pe-chat-history',
+      JSON.stringify([{ role: 'x' }, null, { role: 'user', content: 'ok' }]),
+    );
     expect(loadHistory()).toEqual([{ role: 'user', content: 'ok' }]);
   });
 });

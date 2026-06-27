@@ -59,7 +59,9 @@ describe('abrir/fechar', () => {
     const input = document.querySelector('.pe-cp-input');
     input.value = 'debug';
     input.dispatchEvent(new window.Event('input', { bubbles: true }));
-    const opts = [...document.querySelectorAll('.pe-cp-item .pe-cp-label')].map((e) => e.textContent);
+    const opts = [...document.querySelectorAll('.pe-cp-item .pe-cp-label')].map(
+      (e) => e.textContent,
+    );
     expect(opts.length).toBeGreaterThan(0);
     expect(opts.every((o) => o.toLowerCase().includes('debug'))).toBe(true);
   });

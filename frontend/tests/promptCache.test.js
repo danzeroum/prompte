@@ -1,9 +1,20 @@
-import { hashRequest, getCachedResponse } from '../assets/js/promptCache.js';
+import { jest } from '@jest/globals';
 
-const hasSubtle = !!(globalThis.crypto && globalThis.crypto.subtle && globalThis.crypto.subtle.digest);
+const request = jest.fn();
+jest.unstable_mockModule('../assets/js/apiClient.js', () => ({ request }));
+
+const { hashRequest, getCachedResponse } = await import('../assets/js/promptCache.js');
+
+const hasSubtle = !!(
+  globalThis.crypto &&
+  globalThis.crypto.subtle &&
+  globalThis.crypto.subtle.digest
+);
 const maybe = hasSubtle ? it : it.skip;
 
 describe('promptCache', () => {
+  beforeEach(() => request.mockReset());
+
   maybe('hashRequest é determinístico e independe da ordem das chaves', async () => {
     const a = await hashRequest({ temperature: 0.3, messages: [{ role: 'user', content: 'oi' }] });
     const b = await hashRequest({ messages: [{ role: 'user', content: 'oi' }], temperature: 0.3 });
@@ -17,7 +28,21 @@ describe('promptCache', () => {
     expect(a).not.toBe(b);
   });
 
-  it('getCachedResponse retorna null sem Supabase configurado', async () => {
+  maybe('getCachedResponse retorna a resposta em hit (200)', async () => {
+    request.mockResolvedValue({ status: 200, data: { response: { content: 'oi', model: 'm' } } });
+    expect(await getCachedResponse({ messages: [], temperature: 0 })).toEqual({
+      content: 'oi',
+      model: 'm',
+    });
+  });
+
+  maybe('getCachedResponse retorna null em miss (404)', async () => {
+    request.mockResolvedValue({ status: 404, data: { error: 'miss' } });
+    expect(await getCachedResponse({ messages: [], temperature: 0 })).toBeNull();
+  });
+
+  it('getCachedResponse retorna null se a rede/hash falhar', async () => {
+    request.mockRejectedValue(new Error('network'));
     expect(await getCachedResponse({ messages: [], temperature: 0 })).toBeNull();
   });
 });

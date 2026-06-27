@@ -1,13 +1,10 @@
-// promptCache.js — leitura do cache de respostas da LLM (Fase B).
-// O cliente apenas LÊ o cache (por hash da requisição); a escrita é feita
-// exclusivamente pela Edge Function (service_role) na Fase C, evitando
-// cache poisoning. A RLS já oculta entradas expiradas, então uma linha
-// ausente equivale a "miss".
+// promptCache.js — leitura do cache de respostas da LLM.
+// O cliente só LÊ (por hash); a escrita é da API (/api/llm). Hash determinístico
+// idêntico ao do servidor (api/src/hash.js) para a leitura bater com a escrita.
 
-import { getSupabase } from './supabaseClient.js';
+import { request } from './apiClient.js';
 
-// Gera o hash determinístico (sha256 hex) de uma requisição. Aceita string
-// ou objeto (ex.: { messages, temperature }). Usa Web Crypto (navegador/Node 20+).
+// sha256 hex de uma requisição (string ou objeto { messages, temperature }).
 export async function hashRequest(payload) {
   const text = typeof payload === 'string' ? payload : stableStringify(payload);
   const bytes = new TextEncoder().encode(text);
@@ -17,7 +14,7 @@ export async function hashRequest(payload) {
     .join('');
 }
 
-// JSON estável (chaves ordenadas) para que objetos equivalentes gerem o mesmo hash.
+// JSON estável (chaves ordenadas) para objetos equivalentes gerarem o mesmo hash.
 function stableStringify(value) {
   if (value === null || typeof value !== 'object') return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
@@ -25,17 +22,14 @@ function stableStringify(value) {
   return `{${keys.map((k) => `${JSON.stringify(k)}:${stableStringify(value[k])}`).join(',')}}`;
 }
 
-// Consulta o cache. Retorna a resposta cacheada (fresca) ou null em caso de
-// miss / sem Supabase configurado.
+// Consulta o cache. Retorna a resposta cacheada (fresca) ou null (miss/offline).
 export async function getCachedResponse(payload) {
-  const client = await getSupabase();
-  if (!client) return null;
-  const hash = await hashRequest(payload);
-  const { data, error } = await client
-    .from('prompt_cache')
-    .select('response')
-    .eq('hash', hash)
-    .maybeSingle();
-  if (error || !data) return null;
-  return data.response;
+  try {
+    const hash = await hashRequest(payload);
+    const { status, data } = await request(`/cache/${hash}`);
+    if (status === 200 && data && data.response) return data.response;
+    return null;
+  } catch {
+    return null;
+  }
 }

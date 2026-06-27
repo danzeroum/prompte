@@ -1,9 +1,7 @@
-// auth.js — autenticação por magic link (Fase D.2).
-// Usa Supabase Auth (signInWithOtp). Quando logado, o supabase-js anexa o JWT
-// do usuário às chamadas, então a Edge Function aplica o limite maior de rate
-// limiting automaticamente. Sem Supabase configurado, vira no-op.
+// auth.js — autenticação por e-mail + senha contra o backend próprio.
+// Guarda a sessão (access/refresh) via apiClient; expõe o usuário em window.PE.user.
 
-import { getSupabase } from './supabaseClient.js';
+import { request, getSession, setSession, clearSession } from './apiClient.js';
 
 let _user = null;
 const _listeners = new Set();
@@ -37,38 +35,68 @@ export function isValidEmail(email) {
   return EMAIL_RE.test(String(email || '').trim());
 }
 
-// Envia o magic link para o e-mail. Retorna { ok, error }.
-export async function signInWithEmail(email) {
+function persist(data) {
+  setSession({ access: data.access_token, refresh: data.refresh_token, user: data.user });
+  setUser(data.user);
+}
+
+// Cadastra (e já loga). Retorna { ok, error? }.
+export async function signUp(email, password) {
   if (!isValidEmail(email)) return { ok: false, error: 'E-mail inválido' };
-  const supabase = await getSupabase();
-  if (!supabase) return { ok: false, error: 'Supabase não configurado' };
-  const redirect = typeof location !== 'undefined' ? location.href.split('#')[0] : undefined;
-  const { error } = await supabase.auth.signInWithOtp({
-    email: email.trim(),
-    options: redirect ? { emailRedirectTo: redirect } : undefined,
+  const { status, data } = await request('/auth/signup', {
+    method: 'POST',
+    body: { email: String(email).trim(), password: String(password || '') },
   });
-  return error ? { ok: false, error: error.message } : { ok: true };
+  if (status === 201) {
+    persist(data);
+    return { ok: true };
+  }
+  return { ok: false, error: (data && data.error) || 'Falha ao cadastrar' };
+}
+
+// Entra com e-mail e senha. Retorna { ok, error? }.
+export async function signIn(email, password) {
+  if (!isValidEmail(email)) return { ok: false, error: 'E-mail inválido' };
+  const { status, data } = await request('/auth/login', {
+    method: 'POST',
+    body: { email: String(email).trim(), password: String(password || '') },
+  });
+  if (status === 200) {
+    persist(data);
+    return { ok: true };
+  }
+  return { ok: false, error: (data && data.error) || 'E-mail ou senha inválidos' };
 }
 
 export async function signOut() {
-  const supabase = await getSupabase();
-  if (!supabase) return;
-  await supabase.auth.signOut();
+  const s = getSession();
+  if (s && s.refresh) {
+    try {
+      await request('/auth/logout', { method: 'POST', body: { refresh_token: s.refresh } });
+    } catch {
+      /* ignora erro de rede no logout */
+    }
+  }
+  clearSession();
   setUser(null);
 }
 
-// Inicializa: lê a sessão atual e assina mudanças de estado. Idempotente — só
-// resolve o cliente (e carrega o SDK) uma vez (#M12: chamada sob demanda).
+// Inicializa: se há sessão salva, valida via /auth/me e publica o usuário.
+// Idempotente; chamada sob demanda (#M12) via window.PE.ensureAuth.
 let _initStarted = false;
 export async function initAuth() {
   if (_initStarted) return;
   _initStarted = true;
-  const supabase = await getSupabase();
-  if (!supabase) {
-    _initStarted = false; // sem config: permite re-tentar se for configurado depois
+  const s = getSession();
+  if (!s || !s.access) {
+    _initStarted = false; // sem sessão: permite re-tentar após login
     return;
   }
-  const { data } = await supabase.auth.getSession();
-  setUser(data?.session?.user ?? null);
-  supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user ?? null));
+  try {
+    const { status, data } = await request('/auth/me', { auth: true });
+    if (status === 200 && data && data.user) setUser(data.user);
+    else clearSession();
+  } catch {
+    /* offline: mantém o que tiver */
+  }
 }
