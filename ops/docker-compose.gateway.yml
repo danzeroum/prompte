@@ -1,0 +1,99 @@
+# Deploy ATRÁS do gateway nginx existente (rede externa btv-prod-net), SEM Caddy.
+# O gateway global (btv-nginx-prod) faz o TLS e roteia:
+#   prompte.buildtovalue.cloud  →  http://prompte-frontend:80
+#   prompte.../api/*            →  http://prompte-api:8787   (rota a adicionar no gateway)
+#
+# Uso:
+#   cp ops/.env.selfhost.example ops/.env.selfhost   # preencha (DOMAIN/ACME_EMAIL não são usados aqui)
+#   docker compose --env-file ops/.env.selfhost -f ops/docker-compose.gateway.yml up -d --build
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: prompte-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?defina POSTGRES_USER no ops/.env.selfhost}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no ops/.env.selfhost}
+      POSTGRES_DB: ${POSTGRES_DB:-prompte}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ../db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [internal]
+
+  db-backup:
+    image: postgres:16-alpine
+    container_name: prompte-db-backup
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB:-prompte}
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-86400}
+      BACKUP_KEEP: ${BACKUP_KEEP:-7}
+    volumes:
+      - db_backups:/backups
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        echo "[backup] intervalo $${BACKUP_INTERVAL_SECONDS}s, retenção $${BACKUP_KEEP}";
+        while true; do
+          ts=$$(date +%Y%m%d-%H%M%S);
+          f="/backups/prompte-$${ts}.sql.gz";
+          if pg_dump | gzip > "$${f}.tmp" && mv "$${f}.tmp" "$${f}"; then
+            echo "[backup] ok $${f}";
+          else
+            echo "[backup] FALHOU em $${ts}"; rm -f "$${f}.tmp";
+          fi;
+          ls -1t /backups/prompte-*.sql.gz 2>/dev/null | tail -n +$$(( BACKUP_KEEP + 1 )) | xargs -r rm -f;
+          sleep "$${BACKUP_INTERVAL_SECONDS}";
+        done
+    networks: [internal]
+
+  api:
+    build: ../api
+    image: prompte-api
+    container_name: prompte-api
+    restart: unless-stopped
+    environment:
+      API_PORT: 8787
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-prompte}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no ops/.env.selfhost}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    # internal: fala com o db. web (btv-prod-net): o gateway alcança como prompte-api.
+    networks: [internal, web]
+
+  frontend:
+    build:
+      context: ../frontend
+      args:
+        VITE_API_URL: /api
+    image: prompte-frontend
+    container_name: prompte-frontend
+    restart: unless-stopped
+    # só na rede do gateway; quem expõe ao mundo é o btv-nginx-prod.
+    networks: [web]
+
+networks:
+  internal:
+  web:
+    external: true
+    name: btv-prod-net
+
+volumes:
+  db_data: # dados do Postgres (não apagar = não perder dados)
+  db_backups: # dumps do pg_dump

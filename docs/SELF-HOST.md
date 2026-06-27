@@ -63,6 +63,29 @@ O **schema do banco é aplicado automaticamente** no primeiro boot (scripts em
 > Dev local (sem Docker): `cd api && npm i && DATABASE_URL=... JWT_SECRET=dev npm start`
 > e `cd frontend && npm run dev` (o Vite proxia `/api` → `http://localhost:8787`).
 
+## Modo gateway (atrás de um nginx/Traefik existente)
+
+Se a VPS já tem um **gateway global** fazendo TLS e roteamento (ex.: `btv-nginx-prod`
+na rede `btv-prod-net`), **não use o Caddy** deste repo. Use o compose de gateway, que
+**não expõe 80/443** e pluga `frontend`/`api` na rede do gateway:
+
+```bash
+docker compose --env-file ops/.env.selfhost -f ops/docker-compose.gateway.yml up -d --build
+```
+
+No gateway, roteie o domínio para os containers (`prompte-frontend:80` e `prompte-api:8787`).
+Exemplo de bloco nginx (o `^~ /api/` precede o regex de bloqueio e o `location /`):
+
+```nginx
+server { listen 443 ssl; server_name prompte.buildtovalue.cloud;
+    ssl_certificate     /etc/letsencrypt/live/prompte.buildtovalue.cloud/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/prompte.buildtovalue.cloud/privkey.pem;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+    location ~* (wp-login|login\.cgi|\.git|env) { return 444; }
+    location ^~ /api/ { set $up_api "http://prompte-api:8787"; proxy_pass $up_api; }
+    location /       { set $upstream "http://prompte-frontend:80"; proxy_pass $upstream; } }
+```
+
 ## Backup e restore
 
 O serviço `db-backup` roda `pg_dump` comprimido a cada `BACKUP_INTERVAL_SECONDS`
