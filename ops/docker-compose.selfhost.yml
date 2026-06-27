@@ -26,6 +26,21 @@ services:
     # Sem `ports`: o banco fica acessível só na rede interna do compose (a api fala com db:5432).
     networks: [internal]
 
+  api:
+    build: ../api
+    image: prompte-api
+    container_name: prompte-api
+    restart: unless-stopped
+    environment:
+      API_PORT: 8787
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-prompte}
+      # Segredos de JWT/LLM/ADMIN entram nos PRs C/E.
+    depends_on:
+      db:
+        condition: service_healthy
+    # Sem `ports`: quem expõe é o Caddy (PR-G), via /api/*.
+    networks: [internal]
+
 networks:
   internal:
 

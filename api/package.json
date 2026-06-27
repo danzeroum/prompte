@@ -1,0 +1,16 @@
+{
+  "name": "prompte-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Backend próprio (Postgres puro) — substitui Supabase auth/REST/Edge Functions.",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "fastify": "^5.2.0",
+    "pg": "^8.13.1"
+  }
+}
