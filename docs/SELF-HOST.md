@@ -50,6 +50,8 @@ O **schema do banco é aplicado automaticamente** no primeiro boot (scripts em
 | `JWT_SECRET` | assinatura dos JWT (**obrigatório**) |
 | `ADMIN_EMAILS` | CSV de e-mails que acessam `/api/metrics` |
 | `DEEPSEEK_API_KEY` / `OPENAI_API_KEY` | LLM (sem chave → `/api/llm` responde 503) |
+| `GITHUB_CLIENT_ID/SECRET` | conexão GitHub (sem eles → feature desligada) |
+| `GITHUB_CALLBACK_URL` / `GITHUB_APP_BASE_URL` | callback OAuth e origem do app |
 | `DOMAIN` / `ACME_EMAIL` | HTTPS automático (Let's Encrypt) |
 
 ## Verificação ponta a ponta
@@ -103,4 +105,39 @@ gunzip -c <arquivo>.sql.gz | \
 ```
 
 > Para forçar um backup imediato: `docker compose ... restart db-backup` (ele dumpa ao subir).
+
+## Conexão GitHub (listar repositórios nos campos do gerador)
+
+Permite que cada usuário conecte a própria conta do GitHub para **buscar
+repositórios e navegar arquivos** direto nos campos de caminho/repo do gerador.
+O token OAuth fica **só no backend, cifrado em repouso** (AES-256-GCM); o
+navegador nunca o vê — todas as chamadas ao GitHub passam pela API (`/api/github/*`).
+
+**1. Crie uma OAuth App** em `https://github.com/settings/developers`
+(ou em *Settings → Developer settings → OAuth Apps* da sua organização):
+
+| Campo | Valor |
+|---|---|
+| Application name | Prompt Engineering Pro (ou o que preferir) |
+| Homepage URL | `https://SEU_DOMINIO` |
+| Authorization callback URL | `https://SEU_DOMINIO/api/github/callback` |
+
+**2. Preencha em `ops/.env.selfhost`:**
+
+```bash
+GITHUB_CLIENT_ID=...                # da OAuth App
+GITHUB_CLIENT_SECRET=...            # "Generate a new client secret"
+GITHUB_CALLBACK_URL=https://SEU_DOMINIO/api/github/callback
+GITHUB_APP_BASE_URL=https://SEU_DOMINIO
+GITHUB_SCOPE=repo                  # 'repo' = inclui privados; 'public_repo' = só públicos
+GITHUB_TOKEN_KEY=$(openssl rand -hex 32)   # opcional; default usa o JWT_SECRET
+```
+
+**3. Suba o stack** (`docker compose ... up -d --build`). Sem `CLIENT_ID/SECRET`
+a feature fica desligada e as rotas respondem 503 — o resto da API segue normal.
+
+**Como usar:** logado no app, clique no ícone do GitHub ao lado de um campo de
+caminho/repositório (ou em ⚙️ → GitHub → Conectar). Após autorizar no GitHub,
+você volta ao gerador e pode buscar um repo e escolher arquivos/pastas; o valor
+preenche o campo. Desconectar: ⚙️ → GitHub → Desconectar.
 

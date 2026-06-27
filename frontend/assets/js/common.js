@@ -15,6 +15,7 @@ import {
 import { showToast } from './validation.js';
 import { onAuthChange, signIn, signUp, signOut, currentUser } from './auth.js';
 import { getPromptHistory, clearPromptHistory } from './promptHistory.js';
+import { buildGithubMenuButton } from './githubPicker.js';
 
 const NAV_SELECTOR = '.sb-item, .sidebar-item';
 
@@ -356,6 +357,12 @@ function buildPreferencesMenu() {
       openAuthModal();
     }
   });
+  // Conexão GitHub (listar repositórios nos campos de caminho do gerador).
+  const githubLabel = document.createElement('div');
+  githubLabel.className = 'pe-menu-label';
+  githubLabel.textContent = t('github.menu.label');
+  const githubBtn = buildGithubMenuButton();
+
   // Reflete o estado de autenticação no rótulo do botão.
   onAuthChange((user) => {
     accountBtn.textContent = user
@@ -374,6 +381,8 @@ function buildPreferencesMenu() {
     importInput,
     accountLabel,
     accountBtn,
+    githubLabel,
+    githubBtn,
   );
   return menu;
 }

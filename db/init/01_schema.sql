@@ -23,6 +23,20 @@ create table if not exists auth_sessions (
 );
 create index if not exists auth_sessions_user_idx on auth_sessions (user_id);
 
+-- ───────────────────────── Conexão GitHub (OAuth por usuário) ─────────────────────────
+-- Guarda o token OAuth do GitHub de cada usuário (1:1) para listar repositórios
+-- e navegar arquivos no gerador. O token é cifrado em repouso (AES-256-GCM) pela
+-- API antes de gravar — nunca em texto puro. A coluna guarda o blob cifrado.
+create table if not exists github_accounts (
+  user_id       uuid primary key references users(id) on delete cascade,
+  github_login  text not null,
+  github_id     bigint,
+  access_token  text not null,            -- cifrado (iv:tag:ciphertext em base64)
+  scope         text,
+  connected_at  timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
+);
+
 -- ───────────────────────── Telemetria (Fase A) ─────────────────────────
 create table if not exists events (
   id         uuid primary key default gen_random_uuid(),

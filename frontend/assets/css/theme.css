@@ -903,3 +903,147 @@
     display: none;
   }
 }
+
+/* ───────────────────────── Conexão GitHub (#GH) ───────────────────────── */
+/* Campo de caminho/repo aumentado: input + botão do seletor lado a lado. */
+.pe-gh-field {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+.pe-gh-field > input {
+  flex: 1;
+  min-width: 0;
+}
+.pe-gh-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  padding: 0;
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pe-gh-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.pe-gh-btn svg {
+  display: block;
+}
+
+/* Modal do seletor: mais largo e alto que os modais simples. */
+.pe-gh-modal {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  max-height: min(80vh, 640px);
+}
+.pe-gh-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.pe-gh-head h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.pe-gh-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 10px;
+  overflow: hidden;
+}
+.pe-gh-muted {
+  font-size: 12.5px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin: 8px 0;
+}
+.pe-gh-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.pe-gh-search {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.pe-gh-search:focus {
+  outline: none;
+  border-color: var(--border-focus);
+}
+.pe-gh-list {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+}
+.pe-gh-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.pe-gh-row:hover {
+  background: var(--bg3);
+}
+.pe-gh-row-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pe-gh-row-meta {
+  flex: 0 0 auto;
+  color: var(--text2);
+  font-size: 11px;
+}
+.pe-gh-crumbs {
+  font-size: 12.5px;
+  color: var(--text2);
+  word-break: break-word;
+}
+.pe-gh-crumb {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+.pe-gh-crumb:hover {
+  text-decoration: underline;
+}
+.pe-gh-usefolder {
+  align-self: flex-start;
+}
+.pe-gh-connect {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
