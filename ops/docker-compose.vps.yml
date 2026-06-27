@@ -34,7 +34,9 @@ services:
       DOMAIN: ${DOMAIN:?defina DOMAIN no ops/.env}
       ACME_EMAIL: ${ACME_EMAIL:?defina ACME_EMAIL no ops/.env}
       # Host do Supabase que o Caddy proxia no caminho /sb (auth/rest/functions).
-      SUPABASE_HOST: ${SUPABASE_HOST:?defina SUPABASE_HOST no ops/.env}
+      # Default = host do projeto padrão (igual ao ops/.env.example); sobrescreva
+      # no ops/.env só se apontar para outro projeto Supabase.
+      SUPABASE_HOST: ${SUPABASE_HOST:-tqohthmeneaweuozuref.supabase.co}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
